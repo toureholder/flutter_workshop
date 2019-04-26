@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/model/donation.dart';
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Início'),
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar(
         actions: _appBarActions(),
+        title: 'Início',
       ),
       body: _listView(Donation.fakeList()),
     );
@@ -33,10 +35,10 @@ class Home extends StatelessWidget {
 
   Text _title(Donation listItem) {
     return Text(
-          listItem.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        );
+      listItem.title,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 
   Widget _subtitle(Donation listItem) {
