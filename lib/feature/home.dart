@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/model/donation.dart';
 
@@ -9,7 +10,7 @@ class Home extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         actions: _appBarActions(),
-        title: 'Início',
+        title: L10n.getString(context, 'home_title'),
       ),
       body: _listView(Donation.fakeList()),
     );
