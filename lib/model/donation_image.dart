@@ -3,7 +3,12 @@ class DonationImage {
 
   DonationImage(this.url);
 
+  DonationImage.fromJson(Map<String, dynamic> json) : url = json['url'];
+
   DonationImage.fake() : url = 'https://picsum.photos/id/400/500/500';
+
+  static List<DonationImage> fromJsonList(List<dynamic> jsonList) =>
+      jsonList.map((json) => DonationImage.fromJson(json)).toList();
 
   static List<DonationImage> fakeList() {
     return [

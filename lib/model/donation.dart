@@ -10,6 +10,13 @@ class Donation {
 
   Donation(this.id, this.title, this.description, this.user, this.images);
 
+  Donation.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        title = json['title'],
+        description = json['description'],
+        user = User.fromJson(json['user']),
+        images = DonationImage.fromJsonList(json['listing_images']);
+
   Donation.fake()
       : id = 1,
         title = "Donation",
@@ -17,6 +24,9 @@ class Donation {
             "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
         images = DonationImage.fakeList(),
         user = User.fake();
+
+  static List<Donation> fromJsonList(List<dynamic> jsonList) =>
+      jsonList.map((json) => Donation.fromJson(json)).toList();
 
   static List<Donation> fakeList() {
     final List<Donation> list = [];
