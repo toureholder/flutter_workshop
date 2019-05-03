@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_workshop/config/l10n.dart';
-import 'package:flutter_workshop/feature/home.dart';
+import 'package:flutter_workshop/feature/home/home.dart';
 
 void main() => runApp(MyApp());
 

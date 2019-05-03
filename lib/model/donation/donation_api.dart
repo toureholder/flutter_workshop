@@ -1,5 +1,5 @@
-import 'package:flutter_workshop/model/donation.dart';
-import 'package:flutter_workshop/model/donation_api_response.dart';
+import 'package:flutter_workshop/model/donation/donation.dart';
+import 'package:flutter_workshop/model/donation/donation_api_response.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
