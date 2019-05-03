@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
       leading: _image(listItem),
       title: _title(listItem),
       subtitle: _subtitle(listItem),
-      onTap: _navigateToDetail,
+      onTap: () => _navigateToDetail(listItem),
     );
   }
 
@@ -111,8 +111,8 @@ class _HomeState extends State<Home> {
     ];
   }
 
-  _navigateToDetail() {
-    final page = Detail();
+  _navigateToDetail(Donation donation) {
+    final page = Detail(donation: donation);
     final route = MaterialPageRoute(builder: (context) => page);
     Navigator.push(context, route);
   }
