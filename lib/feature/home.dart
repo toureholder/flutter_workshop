@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/model/donation.dart';
+import 'package:flutter_workshop/model/donation_api.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -12,8 +13,24 @@ class Home extends StatelessWidget {
         actions: _appBarActions(),
         title: L10n.getString(context, 'home_title'),
       ),
-      body: _listView(Donation.fakeList()),
+      body: _listFutureBuilder(),
     );
+  }
+
+  FutureBuilder<List<Donation>> _listFutureBuilder() {
+    return FutureBuilder(
+        future: DonationApi().getDonations(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
+          Widget widget = Center(child: CircularProgressIndicator());
+
+          if (snapshot.hasData)
+            widget = _listView(snapshot.data);
+          else if (snapshot.hasError)
+            widget = Center(child: Text(snapshot.error.toString()));
+
+          return widget;
+        });
   }
 
   ListView _listView(List<Donation> list) {
