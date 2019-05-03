@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 
@@ -65,10 +66,12 @@ class _HomeState extends State<Home> {
 
   Widget _listItem(Donation listItem) {
     return ListTile(
-        contentPadding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-        leading: _image(listItem),
-        title: _title(listItem),
-        subtitle: _subtitle(listItem));
+      contentPadding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      leading: _image(listItem),
+      title: _title(listItem),
+      subtitle: _subtitle(listItem),
+      onTap: _navigateToDetail,
+    );
   }
 
   Text _title(Donation listItem) {
@@ -106,5 +109,11 @@ class _HomeState extends State<Home> {
     return <Widget>[
       IconButton(icon: Icon(Icons.account_circle), onPressed: () {})
     ];
+  }
+
+  _navigateToDetail() {
+    final page = Detail();
+    final route = MaterialPageRoute(builder: (context) => page);
+    Navigator.push(context, route);
   }
 }
