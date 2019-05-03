@@ -1,5 +1,5 @@
-import 'package:flutter_workshop/model/donation_image.dart';
-import 'package:flutter_workshop/model/user.dart';
+import 'package:flutter_workshop/model/donation/donation_image.dart';
+import 'package:flutter_workshop/model/user/user.dart';
 
 class Donation {
   final int id;

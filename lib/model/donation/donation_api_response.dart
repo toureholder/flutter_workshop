@@ -1,4 +1,4 @@
-import 'package:flutter_workshop/model/donation.dart';
+import 'package:flutter_workshop/model/donation/donation.dart';
 
 class DonationApiResponse {
   final List<Donation> donations;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
-import 'package:flutter_workshop/model/donation.dart';
-import 'package:flutter_workshop/model/donation_api.dart';
+import 'package:flutter_workshop/model/donation/donation.dart';
+import 'package:flutter_workshop/model/donation/donation_api.dart';
 
 class Home extends StatelessWidget {
   @override
