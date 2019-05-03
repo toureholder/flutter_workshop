@@ -1,10 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
-import 'package:flutter_workshop/model/donation/donation_api.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  HomeBloc bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    bloc = HomeBloc();
+    bloc.loadDonations();
+  }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +37,9 @@ class Home extends StatelessWidget {
     );
   }
 
-  FutureBuilder<List<Donation>> _listFutureBuilder() {
-    return FutureBuilder(
-        future: DonationApi().getDonations(),
+  StreamBuilder<List<Donation>> _listFutureBuilder() {
+    return StreamBuilder(
+        stream: bloc.controller.stream,
         builder:
             (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
           Widget widget = Center(child: CircularProgressIndicator());
