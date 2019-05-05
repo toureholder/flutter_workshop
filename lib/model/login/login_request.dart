@@ -4,5 +4,5 @@ class LoginRequest {
 
   LoginRequest(this.email, this.password);
 
-  Map<String, dynamic> json() => {'email': email, 'password': password};
+  Map<String, dynamic> toJson() => {'email': email, 'password': password};
 }
