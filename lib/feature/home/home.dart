@@ -3,7 +3,9 @@ import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
+import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
+import 'package:flutter_workshop/util/navigation.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -29,7 +31,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: CustomAppBar(
         actions: _appBarActions(),
         title: L10n.getString(context, 'home_title'),
@@ -107,13 +108,12 @@ class _HomeState extends State<Home> {
 
   List<Widget> _appBarActions() {
     return <Widget>[
-      IconButton(icon: Icon(Icons.account_circle), onPressed: () {})
+      IconButton(icon: Icon(Icons.account_circle), onPressed: _navigateToLogin)
     ];
   }
 
-  _navigateToDetail(Donation donation) {
-    final page = Detail(donation: donation);
-    final route = MaterialPageRoute(builder: (context) => page);
-    Navigator.push(context, route);
-  }
+  _navigateToDetail(Donation donation) =>
+      Navigation(context).push(Detail(donation: donation));
+
+  _navigateToLogin() => Navigation(context).push(Login());
 }
