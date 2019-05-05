@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/feature/login/login_bloc.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -10,6 +11,9 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool _isPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
+  LoginBloc bloc;
+
+  
 
   @override
   Widget build(BuildContext context) {
