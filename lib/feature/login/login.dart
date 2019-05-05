@@ -9,6 +9,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _isPasswordVisible = false;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class _LoginState extends State<Login> {
 
   Form _form(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Column(
         children: <Widget>[
           _emailField(context),
@@ -39,10 +41,12 @@ class _LoginState extends State<Login> {
 
   TextFormField _passwordField(BuildContext context) {
     return TextFormField(
-        decoration: InputDecoration(
-            labelText: L10n.getString(context, 'login_password'),
-            suffixIcon: _visibilityToggle()),
-        obscureText: !_isPasswordVisible);
+      decoration: InputDecoration(
+          labelText: L10n.getString(context, 'login_password'),
+          suffixIcon: _visibilityToggle()),
+      obscureText: !_isPasswordVisible,
+      validator: _validatePassword,
+    );
   }
 
   Widget _visibilityToggle() {
@@ -56,9 +60,9 @@ class _LoginState extends State<Login> {
 
   TextFormField _emailField(BuildContext context) {
     return TextFormField(
-      decoration:
-          InputDecoration(labelText: L10n.getString(context, 'login_email')),
-    );
+        decoration:
+            InputDecoration(labelText: L10n.getString(context, 'login_email')),
+        validator: _validateEmail);
   }
 
   Widget _button(BuildContext context) {
@@ -69,7 +73,37 @@ class _LoginState extends State<Login> {
           child: Text(L10n.getString(context, 'login_title')),
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
-          onPressed: () {}),
+          onPressed: () {
+            if (_formKey.currentState.validate())
+              print('the form is OK');
+            else
+              print('nah, the form is not valid');
+          }),
     );
+  }
+
+  String _validateEmail(String input) {
+    String message;
+
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+
+    if (input.trim().isEmpty)
+      message = L10n.getString(context, 'validation_message_email_required');
+    else if (!regex.hasMatch(input))
+      message = L10n.getString(context, 'validation_message_email_invalid');
+    return message;
+  }
+
+  String _validatePassword(String input) {
+    String message;
+
+    if (input.trim().isEmpty)
+      message = L10n.getString(context, 'validation_message_password_required');
+    else if (input.length < 6)
+      message =
+          L10n.getString(context, 'validation_message_password_too_short');
+    return message;
   }
 }
