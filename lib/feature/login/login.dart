@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
+import 'package:flutter_workshop/model/login/login_request.dart';
+import 'package:flutter_workshop/model/login/login_response.dart';
+import 'package:flutter_workshop/util/http_event.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -11,9 +14,21 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool _isPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
-  LoginBloc bloc;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  LoginBloc _bloc;
 
-  
+  @override
+  void initState() {
+    super.initState();
+    _bloc = LoginBloc();
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +52,13 @@ class _LoginState extends State<Login> {
           SizedBox(height: 40),
           _passwordField(context),
           SizedBox(height: 60),
-          _button(context)
+          StreamBuilder<HttpEvent<LoginResponse>>(
+              stream: _bloc.controller.stream,
+              builder:
+                  (context, AsyncSnapshot<HttpEvent<LoginResponse>> snapshot) {
+                bool isLoading = snapshot.hasData && snapshot.data.isLoading;
+                return _button(context, isLoading);
+              })
         ],
       ),
     );
@@ -45,6 +66,7 @@ class _LoginState extends State<Login> {
 
   TextFormField _passwordField(BuildContext context) {
     return TextFormField(
+      controller: _passwordController,
       decoration: InputDecoration(
           labelText: L10n.getString(context, 'login_password'),
           suffixIcon: _visibilityToggle()),
@@ -64,26 +86,43 @@ class _LoginState extends State<Login> {
 
   TextFormField _emailField(BuildContext context) {
     return TextFormField(
+        controller: _emailController,
         decoration:
             InputDecoration(labelText: L10n.getString(context, 'login_email')),
         validator: _validateEmail);
   }
 
-  Widget _button(BuildContext context) {
+  Widget _button(BuildContext context, bool isLoading) {
+    final child = isLoading
+        ? _circularProgressIndicator()
+        : Text(L10n.getString(context, 'login_title'));
+
     return ButtonTheme(
       height: 48.0,
       minWidth: double.maxFinite,
       child: FlatButton(
-          child: Text(L10n.getString(context, 'login_title')),
+          child: child,
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
           onPressed: () {
-            if (_formKey.currentState.validate())
-              print('the form is OK');
-            else
-              print('nah, the form is not valid');
+            if (_formKey.currentState.validate()) _sendLoginRequest();
           }),
     );
+  }
+
+  Widget _circularProgressIndicator() {
+    return SizedBox(
+      height: 26.0,
+      width: 26.0,
+      child: CircularProgressIndicator(
+          strokeWidth: 3.0,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+    );
+  }
+
+  _sendLoginRequest() {
+    final loginRequest = LoginRequest(_emailController.text, _passwordController.text);
+    _bloc.login(loginRequest);
   }
 
   String _validateEmail(String input) {
