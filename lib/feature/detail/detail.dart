@@ -34,11 +34,18 @@ class Detail extends StatelessWidget {
   }
 
   Row _user(User user) {
+    final backgroundImage =
+        user.avatarUrl == null ? null : NetworkImage(user.avatarUrl);
+    final child =
+        user.avatarUrl == null ? Text(user.name[0].toUpperCase()) : null;
+
     return Row(
       children: <Widget>[
         CircleAvatar(
-          backgroundImage: NetworkImage(user.avatarUrl),
-          backgroundColor: Colors.grey,
+          backgroundImage: backgroundImage,
+          child: child,
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
         ),
         SizedBox(
           width: 16,
@@ -58,7 +65,7 @@ class Detail extends StatelessWidget {
 
   Text _title() => Text(
         donation.title,
-        style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
       );
 
   Widget _carousel() {
