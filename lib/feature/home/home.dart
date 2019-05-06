@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5.0),
       child: Image.network(
-        listItem.images[0].url,
+        listItem.images.last.url,
         height: 75,
         width: 75,
         fit: BoxFit.cover,
@@ -108,7 +108,14 @@ class _HomeState extends State<Home> {
 
   List<Widget> _appBarActions() {
     return <Widget>[
-      IconButton(icon: Icon(Icons.account_circle), onPressed: _navigateToLogin)
+      FlatButton(
+          onPressed: _navigateToLogin,
+          child: Text(
+            'Entrar',
+            style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold),
+          ))
     ];
   }
 
