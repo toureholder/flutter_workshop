@@ -17,7 +17,7 @@ class CustomFormFieldValidator {
     String message;
 
     if (input.trim().isEmpty)
-      message = 'validation_message_password_required_test';
+      message = 'validation_message_password_required';
     else if (input.length < 6)
       message = 'validation_message_password_too_short';
     return message;
