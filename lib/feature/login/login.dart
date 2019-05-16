@@ -5,6 +5,7 @@ import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_request.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/http_event.dart';
+import 'package:flutter_workshop/util/form_field_validator.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -71,7 +72,8 @@ class _LoginState extends State<Login> {
           labelText: L10n.getString(context, 'login_password'),
           suffixIcon: _visibilityToggle()),
       obscureText: !_isPasswordVisible,
-      validator: _validatePassword,
+      validator: (input) => L10n.getString(
+          context, CustomFormFieldValidator.validatePassword(input)),
     );
   }
 
@@ -89,7 +91,8 @@ class _LoginState extends State<Login> {
         controller: _emailController,
         decoration:
             InputDecoration(labelText: L10n.getString(context, 'login_email')),
-        validator: _validateEmail);
+        validator: (input) => L10n.getString(
+            context, CustomFormFieldValidator.validateEmail(input)));
   }
 
   Widget _button(BuildContext context, bool isLoading) {
@@ -121,32 +124,8 @@ class _LoginState extends State<Login> {
   }
 
   _sendLoginRequest() {
-    final loginRequest = LoginRequest(_emailController.text, _passwordController.text);
+    final loginRequest =
+        LoginRequest(_emailController.text, _passwordController.text);
     _bloc.login(loginRequest);
-  }
-
-  String _validateEmail(String input) {
-    String message;
-
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-
-    if (input.trim().isEmpty)
-      message = L10n.getString(context, 'validation_message_email_required');
-    else if (!regex.hasMatch(input))
-      message = L10n.getString(context, 'validation_message_email_invalid');
-    return message;
-  }
-
-  String _validatePassword(String input) {
-    String message;
-
-    if (input.trim().isEmpty)
-      message = L10n.getString(context, 'validation_message_password_required');
-    else if (input.length < 6)
-      message =
-          L10n.getString(context, 'validation_message_password_too_short');
-    return message;
   }
 }

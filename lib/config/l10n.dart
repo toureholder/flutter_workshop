@@ -23,7 +23,7 @@ class L10n {
   final String defaultLanguageCode = AppLocales.supportedLanguageCodes.first;
   static Map<String, Map<String, String>> _localizedValues = Strings.map;
 
-  String get(String key) {
+  String _get(String key) {
     if (_localizedValues[key] == null) return key;
 
     return _localizedValues[key][locale.languageCode] ??
@@ -32,7 +32,7 @@ class L10n {
   }
 
   static String getString(BuildContext context, String key) =>
-      Localizations.of<L10n>(context, L10n).get(key);
+      key == null ? null : Localizations.of<L10n>(context, L10n)._get(key);
 }
 
 class AppLocales {
