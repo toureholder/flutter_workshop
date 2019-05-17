@@ -4,18 +4,20 @@ import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/donation/donation_api.dart';
 
 class HomeBloc {
-  final StreamController controller = StreamController<List<Donation>>();
+  final StreamController _controller = StreamController<List<Donation>>();
+
+  get stream => _controller.stream;
 
   dispose() {
-    controller.close();
+    _controller.close();
   }
 
   loadDonations() async {
     try {
       final donations = await DonationApi().getDonations();
-      controller.sink.add(donations);
+      _controller.sink.add(donations);
     } catch (error) {
-      controller.sink.addError(error);
+      _controller.sink.addError(error);
     }
   }
 }

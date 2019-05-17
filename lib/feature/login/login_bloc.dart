@@ -6,19 +6,21 @@ import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 
 class LoginBloc {
-  final StreamController controller =
+  final StreamController _controller =
       StreamController<HttpEvent<LoginResponse>>();
 
-  dispose() => controller.close();
+  get stream => _controller.stream;
+
+  dispose() => _controller.close();
 
   login(LoginRequest request) async {
     try {
-      controller.sink.add(HttpEvent<LoginResponse>(state: EventState.loading));
+      _controller.sink.add(HttpEvent<LoginResponse>(state: EventState.loading));
       final loginResponse = await LoginApi().login(request);
-      controller.sink.add(HttpEvent<LoginResponse>(
+      _controller.sink.add(HttpEvent<LoginResponse>(
           state: EventState.done, data: loginResponse));
     } catch (error) {
-      controller.sink.addError(error);
+      _controller.sink.addError(error);
     }
   }
 }

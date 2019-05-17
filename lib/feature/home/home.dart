@@ -13,18 +13,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  HomeBloc bloc;
+  HomeBloc _bloc;
 
   @override
   void initState() {
     super.initState();
-    bloc = HomeBloc();
-    bloc.loadDonations();
+    _bloc = HomeBloc();
+    _bloc.loadDonations();
   }
 
   @override
   void dispose() {
-    bloc.dispose();
+    _bloc.dispose();
     super.dispose();
   }
 
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
 
   StreamBuilder<List<Donation>> _listFutureBuilder() {
     return StreamBuilder(
-        stream: bloc.controller.stream,
+        stream: _bloc.stream,
         builder:
             (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
           Widget widget = Center(child: CircularProgressIndicator());
