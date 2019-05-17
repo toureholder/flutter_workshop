@@ -17,16 +17,16 @@ class StringLocalizationsDelegate extends LocalizationsDelegate<L10n> {
 }
 
 class L10n {
-  L10n(this.locale);
+  L10n(this._locale);
 
-  final Locale locale;
+  final Locale _locale;
   final String defaultLanguageCode = AppLocales.supportedLanguageCodes.first;
-  static Map<String, Map<String, String>> _localizedValues = Strings.map;
+  static Map<String, Map<String, String>> _localizedValues = Strings().map;
 
   String _get(String key) {
     if (_localizedValues[key] == null) return key;
 
-    return _localizedValues[key][locale.languageCode] ??
+    return _localizedValues[key][_locale.languageCode] ??
         _localizedValues[key][defaultLanguageCode] ??
         key;
   }
