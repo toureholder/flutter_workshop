@@ -54,7 +54,7 @@ class _LoginState extends State<Login> {
           _passwordField(context),
           SizedBox(height: 60),
           StreamBuilder<HttpEvent<LoginResponse>>(
-              stream: _bloc.controller.stream,
+              stream: _bloc.stream,
               builder:
                   (context, AsyncSnapshot<HttpEvent<LoginResponse>> snapshot) {
                 bool isLoading = snapshot.hasData && snapshot.data.isLoading;
