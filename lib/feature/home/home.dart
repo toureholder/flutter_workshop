@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
@@ -16,16 +17,10 @@ class _HomeState extends State<Home> {
   HomeBloc _bloc;
 
   @override
-  void initState() {
-    super.initState();
-    _bloc = HomeBloc();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _bloc = DependencyProvider.of(context).dependencies.homeBloc;
     _bloc.loadDonations();
-  }
-
-  @override
-  void dispose() {
-    _bloc.dispose();
-    super.dispose();
   }
 
   @override

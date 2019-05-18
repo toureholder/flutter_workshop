@@ -7,7 +7,7 @@ import 'package:flutter_workshop/util/http_event.dart';
 
 class LoginBloc {
   final StreamController _controller =
-      StreamController<HttpEvent<LoginResponse>>();
+      StreamController<HttpEvent<LoginResponse>>.broadcast();
 
   get stream => _controller.stream;
 
@@ -17,6 +17,7 @@ class LoginBloc {
     try {
       _controller.sink.add(HttpEvent<LoginResponse>(state: EventState.loading));
       final loginResponse = await LoginApi().login(request);
+      print('token: ${loginResponse.token}');
       _controller.sink.add(HttpEvent<LoginResponse>(
           state: EventState.done, data: loginResponse));
     } catch (error) {
