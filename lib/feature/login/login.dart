@@ -3,13 +3,14 @@ import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
-import 'package:flutter_workshop/model/login/login_request.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/custom_form_field_validator.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 
 class Login extends StatefulWidget {
-  static const submitButtonKey = 'login_submit_button';
+  static const submitButtonKey = Key('login_submit_button');
+  static const emailFieldKey = Key('email_field_button');
+  static const passwordFieldKey = Key('password_fieldbutton');
 
   @override
   _LoginState createState() => _LoginState();
@@ -46,9 +47,9 @@ class _LoginState extends State<Login> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          _emailField(context),
+          _emailField(),
           SizedBox(height: 40),
-          _passwordField(context),
+          _passwordField(),
           SizedBox(height: 60),
           StreamBuilder<HttpEvent<LoginResponse>>(
               stream: _bloc.stream,
@@ -62,8 +63,9 @@ class _LoginState extends State<Login> {
     );
   }
 
-  TextFormField _passwordField(BuildContext context) {
+  TextFormField _passwordField() {
     return TextFormField(
+      key: Login.passwordFieldKey,
       controller: _passwordController,
       decoration: InputDecoration(
           labelText: L10n.getString(context, 'login_password'),
@@ -83,8 +85,9 @@ class _LoginState extends State<Login> {
     );
   }
 
-  TextFormField _emailField(BuildContext context) {
+  TextFormField _emailField() {
     return TextFormField(
+        key: Login.emailFieldKey,
         controller: _emailController,
         decoration:
             InputDecoration(labelText: L10n.getString(context, 'login_email')),
@@ -101,7 +104,7 @@ class _LoginState extends State<Login> {
       height: 48.0,
       minWidth: double.maxFinite,
       child: FlatButton(
-          key: Key(Login.submitButtonKey),
+          key: Login.submitButtonKey,
           child: child,
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
@@ -122,8 +125,7 @@ class _LoginState extends State<Login> {
   }
 
   _sendLoginRequest() {
-    final loginRequest =
-        LoginRequest(_emailController.text, _passwordController.text);
-    _bloc.login(loginRequest);
+    _bloc.login(
+        email: _emailController.text, password: _passwordController.text);
   }
 }

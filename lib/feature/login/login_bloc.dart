@@ -13,8 +13,9 @@ class LoginBloc {
 
   dispose() => _controller.close();
 
-  login(LoginRequest request) async {
+  login({String email, String password}) async {
     try {
+      final request = LoginRequest(email: email, password: password);
       _controller.sink.add(HttpEvent<LoginResponse>(state: EventState.loading));
       final loginResponse = await LoginApi().login(request);
       print('token: ${loginResponse.token}');
