@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_workshop/util/custom_form_field_validator.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 
 class Login extends StatefulWidget {
+  static const submitButtonKey = 'login_submit_button';
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -20,15 +23,9 @@ class _LoginState extends State<Login> {
   LoginBloc _bloc;
 
   @override
-  void initState() {
-    super.initState();
-    _bloc = LoginBloc();
-  }
-
-  @override
-  void dispose() {
-    _bloc.dispose();
-    super.dispose();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _bloc = DependencyProvider.of(context).dependencies.loginBloc;
   }
 
   @override
@@ -104,6 +101,7 @@ class _LoginState extends State<Login> {
       height: 48.0,
       minWidth: double.maxFinite,
       child: FlatButton(
+          key: Key(Login.submitButtonKey),
           child: child,
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
