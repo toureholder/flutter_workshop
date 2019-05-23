@@ -4,25 +4,28 @@ import 'package:flutter_workshop/model/login/login_api.dart';
 import 'package:flutter_workshop/model/login/login_request.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/http_event.dart';
+import 'package:meta/meta.dart';
 
 class LoginBloc {
-  final StreamController _controller =
-      StreamController<HttpEvent<LoginResponse>>.broadcast();
+  final LoginApi loginApi;
+  final StreamController<HttpEvent<LoginResponse>> controller;
 
-  get stream => _controller.stream;
+  LoginBloc({@required this.loginApi, @required this.controller});
 
-  dispose() => _controller.close();
+  get stream => controller.stream;
+
+  dispose() => controller.close();
 
   login({String email, String password}) async {
     try {
       final request = LoginRequest(email: email, password: password);
-      _controller.sink.add(HttpEvent<LoginResponse>(state: EventState.loading));
-      final loginResponse = await LoginApi().login(request);
+      controller.sink.add(HttpEvent<LoginResponse>(state: EventState.loading));
+      final loginResponse = await loginApi.login(request);
       print('token: ${loginResponse.token}');
-      _controller.sink.add(HttpEvent<LoginResponse>(
+      controller.sink.add(HttpEvent<LoginResponse>(
           state: EventState.done, data: loginResponse));
     } catch (error) {
-      _controller.sink.addError(error);
+      controller.sink.addError(error);
     }
   }
 }
