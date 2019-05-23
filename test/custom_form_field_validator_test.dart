@@ -1,5 +1,5 @@
 import 'package:flutter_workshop/util/custom_form_field_validator.dart';
-import 'package:test_api/test_api.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('empty email returns error string', () {
