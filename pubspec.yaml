@@ -31,7 +31,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^4.0.0
+  mockito: ^3.0.0
+  image_test_utils: ^1.0.0
   test: 1.6.1
 
 
