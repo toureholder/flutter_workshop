@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-class MockClient extends Mock implements http.Client {}
+import 'test_util/mocks.dart';
 
 main() {
   MockClient _mockClient = MockClient();

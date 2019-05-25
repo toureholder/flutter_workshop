@@ -10,7 +10,7 @@ import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
 
-import 'test_util.dart';
+import 'test_util/test_util.dart';
 
 class MockLoginBloc extends Mock implements LoginBloc {}
 
