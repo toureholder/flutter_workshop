@@ -9,6 +9,8 @@ import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/util/navigation.dart';
 
 class Home extends StatefulWidget {
+  static const loginButtonKey = Key('home_login_button');
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -104,6 +106,7 @@ class _HomeState extends State<Home> {
   List<Widget> _appBarActions() {
     return <Widget>[
       FlatButton(
+          key: Home.loginButtonKey,
           onPressed: _navigateToLogin,
           child: Text(
             'Entrar',
