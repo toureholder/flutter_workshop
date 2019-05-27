@@ -7,7 +7,9 @@ import 'package:flutter_workshop/values/strings.dart';
 
 class TestUtil {
   static Widget makeTestableWidget(
-      {Widget subject, AppDependencies dependencies}) {
+      {Widget subject,
+      AppDependencies dependencies,
+      List<NavigatorObserver> navigatorObservers}) {
     return DependencyProvider(
       dependencies: dependencies,
       child: MaterialApp(
@@ -18,13 +20,13 @@ class TestUtil {
         ],
         supportedLocales: AppLocales.supportedLocales,
         home: subject,
+        navigatorObservers: navigatorObservers ?? const <NavigatorObserver>[],
       ),
     );
   }
 
   static Finder findInternationalizedText(String localizationKey) {
-    final Map<String, String> localizationMap =
-        Strings().map[localizationKey];
+    final Map<String, String> localizationMap = Strings().map[localizationKey];
 
     return find.byElementPredicate((Element candidate) {
       if (candidate.widget is Text) {

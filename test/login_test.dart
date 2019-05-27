@@ -4,15 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
-import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
 
+import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
-
-class MockLoginBloc extends Mock implements LoginBloc {}
 
 void main() {
   final _mockLoginBloc = MockLoginBloc();
