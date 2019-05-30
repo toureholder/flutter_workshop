@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/custom_form_field_validator.dart';
 import 'package:flutter_workshop/util/http_event.dart';
+import 'package:flutter_workshop/util/navigation.dart';
 
 class Login extends StatefulWidget {
   static const submitButtonKey = Key('login_submit_button');
@@ -27,6 +29,7 @@ class _LoginState extends State<Login> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _bloc = DependencyProvider.of(context).dependencies.loginBloc;
+    _listenForLoginSuccess();
   }
 
   @override
@@ -127,5 +130,15 @@ class _LoginState extends State<Login> {
   _sendLoginRequest() {
     _bloc.login(
         email: _emailController.text, password: _passwordController.text);
+  }
+
+  _listenForLoginSuccess() {
+    _bloc.stream.listen((HttpEvent<LoginResponse> event) {
+      if (event.isDone) _onLoginSuccess();
+    });
+  }
+
+  _onLoginSuccess() {
+    Navigation(context).push(Home(), clearStack: true);
   }
 }

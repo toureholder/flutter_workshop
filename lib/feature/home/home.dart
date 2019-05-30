@@ -6,6 +6,7 @@ import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
+import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/navigation.dart';
 
 class Home extends StatefulWidget {
@@ -17,10 +18,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   HomeBloc _bloc;
+  Navigation _navigation;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _navigation = Navigation(context);
     _bloc = DependencyProvider.of(context).dependencies.homeBloc;
     _bloc.loadDonations();
   }
@@ -105,20 +108,48 @@ class _HomeState extends State<Home> {
 
   List<Widget> _appBarActions() {
     return <Widget>[
-      FlatButton(
-          key: Home.loginButtonKey,
-          onPressed: _navigateToLogin,
-          child: Text(
-            'Entrar',
-            style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold),
-          ))
+      FutureBuilder<User>(
+          future: _bloc.loadCurrentUser(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? _userAvatar(snapshot.data)
+                : _loginButton();
+          })
     ];
   }
 
-  _navigateToDetail(Donation donation) =>
-      Navigation(context).push(Detail(donation: donation));
+  Padding _userAvatar(User user) {
+    Widget child = Text(user.name.substring(0, 1).toUpperCase());
+    ImageProvider backgroundImage;
 
-  _navigateToLogin() => Navigation(context).push(Login());
+    if (user.avatarUrl != null && user.name.isNotEmpty) {
+      child = null;
+      backgroundImage = NetworkImage(user.avatarUrl);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: CircleAvatar(
+        child: child,
+        backgroundImage: backgroundImage,
+      ),
+    );
+  }
+
+  FlatButton _loginButton() {
+    return FlatButton(
+        key: Home.loginButtonKey,
+        onPressed: _navigateToLogin,
+        child: Text(
+          L10n.getString(context, 'login_title'),
+          style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.bold),
+        ));
+  }
+
+  _navigateToDetail(Donation donation) =>
+      _navigation.push(Detail(donation: donation));
+
+  _navigateToLogin() => _navigation.push(Login());
 }

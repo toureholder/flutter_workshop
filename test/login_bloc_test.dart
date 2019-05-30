@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/model/user/user.dart';
+import 'package:flutter_workshop/service/shared_preferences_storage.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
 import 'package:flutter_workshop/model/login/login_api.dart';
 
@@ -16,17 +18,23 @@ class MockLoginResponseStreamController extends Mock
 class MockLoginResponseStreamSink extends Mock
     implements StreamSink<HttpEvent<LoginResponse>> {}
 
-void main() {
+void main() async {
+  SharedPreferences.setMockInitialValues({});
   MockLoginResponseStreamController _mockController;
   MockLoginResponseStreamSink _mockSink;
   MockLoginApi _mockLoginApi;
   LoginBloc _bloc;
 
-  setUp(() {
+  setUp(() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     _mockController = MockLoginResponseStreamController();
     _mockSink = MockLoginResponseStreamSink();
     _mockLoginApi = MockLoginApi();
-    _bloc = LoginBloc(controller: _mockController, loginApi: _mockLoginApi);
+    _bloc = LoginBloc(
+        controller: _mockController,
+        loginApi: _mockLoginApi,
+        diskStorageProvider: SharedPreferencesStorage(sharedPreferences));
 
     when(_mockController.sink).thenReturn(_mockSink);
   });
