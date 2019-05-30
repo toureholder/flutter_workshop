@@ -3,37 +3,39 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
+import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
-import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
+import 'package:flutter_workshop/model/user/user.dart';
 import 'package:mockito/mockito.dart';
 import 'package:image_test_utils/image_test_utils.dart';
 
 import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
 
-class MockHomeBloc extends Mock implements HomeBloc {}
-
 void main() {
   final _mockHomeBloc = MockHomeBloc();
+  final _mockLoginBloc = MockLoginBloc();
   final _mockNavigationObserver = MockNavigatorObserver();
 
-  final testableWidget = TestUtil.makeTestableWidget(
+  final _testableWidget = TestUtil.makeTestableWidget(
       subject: Home(),
       dependencies:
-          AppDependencies(homeBloc: _mockHomeBloc, loginBloc: MockLoginBloc()),
+          AppDependencies(homeBloc: _mockHomeBloc, loginBloc: _mockLoginBloc),
       navigatorObservers: [_mockNavigationObserver]);
+
+  final _appBar = find.byType(CustomAppBar);
 
   testWidgets('shows circular progress inidicator while loading',
       (WidgetTester tester) async {
-    await tester.pumpWidget(testableWidget);
+    await tester.pumpWidget(_testableWidget);
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
   testWidgets('loads donations', (WidgetTester tester) async {
-    await tester.pumpWidget(testableWidget);
+    await tester.pumpWidget(_testableWidget);
 
     verify(_mockHomeBloc.loadDonations());
   });
@@ -45,7 +47,7 @@ void main() {
 
       when(_mockHomeBloc.stream).thenAnswer((_) => controller.stream);
 
-      await tester.pumpWidget(testableWidget);
+      await tester.pumpWidget(_testableWidget);
 
       controller.sink.add(Donation.fakeList());
 
@@ -59,12 +61,45 @@ void main() {
   });
 
   testWidgets('navigates to login screen', (WidgetTester tester) async {
-    await tester.pumpWidget(testableWidget);
+    when(_mockLoginBloc.stream).thenAnswer((_) => MockLoginResponseStream());
+
+    await tester.pumpWidget(_testableWidget);
     final loginButton = find.byKey(Home.loginButtonKey);
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
 
     verify(_mockNavigationObserver.didPush(any, any));
     expect(find.byType(Login), findsOneWidget);
+  });
+
+  testWidgets('displays user avatar in app bar if user is logged in',
+      (WidgetTester tester) async {
+    provideMockedNetworkImages(() async {
+      when(_mockHomeBloc.loadCurrentUser())
+          .thenAnswer((_) async => User.fake());
+
+      await tester.pumpWidget(_testableWidget);
+      await tester.pump(Duration.zero);
+
+      expect(find.descendant(of: _appBar, matching: find.byType(CircleAvatar)),
+          findsOneWidget);
+    });
+  });
+
+  testWidgets('displays login button in app bar if user is not logged in',
+      (WidgetTester tester) async {
+    provideMockedNetworkImages(() async {
+      when(_mockHomeBloc.loadCurrentUser()).thenAnswer((_) async => null);
+
+      await tester.pumpWidget(_testableWidget);
+      await tester.pump(Duration.zero);
+
+      final flatButton = find.byType(FlatButton);
+      final text = TestUtil.findInternationalizedText('login_title');
+      final textButton = find.descendant(of: flatButton, matching: text);
+
+      expect(
+          find.descendant(of: _appBar, matching: textButton), findsOneWidget);
+    });
   });
 }
