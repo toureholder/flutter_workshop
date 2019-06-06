@@ -16,6 +16,22 @@ class Strings {
       "en": "Password",
       "pt": "Senha"
     },
+    "logout_confirmation_title": {
+      "en": "Logout?",
+      "pt": "Sair?"
+    },
+    "logout_confirmation": {
+      "en": "Logout",
+      "pt": "Sair"
+    },
+    "common_cancel": {
+      "en": "Cancel",
+      "pt": "Cancelar"
+    },
+    "common_ok": {
+      "en": "Ok",
+      "pt": "Ok"
+    },
     "validation_message_email_required": {
       "en": "Email required",
       "pt": "E seu e-mail?"
