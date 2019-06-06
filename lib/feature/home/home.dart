@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
@@ -118,7 +119,7 @@ class _HomeState extends State<Home> {
     ];
   }
 
-  Padding _userAvatar(User user) {
+  Widget _userAvatar(User user) {
     Widget child = Text(user.name.substring(0, 1).toUpperCase());
     ImageProvider backgroundImage;
 
@@ -127,12 +128,15 @@ class _HomeState extends State<Home> {
       backgroundImage = NetworkImage(user.avatarUrl);
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: CircleAvatar(
-        child: child,
-        backgroundImage: backgroundImage,
+    return GestureDetector(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: CircleAvatar(
+          child: child,
+          backgroundImage: backgroundImage,
+        ),
       ),
+      onTap: _showLogoutConfirmationDialog,
     );
   }
 
@@ -152,4 +156,15 @@ class _HomeState extends State<Home> {
       _navigation.push(Detail(donation: donation));
 
   _navigateToLogin() => _navigation.push(Login());
+
+  _showLogoutConfirmationDialog() {
+    showDialog(
+        context: context,
+        builder: (context) => CustomAlertDialog(
+              titleText: L10n.getString(context, 'logout_confirmation_title'),
+              hasCancelButton: true,
+              confirmationText: L10n.getString(context, 'logout_confirmation'),
+              onConfirmed: () => print('Confirmed'),
+            ));
+  }
 }
