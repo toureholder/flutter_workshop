@@ -29,4 +29,10 @@ class SharedPreferencesStorage implements DiskStorageProvider {
   @override
   Future<bool> setAccessToken(String token) =>
       sharedPreferences.setString(_accessTokenKey, token);
+
+  @override
+  Future<bool> clearToken() => sharedPreferences.remove(_accessTokenKey);
+
+  @override
+  Future<bool> clearUser() => sharedPreferences.remove(_userKey);
 }

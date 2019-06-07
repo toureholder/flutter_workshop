@@ -9,6 +9,7 @@ import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/donation/donation_api.dart';
 import 'package:flutter_workshop/model/login/login_api.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
+import 'package:flutter_workshop/service/session.dart';
 import 'package:flutter_workshop/service/shared_preferences_storage.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,15 +22,18 @@ void main() async {
   final _sharedPreferencesStorage =
       SharedPreferencesStorage(_sharedPreferences);
 
+  final _session = Session(diskStorageProvider: _sharedPreferencesStorage);
+
   final dependencies = AppDependencies(
       loginBloc: LoginBloc(
           controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
           loginApi: LoginApi(client: _httpClient),
-          diskStorageProvider: _sharedPreferencesStorage),
+          sessionProvider: _session),
       homeBloc: HomeBloc(
           controller: StreamController<List<Donation>>.broadcast(),
           donationApi: DonationApi(client: _httpClient),
-          diskStorageProvider: _sharedPreferencesStorage));
+          diskStorageProvider: _sharedPreferencesStorage,
+          sessionProvider: _session));
 
   runApp(MyApp(dependencies: dependencies));
 }

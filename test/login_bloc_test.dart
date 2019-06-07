@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/model/user/user.dart';
+import 'package:flutter_workshop/service/session.dart';
 import 'package:flutter_workshop/service/shared_preferences_storage.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
@@ -28,13 +29,17 @@ void main() async {
   setUp(() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
+
+    final session = Session(
+        diskStorageProvider: SharedPreferencesStorage(sharedPreferences));
+
     _mockController = MockLoginResponseStreamController();
     _mockSink = MockLoginResponseStreamSink();
     _mockLoginApi = MockLoginApi();
     _bloc = LoginBloc(
         controller: _mockController,
         loginApi: _mockLoginApi,
-        diskStorageProvider: SharedPreferencesStorage(sharedPreferences));
+        sessionProvider: session);
 
     when(_mockController.sink).thenReturn(_mockSink);
   });
