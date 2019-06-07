@@ -152,6 +152,12 @@ class _HomeState extends State<Home> {
         ));
   }
 
+  _logout() async {
+    await _bloc.logout();
+    setState(() {});
+    Navigator.of(context).pop();
+  }
+
   _navigateToDetail(Donation donation) =>
       _navigation.push(Detail(donation: donation));
 
@@ -164,7 +170,7 @@ class _HomeState extends State<Home> {
               titleText: L10n.getString(context, 'logout_confirmation_title'),
               hasCancelButton: true,
               confirmationText: L10n.getString(context, 'logout_confirmation'),
-              onConfirmed: () => print('Confirmed'),
+              onConfirmed: () => _logout(),
             ));
   }
 }
