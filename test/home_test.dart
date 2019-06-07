@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
+import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
@@ -100,6 +101,29 @@ void main() {
 
       expect(
           find.descendant(of: _appBar, matching: textButton), findsOneWidget);
+    });
+  });
+
+  testWidgets('shows logout confirmation dialog when user taps avatar',
+      (WidgetTester tester) async {
+    provideMockedNetworkImages(() async {
+      when(_mockHomeBloc.loadCurrentUser())
+          .thenAnswer((_) async => User.fake());
+
+      await tester.pumpWidget(_testableWidget);
+      await tester.pump(Duration.zero);
+
+      final avatar =
+          find.descendant(of: _appBar, matching: find.byType(CircleAvatar));
+
+      await tester.tap(avatar);
+      await tester.pump(Duration.zero);
+
+      final dialog = find.byType(CustomAlertDialog);
+      final title =
+          TestUtil.findInternationalizedText('logout_confirmation_title');
+
+      expect(find.descendant(of: dialog, matching: title), findsOneWidget);
     });
   });
 }
