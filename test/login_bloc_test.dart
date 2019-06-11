@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
+import 'package:flutter_workshop/model/login/login_api.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/model/user/user.dart';
-import 'package:flutter_workshop/service/session.dart';
-import 'package:flutter_workshop/service/shared_preferences_storage.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
-import 'package:flutter_workshop/model/login/login_api.dart';
+
+import 'test_util/mocks.dart';
 
 class MockLoginApi extends Mock implements LoginApi {}
 
@@ -20,26 +19,21 @@ class MockLoginResponseStreamSink extends Mock
     implements StreamSink<HttpEvent<LoginResponse>> {}
 
 void main() async {
-  SharedPreferences.setMockInitialValues({});
   MockLoginResponseStreamController _mockController;
   MockLoginResponseStreamSink _mockSink;
   MockLoginApi _mockLoginApi;
+  MockSessionProvider _mockSessionProvider;
   LoginBloc _bloc;
 
   setUp(() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    final session = Session(
-        diskStorageProvider: SharedPreferencesStorage(sharedPreferences));
-
     _mockController = MockLoginResponseStreamController();
     _mockSink = MockLoginResponseStreamSink();
     _mockLoginApi = MockLoginApi();
+    _mockSessionProvider = MockSessionProvider();
     _bloc = LoginBloc(
         controller: _mockController,
         loginApi: _mockLoginApi,
-        sessionProvider: session);
+        sessionProvider: _mockSessionProvider);
 
     when(_mockController.sink).thenReturn(_mockSink);
   });
@@ -49,7 +43,7 @@ void main() async {
     verify(_mockLoginApi.login(any));
   });
 
-  test('adds events to stream sink if api returns a LoginReponse', () async {
+  test('adds loading and success events to stream sink if api returns a LoginReponse', () async {
     when(_mockLoginApi.login(any))
         .thenAnswer((_) async => LoginResponse('token', User.fake()));
 
@@ -62,6 +56,14 @@ void main() async {
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSink.addError(any)).called(1);
+  });
+
+  test('creates session if api returns a LoginReponse', () async {
+    when(_mockLoginApi.login(any))
+        .thenAnswer((_) async => LoginResponse('token', User.fake()));
+
+    await _bloc.login(email: 'test@test.com', password: '123456');
+    verify(_mockSessionProvider.logUserIn(any));
   });
 
   tearDown(() {
