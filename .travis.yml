@@ -14,7 +14,9 @@ install:
   - flutter doctor -v
   - flutter packages get
 script:
-  - flutter test
+  - flutter test --coverage --coverage-path=lcov.info
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 cache:
   directories:
   - $HOME/.pub-cache
