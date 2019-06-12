@@ -1,6 +1,7 @@
 # Flutter beginner's workshop
 
 [![Build Status](https://travis-ci.com/toureh/flutter_workshop.svg?branch=master)](https://travis-ci.com/toureh/flutter_workshop)
+[![codecov](https://codecov.io/gh/toureh/flutter_workshop/branch/master/graph/badge.svg)](https://codecov.io/gh/toureh/flutter_workshop)
 
 This repository contains a sample app the I use to give workshops geared towards beginners to Flutter. I've made an effort to keep the git history clean so that each commit represents a significant building block in the app.
 
@@ -18,6 +19,7 @@ This repository contains a sample app the I use to give workshops geared towards
 * Dependency injection with InheritedWidget
 * Unit and widget tests
 * Continuous integration pipelines with Travis CI
+* Uploading code coverage to Codecov
 
 
 ## Getting Started
