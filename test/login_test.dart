@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
+import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
@@ -16,7 +18,6 @@ import 'test_util/test_util.dart';
 void main() {
   MockLoginBloc _mockLoginBloc;
   MockHomeBloc _mockHomeBloc;
-  MockLoginResponseStream _mockLoginStream;
   MockNavigatorObserver _mockNavigationObserver;
   Widget _testableWidget;
   Finder _emailField;
@@ -27,7 +28,6 @@ void main() {
   setUp(() {
     _mockLoginBloc = MockLoginBloc();
     _mockHomeBloc = MockHomeBloc();
-    _mockLoginStream = MockLoginResponseStream();
     _mockNavigationObserver = MockNavigatorObserver();
     _streamController = StreamController<HttpEvent<LoginResponse>>.broadcast();
 
@@ -41,7 +41,7 @@ void main() {
     _passwordField = find.byKey(Login.passwordFieldKey);
     _submitButton = find.byKey(Login.submitButtonKey);
 
-    when(_mockLoginBloc.stream).thenAnswer((_) => _mockLoginStream);
+    when(_mockLoginBloc.stream).thenAnswer((_) => _streamController.stream);
   });
 
   group('attempts login', () {
@@ -174,8 +174,6 @@ void main() {
   group('handles login stream events', () {
     testWidgets('shows circular progress inidicator when loading',
         (WidgetTester tester) async {
-      when(_mockLoginBloc.stream).thenAnswer((_) => _streamController.stream);
-
       await tester.pumpWidget(_testableWidget);
       expect(find.byType(CircularProgressIndicator), findsNothing);
 
@@ -187,14 +185,25 @@ void main() {
 
     testWidgets('navigates to home screen when login succeeds',
         (WidgetTester tester) async {
-      when(_mockLoginBloc.stream).thenAnswer((_) => _streamController.stream);
-
       await tester.pumpWidget(_testableWidget);
       _streamController.sink.add(HttpEvent<LoginResponse>(
-          state: EventState.done, data: LoginResponse('token', User.fake())));
+          statusCode: HttpStatus.ok,
+          data: LoginResponse('token', User.fake())));
       await tester.pump(Duration.zero);
       verify(_mockNavigationObserver.didPush(any, any));
       expect(find.byType(Home), findsOneWidget);
+    });
+
+    testWidgets('shows alert dialog when login fails',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_testableWidget);
+      _streamController.sink.add(
+          HttpEvent<LoginResponse>(statusCode: HttpStatus.unprocessableEntity));
+      await tester.pump(Duration.zero);
+      final dialog = find.byType(CustomAlertDialog);
+      final content =
+          TestUtil.findInternationalizedText('login_error_bad_credentials');
+      expect(find.descendant(of: dialog, matching: content), findsOneWidget);
     });
   });
 

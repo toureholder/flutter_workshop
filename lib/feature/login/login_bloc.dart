@@ -24,11 +24,14 @@ class LoginBloc {
   login({String email, String password}) async {
     try {
       final request = LoginRequest(email: email, password: password);
-      controller.sink.add(HttpEvent<LoginResponse>(state: EventState.loading));
-      final loginResponse = await loginApi.login(request);
-      await _saveToPreferences(loginResponse);
-      controller.sink.add(HttpEvent<LoginResponse>(
-          state: EventState.done, data: loginResponse));
+
+      controller.sink.add(HttpEvent.loading());
+
+      final HttpEvent<LoginResponse> event = await loginApi.login(request);
+
+      if (event.data != null) await _saveToPreferences(event.data);
+
+      controller.sink.add(event);
     } catch (error) {
       controller.sink.addError(error);
     }

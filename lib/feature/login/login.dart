@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
+import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
@@ -29,7 +32,7 @@ class _LoginState extends State<Login> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _bloc = DependencyProvider.of(context).dependencies.loginBloc;
-    _listenForLoginSuccess();
+    _listenForLoginResponse();
   }
 
   @override
@@ -132,13 +135,27 @@ class _LoginState extends State<Login> {
         email: _emailController.text, password: _passwordController.text);
   }
 
-  _listenForLoginSuccess() {
+  _listenForLoginResponse() {
     _bloc.stream.listen((HttpEvent<LoginResponse> event) {
-      if (event.isDone) _onLoginSuccess();
+      if (event.isLoading) return;
+      if (event.statusCode == HttpStatus.ok)
+        _onLoginSuccess();
+      else
+        _onLoginFailure(event.statusCode);
     });
   }
 
-  _onLoginSuccess() {
-    Navigation(context).push(Home(), clearStack: true);
+  _onLoginSuccess() => Navigation(context).push(Home(), clearStack: true);
+
+  _onLoginFailure(int statusCode) {
+    final map = {HttpStatus.unprocessableEntity: 'login_error_bad_credentials'};
+
+    final messageKey = map[statusCode] ?? 'common_error_server_generic';
+
+    showDialog(
+        context: context,
+        builder: (context) => CustomAlertDialog(
+              contentText: L10n.getString(context, messageKey),
+            ));
   }
 }
