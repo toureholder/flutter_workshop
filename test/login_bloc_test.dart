@@ -43,9 +43,11 @@ void main() async {
     verify(_mockLoginApi.login(any));
   });
 
-  test('adds loading and success events to stream sink if api returns a LoginReponse', () async {
-    when(_mockLoginApi.login(any))
-        .thenAnswer((_) async => LoginResponse('token', User.fake()));
+  test(
+      'adds loading and success events to stream sink if api returns a LoginReponse',
+      () async {
+    when(_mockLoginApi.login(any)).thenAnswer(
+        (_) async => HttpEvent(data: LoginResponse('token', User.fake())));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSink.add(any)).called(2);
@@ -59,8 +61,8 @@ void main() async {
   });
 
   test('creates session if api returns a LoginReponse', () async {
-    when(_mockLoginApi.login(any))
-        .thenAnswer((_) async => LoginResponse('token', User.fake()));
+    when(_mockLoginApi.login(any)).thenAnswer(
+        (_) async => HttpEvent(data: LoginResponse('token', User.fake())));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSessionProvider.logUserIn(any));

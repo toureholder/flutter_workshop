@@ -16,6 +16,10 @@ class Strings {
       "en": "Password",
       "pt": "Senha"
     },
+    "login_error_bad_credentials": {
+      "en": "Wrong email or password.",
+      "pt": "E-mail ou senha incorreta."
+    },
     "logout_confirmation_title": {
       "en": "Logout?",
       "pt": "Sair?"
@@ -27,6 +31,10 @@ class Strings {
     "common_cancel": {
       "en": "Cancel",
       "pt": "Cancelar"
+    },
+    "common_error_server_generic": {
+      "en": "Something went wrong. Please try again.",
+      "pt": "Algo deu errado. Por favor, tente novamente."
     },
     "common_ok": {
       "en": "Ok",

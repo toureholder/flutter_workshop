@@ -163,14 +163,12 @@ class _HomeState extends State<Home> {
 
   _navigateToLogin() => _navigation.push(Login());
 
-  _showLogoutConfirmationDialog() {
-    showDialog(
-        context: context,
-        builder: (context) => CustomAlertDialog(
-              titleText: L10n.getString(context, 'logout_confirmation_title'),
-              hasCancelButton: true,
-              confirmationText: L10n.getString(context, 'logout_confirmation'),
-              onConfirmed: () => _logout(),
-            ));
-  }
+  _showLogoutConfirmationDialog() => showDialog(
+      context: context,
+      builder: (context) => CustomAlertDialog(
+            titleText: L10n.getString(context, 'logout_confirmation_title'),
+            hasCancelButton: true,
+            confirmationText: L10n.getString(context, 'logout_confirmation'),
+            onConfirmed: () => _logout(),
+          ));
 }

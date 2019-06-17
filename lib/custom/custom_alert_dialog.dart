@@ -30,7 +30,7 @@ class CustomAlertDialog extends StatelessWidget {
       actions: <Widget>[
         if (hasCancelButton || cancellationText != null) _cancelButton(context),
         FlatButton(
-          child: Text(confirmationText),
+          child: Text(confirmationText ?? L10n.getString(context, 'common_ok')),
           onPressed: onConfirmed ?? () => _closeDialog(context),
         )
       ],
