@@ -1,14 +1,13 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 class BaseApi {
-  final http.Client client;
-
   BaseApi({@required this.client});
+
+  final http.Client client;
 
   final String baseUrl = 'https://giv-api.herokuapp.com/';
 
@@ -19,5 +18,5 @@ class BaseApi {
       client.post(url, body: jsonEncode(body), headers: _getDefaultHeaders());
 
   Map<String, String> _getDefaultHeaders() =>
-      {HttpHeaders.contentTypeHeader: 'application/json'};
+      <String, String>{HttpHeaders.contentTypeHeader: 'application/json'};
 }

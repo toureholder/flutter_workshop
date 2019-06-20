@@ -2,9 +2,9 @@ class CustomFormFieldValidator {
   static String validateEmail(String input) {
     String message;
 
-    Pattern pattern =
+    const Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
+    final RegExp regex = RegExp(pattern);
 
     if (input.trim().isEmpty)
       message = 'validation_message_email_required';

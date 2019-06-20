@@ -16,17 +16,17 @@ import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
 
 void main() {
-  final _mockHomeBloc = MockHomeBloc();
-  final _mockLoginBloc = MockLoginBloc();
-  final _mockNavigationObserver = MockNavigatorObserver();
+  final MockHomeBloc _mockHomeBloc = MockHomeBloc();
+  final MockLoginBloc _mockLoginBloc = MockLoginBloc();
+  final MockNavigatorObserver _mockNavigationObserver = MockNavigatorObserver();
 
-  final _testableWidget = TestUtil.makeTestableWidget(
+  final Widget _testableWidget = TestUtil.makeTestableWidget(
       subject: Home(),
       dependencies:
           AppDependencies(homeBloc: _mockHomeBloc, loginBloc: _mockLoginBloc),
-      navigatorObservers: [_mockNavigationObserver]);
+      navigatorObservers: <NavigatorObserver>[_mockNavigationObserver]);
 
-  final _appBar = find.byType(CustomAppBar);
+  final Finder _appBar = find.byType(CustomAppBar);
 
   testWidgets('shows circular progress inidicator while loading',
       (WidgetTester tester) async {
@@ -44,7 +44,8 @@ void main() {
   testWidgets('shows list when donations are added to stream',
       (WidgetTester tester) async {
     provideMockedNetworkImages(() async {
-      final controller = StreamController<List<Donation>>.broadcast();
+      final StreamController<List<Donation>> controller =
+          StreamController<List<Donation>>.broadcast();
 
       when(_mockHomeBloc.stream).thenAnswer((_) => controller.stream);
 
@@ -65,7 +66,7 @@ void main() {
     when(_mockLoginBloc.stream).thenAnswer((_) => MockLoginResponseStream());
 
     await tester.pumpWidget(_testableWidget);
-    final loginButton = find.byKey(Home.loginButtonKey);
+    final Finder loginButton = find.byKey(Home.loginButtonKey);
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
 
@@ -95,9 +96,9 @@ void main() {
       await tester.pumpWidget(_testableWidget);
       await tester.pump(Duration.zero);
 
-      final flatButton = find.byType(FlatButton);
-      final text = TestUtil.findInternationalizedText('login_title');
-      final textButton = find.descendant(of: flatButton, matching: text);
+      final Finder flatButton = find.byType(FlatButton);
+      final Finder text = TestUtil.findInternationalizedText('login_title');
+      final Finder textButton = find.descendant(of: flatButton, matching: text);
 
       expect(
           find.descendant(of: _appBar, matching: textButton), findsOneWidget);
@@ -113,14 +114,14 @@ void main() {
       await tester.pumpWidget(_testableWidget);
       await tester.pump(Duration.zero);
 
-      final avatar =
+      final Finder avatar =
           find.descendant(of: _appBar, matching: find.byType(CircleAvatar));
 
       await tester.tap(avatar);
       await tester.pump(Duration.zero);
 
-      final dialog = find.byType(CustomAlertDialog);
-      final title =
+      final Finder dialog = find.byType(CustomAlertDialog);
+      final Finder title =
           TestUtil.findInternationalizedText('logout_confirmation_title');
 
       expect(find.descendant(of: dialog, matching: title), findsOneWidget);
@@ -136,15 +137,15 @@ void main() {
       await tester.pumpWidget(_testableWidget);
       await tester.pump(Duration.zero);
 
-      final avatar =
+      final Finder avatar =
           find.descendant(of: _appBar, matching: find.byType(CircleAvatar));
 
       await tester.tap(avatar);
       await tester.pump(Duration.zero);
 
-      final buttonText =
+      final Finder buttonText =
           TestUtil.findInternationalizedText('logout_confirmation');
-      final button =
+      final Finder button =
           find.descendant(of: find.byType(FlatButton), matching: buttonText);
 
       await tester.tap(button);
@@ -156,7 +157,8 @@ void main() {
   testWidgets('shows error message when an error is added to stream',
       (WidgetTester tester) async {
     provideMockedNetworkImages(() async {
-      final controller = StreamController<List<Donation>>.broadcast();
+      final StreamController<List<Donation>> controller =
+          StreamController<List<Donation>>.broadcast();
 
       when(_mockHomeBloc.stream).thenAnswer((_) => controller.stream);
 

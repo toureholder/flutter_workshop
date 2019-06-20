@@ -8,24 +8,25 @@ import 'package:flutter_workshop/service/session_provider.dart';
 import 'package:meta/meta.dart';
 
 class HomeBloc {
-  final DonationApi donationApi;
-  final StreamController<List<Donation>> controller;
-  final DiskStorageProvider diskStorageProvider;
-  final SessionProvider sessionProvider;
-
   HomeBloc(
       {@required this.donationApi,
       @required this.controller,
       @required this.diskStorageProvider,
       @required this.sessionProvider});
 
+  final DonationApi donationApi;
+  final StreamController<List<Donation>> controller;
+  final DiskStorageProvider diskStorageProvider;
+
+  final SessionProvider sessionProvider;
+
   Stream<List<Donation>> get stream => controller.stream;
 
-  dispose() => controller.close();
+  Future<void> dispose() => controller.close();
 
-  loadDonations() async {
+  Future<void> loadDonations() async {
     try {
-      final donations = await donationApi.getDonations();
+      final List<Donation> donations = await donationApi.getDonations();
       controller.sink.add(donations);
     } catch (error) {
       controller.sink.addError(error);
@@ -34,5 +35,5 @@ class HomeBloc {
 
   Future<User> loadCurrentUser() async => diskStorageProvider.getUser();
 
-  logout() async => sessionProvider.logUserOut();
+  Future<List<bool>> logout() async => sessionProvider.logUserOut();
 }

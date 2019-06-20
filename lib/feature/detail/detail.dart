@@ -4,21 +4,21 @@ import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 
 class Detail extends StatelessWidget {
-  final Donation donation;
-
   const Detail({Key key, this.donation}) : super(key: key);
+
+  final Donation donation;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: _body(),
     );
   }
 
   Widget _body() {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: ListView(
         children: <Widget>[
           _carousel(),
@@ -34,9 +34,9 @@ class Detail extends StatelessWidget {
   }
 
   Row _user(User user) {
-    final backgroundImage =
+    final ImageProvider backgroundImage =
         user.avatarUrl == null ? null : NetworkImage(user.avatarUrl);
-    final child =
+    final Widget child =
         user.avatarUrl == null ? Text(user.name[0].toUpperCase()) : null;
 
     return Row(
@@ -47,19 +47,13 @@ class Detail extends StatelessWidget {
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
         ),
-        SizedBox(
-          width: 16,
-        ),
+        const SizedBox(width: 16),
         Text(user.name)
       ],
     );
   }
 
-  SizedBox _verticalMargin() {
-    return SizedBox(
-      height: 24,
-    );
-  }
+  SizedBox _verticalMargin() => const SizedBox(height: 24);
 
   Text _description() => Text(donation.description);
 
@@ -69,14 +63,14 @@ class Detail extends StatelessWidget {
       );
 
   Widget _carousel() {
-    final size = 300.0;
+    const double size = 300.0;
     return SizedBox(
       height: size,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: donation.images.length,
-          itemBuilder: (context, index) {
-            String url = donation.images[index].url;
+          itemBuilder: (BuildContext context, int index) {
+            final String url = donation.images[index].url;
             return _image(url, size);
           }),
     );

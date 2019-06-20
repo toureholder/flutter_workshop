@@ -3,9 +3,9 @@ import 'package:flutter_workshop/base/base_material_app.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
 
 class MyApp extends StatefulWidget {
-  final AppDependencies dependencies;
-
   const MyApp({Key key, this.dependencies}) : super(key: key);
+
+  final AppDependencies dependencies;
 
   @override
   _MyAppState createState() => _MyAppState();

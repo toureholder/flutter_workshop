@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,9 +6,9 @@ import 'package:image_test_utils/image_test_utils.dart';
 import 'test_util/test_util.dart';
 
 void main() {
-  final _fakeDonation = Donation.fake();
+  final Donation _fakeDonation = Donation.fake();
 
-  final _testableWidget = TestUtil.makeTestableWidget(
+  final Widget _testableWidget = TestUtil.makeTestableWidget(
       subject: Detail(
     donation: _fakeDonation,
   ));

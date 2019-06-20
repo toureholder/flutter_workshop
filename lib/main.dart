@@ -15,16 +15,18 @@ import 'package:flutter_workshop/util/http_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-void main() async {
-  final _httpClient = http.Client();
-  final _sharedPreferences = await SharedPreferences.getInstance();
+Future<void> main() async {
+  final http.Client _httpClient = http.Client();
+  final SharedPreferences _sharedPreferences =
+      await SharedPreferences.getInstance();
 
-  final _sharedPreferencesStorage =
+  final SharedPreferencesStorage _sharedPreferencesStorage =
       SharedPreferencesStorage(_sharedPreferences);
 
-  final _session = Session(diskStorageProvider: _sharedPreferencesStorage);
+  final Session _session =
+      Session(diskStorageProvider: _sharedPreferencesStorage);
 
-  final dependencies = AppDependencies(
+  final AppDependencies dependencies = AppDependencies(
       loginBloc: LoginBloc(
           controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
           loginApi: LoginApi(client: _httpClient),

@@ -5,19 +5,20 @@ import 'package:meta/meta.dart';
 import 'session_provider.dart';
 
 class Session implements SessionProvider {
-  final DiskStorageProvider diskStorageProvider;
-
   Session({@required this.diskStorageProvider});
 
-  @override
-  Future<List<bool>> logUserIn(LoginResponse loginResponse) => Future.wait([
-    diskStorageProvider.setUser(loginResponse.user),
-    diskStorageProvider.setAccessToken(loginResponse.token)
-  ]);
+  final DiskStorageProvider diskStorageProvider;
 
   @override
-  Future<List<bool>> logUserOut() => Future.wait([
-    diskStorageProvider.clearUser(),
-    diskStorageProvider.clearToken()
-  ]);
+  Future<List<bool>> logUserIn(LoginResponse loginResponse) =>
+      Future.wait(<Future<bool>>[
+        diskStorageProvider.setUser(loginResponse.user),
+        diskStorageProvider.setAccessToken(loginResponse.token)
+      ]);
+
+  @override
+  Future<List<bool>> logUserOut() => Future.wait(<Future<bool>>[
+        diskStorageProvider.clearUser(),
+        diskStorageProvider.clearToken()
+      ]);
 }

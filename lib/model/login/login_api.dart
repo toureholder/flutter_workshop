@@ -12,14 +12,15 @@ class LoginApi extends BaseApi {
   LoginApi({@required http.Client client}) : super(client: client);
 
   Future<HttpEvent<LoginResponse>> login(LoginRequest request) async {
-    final url = '${baseUrl}auth/login';
-    final response = await post(url, request.toJson());
+    final String url = '${baseUrl}auth/login';
+    final http.Response response = await post(url, request.toJson());
 
     LoginResponse data;
 
     if (response.statusCode == HttpStatus.ok)
       data = LoginResponse.fromJson(jsonDecode(response.body));
 
-    return HttpEvent(statusCode: response.statusCode, data: data);
+    return HttpEvent<LoginResponse>(
+        statusCode: response.statusCode, data: data);
   }
 }

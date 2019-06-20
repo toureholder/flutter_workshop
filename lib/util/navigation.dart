@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
 class Navigation {
-  final BuildContext context;
-
   Navigation(this.context);
 
-  push(Widget page, {bool clearStack = false}) {
-    final route = _makeRoute(page);
+  final BuildContext context;
+
+  Future<T> push<T extends Object>(Widget page, {bool clearStack = false}) {
+    final MaterialPageRoute<T> route = _makeRoute(page);
     return clearStack
         ? Navigator.pushAndRemoveUntil(
-            context, route, (route) => false)
+            context, route, (Route<dynamic> route) => false)
         : Navigator.push(context, route);
   }
 
-  pushReplacement(Widget page) =>
+  Future<T> pushReplacement<T extends Object>(Widget page) =>
       Navigator.pushReplacement(context, _makeRoute(page));
 
-  _makeRoute(Widget page) => MaterialPageRoute(builder: (context) => page);
+  Route<dynamic> _makeRoute(Widget page) =>
+      MaterialPageRoute<dynamic>(builder: (BuildContext context) => page);
 }

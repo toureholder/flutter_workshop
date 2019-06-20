@@ -13,12 +13,12 @@ class TestUtil {
     return DependencyProvider(
       dependencies: dependencies,
       child: MaterialApp(
-        localizationsDelegates: [
-          const StringLocalizationsDelegate(),
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          StringLocalizationsDelegate(),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        supportedLocales: AppLocales.supportedLocales,
+        supportedLocales: supportedLocales,
         home: subject,
         navigatorObservers: navigatorObservers ?? const <NavigatorObserver>[],
       ),

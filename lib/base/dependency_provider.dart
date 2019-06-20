@@ -13,17 +13,16 @@ class DependencyProvider extends InheritedWidget {
   final AppDependencies dependencies;
 
   static DependencyProvider of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(DependencyProvider)
-        as DependencyProvider;
+    return context.inheritFromWidgetOfExactType(DependencyProvider);
   }
 
   @override
-  bool updateShouldNotify(DependencyProvider old) => true;
+  bool updateShouldNotify(DependencyProvider oldWidget) => true;
 }
 
 class AppDependencies {
+  AppDependencies({this.loginBloc, this.homeBloc});
+
   final LoginBloc loginBloc;
   final HomeBloc homeBloc;
-
-  AppDependencies({this.loginBloc, this.homeBloc});
 }
