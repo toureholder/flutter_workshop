@@ -8,12 +8,12 @@ class BaseMaterialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        const StringLocalizationsDelegate(),
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        StringLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: AppLocales.supportedLocales,
+      supportedLocales: supportedLocales,
       home: Home(),
     );
   }

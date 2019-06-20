@@ -1,10 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/donation/donation_api.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'dart:async';
 
 import 'test_util/mocks.dart';
 
@@ -65,7 +66,7 @@ void main() {
   });
 
   test('logs user out from session', () async {
-    _bloc.logout();
+    await _bloc.logout();
     verify(_mockSessionProvider.logUserOut()).called(1);
   });
 

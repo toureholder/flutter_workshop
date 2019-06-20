@@ -13,12 +13,12 @@ class TestUtil {
     return DependencyProvider(
       dependencies: dependencies,
       child: MaterialApp(
-        localizationsDelegates: [
-          const StringLocalizationsDelegate(),
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          StringLocalizationsDelegate(),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        supportedLocales: AppLocales.supportedLocales,
+        supportedLocales: supportedLocales,
         home: subject,
         navigatorObservers: navigatorObservers ?? const <NavigatorObserver>[],
       ),
@@ -31,9 +31,9 @@ class TestUtil {
     return find.byElementPredicate((Element candidate) {
       if (candidate.widget is Text) {
         final Text textWidget = candidate.widget;
-        if (textWidget.data != null)
-          return localizationMap.containsValue(textWidget.data);
-        return localizationMap.containsValue(textWidget.textSpan.toPlainText());
+        return (textWidget.data != null)
+            ? localizationMap.containsValue(textWidget.data)
+            : localizationMap.containsValue(textWidget.textSpan.toPlainText());
       } else if (candidate.widget is EditableText) {
         final EditableText editable = candidate.widget;
         return localizationMap.containsValue(editable.controller.text);

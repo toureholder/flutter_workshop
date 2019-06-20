@@ -9,12 +9,13 @@ import 'package:test/test.dart';
 import 'test_util/fakes.dart';
 import 'test_util/mocks.dart';
 
-main() {
+void main() {
   MockClient _mockClient;
   LoginApi _loginApi;
-  Null _body = anyNamed('body');
-  Null _headers = anyNamed('headers');
-  final _loginRequest = LoginRequest(email: 'ab@cd.com', password: '123456');
+  dynamic _body = anyNamed('body');
+  Map<String, String> _headers = anyNamed('headers');
+  final LoginRequest _loginRequest =
+      LoginRequest(email: 'ab@cd.com', password: '123456');
 
   setUp(() {
     _mockClient = MockClient();
@@ -39,7 +40,7 @@ main() {
 
     final HttpEvent<LoginResponse> event = await _loginApi.login(_loginRequest);
 
-    expect(event.data, isA<Null>());
+    expect(event.data, isA<void>());
     expect(event.statusCode, 422);
   });
 

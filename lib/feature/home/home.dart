@@ -11,7 +11,7 @@ import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/navigation.dart';
 
 class Home extends StatefulWidget {
-  static const loginButtonKey = Key('home_login_button');
+  static const Key loginButtonKey = Key('home_login_button');
 
   @override
   _HomeState createState() => _HomeState();
@@ -36,31 +36,30 @@ class _HomeState extends State<Home> {
         actions: _appBarActions(),
         title: L10n.getString(context, 'home_title'),
       ),
-      body: _listFutureBuilder(),
+      body: _listStreamBuilder(),
     );
   }
 
-  StreamBuilder<List<Donation>> _listFutureBuilder() {
-    return StreamBuilder(
-        stream: _bloc.stream,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
-          Widget widget = Center(child: CircularProgressIndicator());
+  StreamBuilder<List<Donation>> _listStreamBuilder() =>
+      StreamBuilder<List<Donation>>(
+          stream: _bloc.stream,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
+            Widget widget = Center(child: const CircularProgressIndicator());
 
-          if (snapshot.hasData)
-            widget = _listView(snapshot.data);
-          else if (snapshot.hasError)
-            widget = Center(child: Text(snapshot.error.toString()));
-
-          return widget;
-        });
-  }
+            if (snapshot.hasData)
+              widget = _listView(snapshot.data);
+            else if (snapshot.hasError) {
+              widget = Center(child: Text(snapshot.error.toString()));
+            }
+            return widget;
+          });
 
   ListView _listView(List<Donation> list) {
     return ListView.builder(
-        padding: EdgeInsets.only(top: 8),
+        padding: const EdgeInsets.only(top: 8),
         itemCount: list.length,
-        itemBuilder: (context, i) {
+        itemBuilder: (BuildContext context, int i) {
           final Donation listItem = list[i];
           return _listItem(listItem);
         });
@@ -68,7 +67,7 @@ class _HomeState extends State<Home> {
 
   Widget _listItem(Donation listItem) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      contentPadding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       leading: _image(listItem),
       title: _title(listItem),
       subtitle: _subtitle(listItem),
@@ -111,7 +110,7 @@ class _HomeState extends State<Home> {
     return <Widget>[
       FutureBuilder<User>(
           future: _bloc.loadCurrentUser(),
-          builder: (context, snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             return snapshot.hasData
                 ? _userAvatar(snapshot.data)
                 : _loginButton();
@@ -152,20 +151,20 @@ class _HomeState extends State<Home> {
         ));
   }
 
-  _logout() async {
+  Future _logout() async {
     await _bloc.logout();
     setState(() {});
-    Navigator.of(context).pop();
+    return Navigator.of(context).pop();
   }
 
-  _navigateToDetail(Donation donation) =>
+  Future _navigateToDetail(Donation donation) =>
       _navigation.push(Detail(donation: donation));
 
-  _navigateToLogin() => _navigation.push(Login());
+  Future _navigateToLogin() => _navigation.push(Login());
 
-  _showLogoutConfirmationDialog() => showDialog(
+  Future _showLogoutConfirmationDialog() => showDialog(
       context: context,
-      builder: (context) => CustomAlertDialog(
+      builder: (BuildContext context) => CustomAlertDialog(
             titleText: L10n.getString(context, 'logout_confirmation_title'),
             hasCancelButton: true,
             confirmationText: L10n.getString(context, 'logout_confirmation'),

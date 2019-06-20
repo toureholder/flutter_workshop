@@ -18,7 +18,7 @@ class MockLoginResponseStreamController extends Mock
 class MockLoginResponseStreamSink extends Mock
     implements StreamSink<HttpEvent<LoginResponse>> {}
 
-void main() async {
+Future<void> main() async {
   MockLoginResponseStreamController _mockController;
   MockLoginResponseStreamSink _mockSink;
   MockLoginApi _mockLoginApi;
@@ -46,8 +46,8 @@ void main() async {
   test(
       'adds loading and success events to stream sink if api returns a LoginReponse',
       () async {
-    when(_mockLoginApi.login(any)).thenAnswer(
-        (_) async => HttpEvent(data: LoginResponse('token', User.fake())));
+    when(_mockLoginApi.login(any)).thenAnswer((_) async =>
+        HttpEvent<LoginResponse>(data: LoginResponse('token', User.fake())));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSink.add(any)).called(2);
@@ -61,8 +61,8 @@ void main() async {
   });
 
   test('creates session if api returns a LoginReponse', () async {
-    when(_mockLoginApi.login(any)).thenAnswer(
-        (_) async => HttpEvent(data: LoginResponse('token', User.fake())));
+    when(_mockLoginApi.login(any)).thenAnswer((_) async =>
+        HttpEvent<LoginResponse>(data: LoginResponse('token', User.fake())));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSessionProvider.logUserIn(any));

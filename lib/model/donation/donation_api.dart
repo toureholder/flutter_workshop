@@ -10,9 +10,9 @@ class DonationApi extends BaseApi {
   DonationApi({@required http.Client client}) : super(client: client);
 
   Future<List<Donation>> getDonations() async {
-    final url = '${baseUrl}listings/categories/33';
-    final response = await get(url);
-    final json = jsonDecode(response.body);
+    final String url = '${baseUrl}listings/categories/33';
+    final http.Response response = await get(url);
+    final Map<String, dynamic> json = jsonDecode(response.body);
     final DonationApiResponse dto = DonationApiResponse.fromJson(json);
     return dto.donations;
   }

@@ -8,24 +8,26 @@ import 'package:flutter_workshop/util/http_event.dart';
 import 'package:meta/meta.dart';
 
 class LoginBloc {
-  final LoginApi loginApi;
-  final StreamController<HttpEvent<LoginResponse>> controller;
-  final SessionProvider sessionProvider;
-
   LoginBloc(
       {@required this.loginApi,
       @required this.controller,
       @required this.sessionProvider});
 
+  final LoginApi loginApi;
+  final StreamController<HttpEvent<LoginResponse>> controller;
+
+  final SessionProvider sessionProvider;
+
   Stream<HttpEvent<LoginResponse>> get stream => controller.stream;
 
-  dispose() => controller.close();
+  Future<void> dispose() => controller.close();
 
-  login({String email, String password}) async {
+  Future<void> login({String email, String password}) async {
     try {
-      final request = LoginRequest(email: email, password: password);
+      final LoginRequest request =
+          LoginRequest(email: email, password: password);
 
-      controller.sink.add(HttpEvent.loading());
+      controller.sink.add(HttpEvent<LoginResponse>(state: EventState.loading));
 
       final HttpEvent<LoginResponse> event = await loginApi.login(request);
 
@@ -37,6 +39,6 @@ class LoginBloc {
     }
   }
 
-  _saveToPreferences(LoginResponse loginResponse) =>
+  Future<List<bool>> _saveToPreferences(LoginResponse loginResponse) =>
       sessionProvider.logUserIn(loginResponse);
 }

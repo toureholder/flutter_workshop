@@ -1,10 +1,6 @@
 import 'dart:convert';
 
 class User {
-  int id;
-  String name;
-  String avatarUrl;
-
   User.fromJson(Map<String, dynamic> json)
       : id = json[idJsonKey],
         name = json[nameJsonKey],
@@ -18,14 +14,15 @@ class User {
         name = 'Test user',
         avatarUrl = 'https://randomuser.me/api/portraits/women/2.jpg';
 
-  String toEncodedJson() {
-    Map<String, dynamic> json = {
-      idJsonKey: id,
-      nameJsonKey: name,
-      avatarUrlJsonKey: avatarUrl
-    };
-    return jsonEncode(json);
-  }
+  int id;
+  String name;
+  String avatarUrl;
+
+  String toEncodedJson() => jsonEncode(<String, dynamic>{
+        idJsonKey: id,
+        nameJsonKey: name,
+        avatarUrlJsonKey: avatarUrl
+      });
 
   static String idJsonKey = 'id';
   static String nameJsonKey = 'name';

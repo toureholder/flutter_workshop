@@ -2,13 +2,13 @@ import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/service/disk_storage_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final String _userKey = 'user';
-final String _accessTokenKey = 'accesToken';
+const String _userKey = 'user';
+const String _accessTokenKey = 'accesToken';
 
 class SharedPreferencesStorage implements DiskStorageProvider {
-  final SharedPreferences sharedPreferences;
-
   SharedPreferencesStorage(this.sharedPreferences);
+
+  final SharedPreferences sharedPreferences;
 
   @override
   User getUser() {

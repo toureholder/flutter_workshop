@@ -23,7 +23,7 @@ void main() {
   Finder _emailField;
   Finder _passwordField;
   Finder _submitButton;
-  StreamController _streamController;
+  StreamController<HttpEvent<LoginResponse>> _streamController;
 
   setUp(() {
     _mockLoginBloc = MockLoginBloc();
@@ -35,7 +35,7 @@ void main() {
         subject: Login(),
         dependencies:
             AppDependencies(loginBloc: _mockLoginBloc, homeBloc: _mockHomeBloc),
-        navigatorObservers: [_mockNavigationObserver]);
+        navigatorObservers: <NavigatorObserver>[_mockNavigationObserver]);
 
     _emailField = find.byKey(Login.emailFieldKey);
     _passwordField = find.byKey(Login.passwordFieldKey);
@@ -49,8 +49,8 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
 
-      final email = 'test@test.com';
-      final password = 'qwertyuiop';
+      const String email = 'test@test.com';
+      const String password = 'qwertyuiop';
 
       await tester.enterText(_emailField, email);
       await tester.enterText(_passwordField, password);
@@ -72,8 +72,8 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
 
-      final email = 'invalid email';
-      final password = 'qwertyuiop';
+      const String email = 'invalid email';
+      const String password = 'qwertyuiop';
 
       await tester.enterText(_emailField, email);
       await tester.enterText(_passwordField, password);
@@ -86,8 +86,8 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
 
-      final email = 'test@test.com';
-      final password = '123';
+      const String email = 'test@test.com';
+      const String password = '123';
 
       await tester.enterText(_emailField, email);
       await tester.enterText(_passwordField, password);
@@ -102,8 +102,8 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
 
-      final email = 'invalid email';
-      final password = 'qwertyuiop';
+      const String email = 'invalid email';
+      const String password = 'qwertyuiop';
 
       await tester.enterText(_emailField, email);
       await tester.enterText(_passwordField, password);
@@ -111,7 +111,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final errorMessage = TestUtil.findInternationalizedText(
+      final Finder errorMessage = TestUtil.findInternationalizedText(
           'validation_message_email_invalid');
 
       expect(errorMessage, findsOneWidget);
@@ -121,14 +121,14 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
 
-      final password = 'qwertyuiop';
+      const String password = 'qwertyuiop';
 
       await tester.enterText(_passwordField, password);
       await tester.tap(_submitButton);
 
       await tester.pumpAndSettle();
 
-      final errorMessage = TestUtil.findInternationalizedText(
+      final Finder errorMessage = TestUtil.findInternationalizedText(
           'validation_message_email_required');
 
       expect(errorMessage, findsOneWidget);
@@ -138,8 +138,8 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
 
-      final email = 'test@test.com';
-      final password = '123';
+      const String email = 'test@test.com';
+      const String password = '123';
 
       await tester.enterText(_emailField, email);
       await tester.enterText(_passwordField, password);
@@ -147,7 +147,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final errorMessage = TestUtil.findInternationalizedText(
+      final Finder errorMessage = TestUtil.findInternationalizedText(
           'validation_message_password_too_short');
 
       expect(errorMessage, findsOneWidget);
@@ -157,14 +157,14 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
 
-      final email = 'test@test.com';
+      const String email = 'test@test.com';
 
       await tester.enterText(_emailField, email);
       await tester.tap(_submitButton);
 
       await tester.pumpAndSettle();
 
-      final errorMessage = TestUtil.findInternationalizedText(
+      final Finder errorMessage = TestUtil.findInternationalizedText(
           'validation_message_password_required');
 
       expect(errorMessage, findsOneWidget);
@@ -200,8 +200,8 @@ void main() {
       _streamController.sink.add(
           HttpEvent<LoginResponse>(statusCode: HttpStatus.unprocessableEntity));
       await tester.pump(Duration.zero);
-      final dialog = find.byType(CustomAlertDialog);
-      final content =
+      final Finder dialog = find.byType(CustomAlertDialog);
+      final Finder content =
           TestUtil.findInternationalizedText('login_error_bad_credentials');
       expect(find.descendant(of: dialog, matching: content), findsOneWidget);
     });

@@ -13,9 +13,9 @@ import 'package:flutter_workshop/util/http_event.dart';
 import 'package:flutter_workshop/util/navigation.dart';
 
 class Login extends StatefulWidget {
-  static const submitButtonKey = Key('login_submit_button');
-  static const emailFieldKey = Key('email_field_button');
-  static const passwordFieldKey = Key('password_fieldbutton');
+  static const Key submitButtonKey = Key('login_submit_button');
+  static const Key emailFieldKey = Key('email_field_button');
+  static const Key passwordFieldKey = Key('password_fieldbutton');
 
   @override
   _LoginState createState() => _LoginState();
@@ -23,9 +23,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _isPasswordVisible = false;
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   LoginBloc _bloc;
 
   @override
@@ -42,67 +42,60 @@ class _LoginState extends State<Login> {
         title: L10n.getString(context, 'login_title'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
         child: _form(context),
       ),
     );
   }
 
-  Form _form(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          _emailField(),
-          SizedBox(height: 40),
-          _passwordField(),
-          SizedBox(height: 60),
-          StreamBuilder<HttpEvent<LoginResponse>>(
-              stream: _bloc.stream,
-              builder:
-                  (context, AsyncSnapshot<HttpEvent<LoginResponse>> snapshot) {
-                bool isLoading = snapshot.hasData && snapshot.data.isLoading;
-                return _button(context, isLoading);
-              })
-        ],
-      ),
-    );
-  }
+  Form _form(BuildContext context) => Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            _emailField(),
+            const SizedBox(height: 40),
+            _passwordField(),
+            const SizedBox(height: 60),
+            StreamBuilder<HttpEvent<LoginResponse>>(
+                stream: _bloc.stream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<HttpEvent<LoginResponse>> snapshot) {
+                  final bool isLoading =
+                      snapshot.hasData && snapshot.data.isLoading;
+                  return _button(context, isLoading);
+                })
+          ],
+        ),
+      );
 
-  TextFormField _passwordField() {
-    return TextFormField(
-      key: Login.passwordFieldKey,
-      controller: _passwordController,
-      decoration: InputDecoration(
-          labelText: L10n.getString(context, 'login_password'),
-          suffixIcon: _visibilityToggle()),
-      obscureText: !_isPasswordVisible,
-      validator: (input) => L10n.getString(
-          context, CustomFormFieldValidator.validatePassword(input)),
-    );
-  }
+  TextFormField _passwordField() => TextFormField(
+        key: Login.passwordFieldKey,
+        controller: _passwordController,
+        decoration: InputDecoration(
+            labelText: L10n.getString(context, 'login_password'),
+            suffixIcon: _visibilityToggle()),
+        obscureText: !_isPasswordVisible,
+        validator: (String input) => L10n.getString(
+            context, CustomFormFieldValidator.validatePassword(input)),
+      );
 
-  Widget _visibilityToggle() {
-    return IconButton(
-      icon: _isPasswordVisible
-          ? Icon(Icons.visibility)
-          : Icon(Icons.visibility_off),
-      onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-    );
-  }
+  Widget _visibilityToggle() => IconButton(
+        icon:
+            Icon(_isPasswordVisible ? Icons.visibility : Icons.visibility_off),
+        onPressed: () =>
+            setState(() => _isPasswordVisible = !_isPasswordVisible),
+      );
 
-  TextFormField _emailField() {
-    return TextFormField(
-        key: Login.emailFieldKey,
-        controller: _emailController,
-        decoration:
-            InputDecoration(labelText: L10n.getString(context, 'login_email')),
-        validator: (input) => L10n.getString(
-            context, CustomFormFieldValidator.validateEmail(input)));
-  }
+  TextFormField _emailField() => TextFormField(
+      key: Login.emailFieldKey,
+      controller: _emailController,
+      decoration:
+          InputDecoration(labelText: L10n.getString(context, 'login_email')),
+      validator: (String input) => L10n.getString(
+          context, CustomFormFieldValidator.validateEmail(input)));
 
   Widget _button(BuildContext context, bool isLoading) {
-    final child = isLoading
+    final Widget child = isLoading
         ? _circularProgressIndicator()
         : Text(L10n.getString(context, 'login_title'));
 
@@ -120,41 +113,42 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _circularProgressIndicator() {
-    return SizedBox(
-      height: 26.0,
-      width: 26.0,
-      child: CircularProgressIndicator(
-          strokeWidth: 3.0,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
-    );
-  }
+  Widget _circularProgressIndicator() => const SizedBox(
+        height: 26.0,
+        width: 26.0,
+        child: CircularProgressIndicator(
+            strokeWidth: 3.0,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+      );
 
-  _sendLoginRequest() {
-    _bloc.login(
-        email: _emailController.text, password: _passwordController.text);
-  }
+  Future<void> _sendLoginRequest() => _bloc.login(
+      email: _emailController.text, password: _passwordController.text);
 
-  _listenForLoginResponse() {
+  void _listenForLoginResponse() {
     _bloc.stream.listen((HttpEvent<LoginResponse> event) {
-      if (event.isLoading) return;
-      if (event.statusCode == HttpStatus.ok)
+      if (event.isLoading)
+        return;
+      else if (event.statusCode == HttpStatus.ok) {
         _onLoginSuccess();
-      else
+      } else {
         _onLoginFailure(event.statusCode);
+      }
     });
   }
 
-  _onLoginSuccess() => Navigation(context).push(Home(), clearStack: true);
+  Future<void> _onLoginSuccess() =>
+      Navigation(context).push(Home(), clearStack: true);
 
-  _onLoginFailure(int statusCode) {
-    final map = {HttpStatus.unprocessableEntity: 'login_error_bad_credentials'};
+  Future<void> _onLoginFailure(int statusCode) {
+    final Map<int, String> map = <int, String>{
+      HttpStatus.unprocessableEntity: 'login_error_bad_credentials'
+    };
 
-    final messageKey = map[statusCode] ?? 'common_error_server_generic';
+    final String messageKey = map[statusCode] ?? 'common_error_server_generic';
 
-    showDialog(
+    return showDialog(
         context: context,
-        builder: (context) => CustomAlertDialog(
+        builder: (BuildContext context) => CustomAlertDialog(
               contentText: L10n.getString(context, messageKey),
             ));
   }
