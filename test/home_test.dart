@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
+import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
@@ -72,6 +74,35 @@ void main() {
 
     verify(_mockNavigationObserver.didPush(any, any));
     expect(find.byType(Login), findsOneWidget);
+  });
+
+  testWidgets('navigates to detail screen', (WidgetTester tester) async {
+    await provideMockedNetworkImages(() async {
+      final StreamController<List<Donation>> controller =
+          StreamController<List<Donation>>.broadcast();
+
+      when(_mockHomeBloc.stream).thenAnswer((_) => controller.stream);
+
+      await tester.pumpWidget(_testableWidget);
+
+      controller.sink.add(Donation.fakeList());
+
+      await tester.pump(Duration.zero);
+
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.byType(ListView), findsOneWidget);
+
+      final firstItem = find.byKey(const Key('${homeListItemValueKey}0'));
+      expect(firstItem, findsOneWidget);
+
+      await tester.tap(firstItem);
+      await tester.pumpAndSettle();
+
+      verify(_mockNavigationObserver.didPush(any, any));
+      expect(find.byType(Detail), findsOneWidget);
+
+      await controller.close();
+    });
   });
 
   testWidgets('displays user avatar in app bar if user is logged in',

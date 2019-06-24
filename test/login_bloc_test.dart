@@ -36,6 +36,9 @@ Future<void> main() async {
         sessionProvider: _mockSessionProvider);
 
     when(_mockController.sink).thenReturn(_mockSink);
+    final stream =
+        StreamController<HttpEvent<LoginResponse>>.broadcast().stream;
+    when(_mockController.stream).thenAnswer((_) => stream);
   });
 
   test('calls login api', () async {
@@ -66,6 +69,11 @@ Future<void> main() async {
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSessionProvider.logUserIn(any));
+  });
+
+  test('gets contoller stream', () async {
+    await _bloc.dispose();
+    expect(_bloc.stream, isA<Stream<HttpEvent<LoginResponse>>>());
   });
 
   test('closes stream', () async {

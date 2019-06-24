@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
+import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
@@ -23,6 +24,7 @@ void main() {
   Finder _emailField;
   Finder _passwordField;
   Finder _submitButton;
+  Finder _passwordVisibilityToggle;
   StreamController<HttpEvent<LoginResponse>> _streamController;
 
   setUp(() {
@@ -40,6 +42,7 @@ void main() {
     _emailField = find.byKey(Login.emailFieldKey);
     _passwordField = find.byKey(Login.passwordFieldKey);
     _submitButton = find.byKey(Login.submitButtonKey);
+    _passwordVisibilityToggle = find.byKey(Login.passwordVisibilityToggledKey);
 
     when(_mockLoginBloc.stream).thenAnswer((_) => _streamController.stream);
   });
@@ -169,6 +172,25 @@ void main() {
 
       expect(errorMessage, findsOneWidget);
     });
+  });
+
+  testWidgets('toggles password visibility', (WidgetTester tester) async {
+    await tester.pumpWidget(_testableWidget);
+
+    final Finder passwordIsVisibleIcon =
+        find.byKey(const Key(loginPasswordVisibilityToggleObscureValueKey));
+    final Finder passwordIsObscuredIcon =
+        find.byKey(const Key(loginPasswordVisibilityToggleVisibleValueKey));
+
+    expect(passwordIsObscuredIcon, findsNothing);
+    expect(passwordIsVisibleIcon, findsOneWidget);
+
+    await tester.tap(_passwordVisibilityToggle);
+
+    await tester.pumpAndSettle();
+
+    expect(passwordIsObscuredIcon, findsOneWidget);
+    expect(passwordIsVisibleIcon, findsNothing);
   });
 
   group('handles login stream events', () {

@@ -38,6 +38,9 @@ void main() {
         diskStorageProvider: _mockDiskStorageProvider);
 
     when(_mockController.sink).thenReturn(_mockSink);
+    final stream =
+        StreamController<List<Donation>>.broadcast().stream;
+    when(_mockController.stream).thenAnswer((_) => stream);
   });
 
   test('calls donation api', () async {
@@ -68,6 +71,11 @@ void main() {
   test('logs user out from session', () async {
     await _bloc.logout();
     verify(_mockSessionProvider.logUserOut()).called(1);
+  });
+
+  test('gets contoller stream', () async {
+    await _bloc.dispose();
+    expect(_bloc.stream, isA<Stream<List<Donation>>>());
   });
 
   test('closes stream', () async {

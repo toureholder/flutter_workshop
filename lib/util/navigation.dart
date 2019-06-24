@@ -13,9 +13,6 @@ class Navigation {
         : Navigator.push(context, route);
   }
 
-  Future<T> pushReplacement<T extends Object>(Widget page) =>
-      Navigator.pushReplacement(context, _makeRoute(page));
-
   Route<dynamic> _makeRoute(Widget page) =>
       MaterialPageRoute<dynamic>(builder: (BuildContext context) => page);
 }
