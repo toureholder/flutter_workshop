@@ -5,13 +5,14 @@ import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
+import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/navigation.dart';
 
 class Home extends StatefulWidget {
-  static const Key loginButtonKey = Key('home_login_button');
+  static const Key loginButtonKey = Key(homeLoginButtonValueKey);
 
   @override
   _HomeState createState() => _HomeState();
@@ -59,14 +60,15 @@ class _HomeState extends State<Home> {
     return ListView.builder(
         padding: const EdgeInsets.only(top: 8),
         itemCount: list.length,
-        itemBuilder: (BuildContext context, int i) {
-          final Donation listItem = list[i];
-          return _listItem(listItem);
+        itemBuilder: (BuildContext context, int index) {
+          final Donation listItem = list[index];
+          return _listItem(listItem, index);
         });
   }
 
-  Widget _listItem(Donation listItem) {
+  Widget _listItem(Donation listItem, int index) {
     return ListTile(
+      key: Key('$homeListItemValueKey$index'),
       contentPadding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       leading: _image(listItem),
       title: _title(listItem),

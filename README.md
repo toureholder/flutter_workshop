@@ -17,7 +17,7 @@ This repository contains a sample app that I use to give workshops geared toward
 * BLoC pattern
 * Storing key-value data on disk
 * Dependency injection with InheritedWidget
-* Unit and widget tests
+* Unit, widget and integration tests
 * Configuring linting rules to implement the Effective Dart guidelines
 * Continuous integration pipelines with Travis CI
 * Uploading code coverage to Codecov
