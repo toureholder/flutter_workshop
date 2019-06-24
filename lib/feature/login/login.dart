@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
+import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
@@ -13,9 +14,9 @@ import 'package:flutter_workshop/util/http_event.dart';
 import 'package:flutter_workshop/util/navigation.dart';
 
 class Login extends StatefulWidget {
-  static const Key submitButtonKey = Key('login_submit_button');
-  static const Key emailFieldKey = Key('email_field_button');
-  static const Key passwordFieldKey = Key('password_fieldbutton');
+  static const Key submitButtonKey = Key(loginSubmitButtonValueKey);
+  static const Key emailFieldKey = Key(loginEmailFieldValueKey);
+  static const Key passwordFieldKey = Key(loginPasswordFieldValueKey);
 
   @override
   _LoginState createState() => _LoginState();
