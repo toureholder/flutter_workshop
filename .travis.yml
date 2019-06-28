@@ -13,6 +13,7 @@ install:
   - export PATH="$PATH:`pwd`/flutter/bin"
   - flutter doctor -v
   - flutter packages get
+  - flutter pub run build_runner build
 script:
   - flutter analyze --no-pub --no-current-package lib/ test/
   - flutter test --coverage --coverage-path=lcov.info

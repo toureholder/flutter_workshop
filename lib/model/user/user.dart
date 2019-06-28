@@ -1,10 +1,19 @@
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user.g.dart';
+
+@JsonSerializable()
 class User {
-  User.fromJson(Map<String, dynamic> json)
-      : id = json[idJsonKey],
-        name = json[nameJsonKey],
-        avatarUrl = json[avatarUrlJsonKey];
+  int id;
+  String name;
+  @JsonKey(name: 'image_url')
+  String avatarUrl;
+
+  User(this.id, this.name, this.avatarUrl);
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   factory User.fromEncodedJson(String encoded) =>
       encoded == null ? null : User.fromJson(jsonDecode(encoded));
@@ -14,15 +23,9 @@ class User {
         name = 'Test user',
         avatarUrl = 'https://randomuser.me/api/portraits/women/2.jpg';
 
-  int id;
-  String name;
-  String avatarUrl;
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
-  String toEncodedJson() => jsonEncode(<String, dynamic>{
-        idJsonKey: id,
-        nameJsonKey: name,
-        avatarUrlJsonKey: avatarUrl
-      });
+  String toEncodedJson() => jsonEncode(toJson());
 
   static String idJsonKey = 'id';
   static String nameJsonKey = 'name';
