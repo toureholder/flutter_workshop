@@ -1,12 +1,15 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'donation_image.g.dart';
+
+@JsonSerializable()
 class DonationImage {
-  DonationImage(this.url);
-
-  DonationImage.fromJson(Map<String, dynamic> json) : url = json['url'];
-
   final String url;
 
-  static List<DonationImage> fromJsonList(List<dynamic> jsonList) =>
-      jsonList.map((dynamic json) => DonationImage.fromJson(json)).toList();
+  DonationImage(this.url);
+
+  factory DonationImage.fromJson(Map<String, dynamic> json) =>
+      _$DonationImageFromJson(json);
 
   static List<DonationImage> fakeList() => <DonationImage>[
         DonationImage('https://picsum.photos/id/100/500/500'),

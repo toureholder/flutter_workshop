@@ -3,6 +3,10 @@
 # https://raw.githubusercontent.com/dart-lang/pedantic/master/lib/analysis_options.1.7.0.yaml
 # https://github.com/flutter/flutter/blob/master/analysis_options.yaml
 
+analyzer:
+  exclude:
+    - '**/*.g.dart'
+
 linter:
   rules:
     - always_declare_return_types # Flutter SDK style
