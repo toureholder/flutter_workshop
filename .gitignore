@@ -23,10 +23,11 @@ coverage/
 **/doc/api/
 .dart_tool/
 .flutter-plugins
-.packages
+.packages*
 .pub-cache/
 .pub/
 /build/
+*.g.dart
 
 # Android related
 **/android/**/gradle-wrapper.jar

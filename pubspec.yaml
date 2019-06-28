@@ -23,6 +23,7 @@ dependencies:
     sdk: flutter
 
   http: ^0.12.0+2
+  json_annotation: ^2.4.0
   shared_preferences: ^0.5.2+1
 
   # The following adds the Cupertino Icons font to your application.
@@ -34,8 +35,11 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  mockito: ^3.0.0
+
+  build_runner: ^1.6.1
   image_test_utils: ^1.0.0
+  json_serializable: ^3.0.0
+  mockito: ^3.0.0
   test: 1.6.1
 
 
