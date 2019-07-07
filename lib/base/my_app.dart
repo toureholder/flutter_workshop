@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/base/base_material_app.dart';
-import 'package:flutter_workshop/base/dependency_provider.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key key, this.dependencies}) : super(key: key);
 
-  final AppDependencies dependencies;
+  final List<SingleChildCloneableWidget> dependencies;
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  AppDependencies _appDependencies;
+  List<SingleChildCloneableWidget> _appDependencies;
 
   @override
   void initState() {
@@ -21,16 +21,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  void dispose() {
-    _appDependencies.loginBloc.dispose();
-    _appDependencies.homeBloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return DependencyProvider(
-      dependencies: _appDependencies,
+    return MultiProvider(
+      providers: _appDependencies,
       child: BaseMaterialApp(),
     );
   }

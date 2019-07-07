@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
@@ -12,12 +11,14 @@ import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/custom_form_field_validator.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:flutter_workshop/util/navigation.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   static const Key submitButtonKey = Key(loginSubmitButtonValueKey);
   static const Key emailFieldKey = Key(loginEmailFieldValueKey);
   static const Key passwordFieldKey = Key(loginPasswordFieldValueKey);
-  static const Key passwordVisibilityToggledKey = Key(loginPasswordVisibilityToggleValueKey);
+  static const Key passwordVisibilityToggledKey =
+      Key(loginPasswordVisibilityToggleValueKey);
 
   @override
   _LoginState createState() => _LoginState();
@@ -33,7 +34,7 @@ class _LoginState extends State<Login> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bloc = DependencyProvider.of(context).dependencies.loginBloc;
+    _bloc = Provider.of<LoginBloc>(context);
     _listenForLoginResponse();
   }
 

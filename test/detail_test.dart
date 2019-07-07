@@ -9,9 +9,10 @@ void main() {
   final Donation _fakeDonation = Donation.fake();
 
   final Widget _testableWidget = TestUtil.makeTestableWidget(
+      dependencies: [],
       subject: Detail(
-    donation: _fakeDonation,
-  ));
+        donation: _fakeDonation,
+      ));
 
   testWidgets('displays donation information', (WidgetTester tester) async {
     await provideMockedNetworkImages(() async {

@@ -2,17 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
+import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
+import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/user/user.dart';
-import 'package:mockito/mockito.dart';
 import 'package:image_test_utils/image_test_utils.dart';
+import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
 
 import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
@@ -22,11 +24,13 @@ void main() {
   final MockLoginBloc _mockLoginBloc = MockLoginBloc();
   final MockNavigatorObserver _mockNavigationObserver = MockNavigatorObserver();
 
-  final Widget _testableWidget = TestUtil.makeTestableWidget(
-      subject: Home(),
-      dependencies:
-          AppDependencies(homeBloc: _mockHomeBloc, loginBloc: _mockLoginBloc),
-      navigatorObservers: <NavigatorObserver>[_mockNavigationObserver]);
+  final Widget _testableWidget =
+      TestUtil.makeTestableWidget(subject: Home(), dependencies: [
+    Provider<HomeBloc>(builder: (_) => _mockHomeBloc),
+    Provider<LoginBloc>(builder: (_) => _mockLoginBloc),
+  ], navigatorObservers: <NavigatorObserver>[
+    _mockNavigationObserver
+  ]);
 
   final Finder _appBar = find.byType(CustomAppBar);
 
