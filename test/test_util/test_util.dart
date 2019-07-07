@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/values/strings.dart';
+import 'package:provider/provider.dart';
 
 class TestUtil {
   static Widget makeTestableWidget(
       {Widget subject,
-      AppDependencies dependencies,
+      List<SingleChildCloneableWidget> dependencies,
       List<NavigatorObserver> navigatorObservers}) {
-    return DependencyProvider(
-      dependencies: dependencies,
+    return MultiProvider(
+      providers: dependencies,
       child: MaterialApp(
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           StringLocalizationsDelegate(),

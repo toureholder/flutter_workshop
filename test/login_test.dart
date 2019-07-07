@@ -3,15 +3,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
+import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
+import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
 
 import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
@@ -33,11 +35,13 @@ void main() {
     _mockNavigationObserver = MockNavigatorObserver();
     _streamController = StreamController<HttpEvent<LoginResponse>>.broadcast();
 
-    _testableWidget = TestUtil.makeTestableWidget(
-        subject: Login(),
-        dependencies:
-            AppDependencies(loginBloc: _mockLoginBloc, homeBloc: _mockHomeBloc),
-        navigatorObservers: <NavigatorObserver>[_mockNavigationObserver]);
+    _testableWidget =
+        TestUtil.makeTestableWidget(subject: Login(), dependencies: [
+      Provider<HomeBloc>(builder: (_) => _mockHomeBloc),
+      Provider<LoginBloc>(builder: (_) => _mockLoginBloc),
+    ], navigatorObservers: <NavigatorObserver>[
+      _mockNavigationObserver
+    ]);
 
     _emailField = find.byKey(Login.emailFieldKey);
     _passwordField = find.byKey(Login.passwordFieldKey);

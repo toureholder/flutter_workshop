@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_workshop/base/dependency_provider.dart';
 import 'package:flutter_workshop/config/l10n.dart';
-import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
+import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
-import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/navigation.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   static const Key loginButtonKey = Key(homeLoginButtonValueKey);
@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _navigation = Navigation(context);
-    _bloc = DependencyProvider.of(context).dependencies.homeBloc;
+    _bloc = Provider.of<HomeBloc>(context);
     _bloc.loadDonations();
   }
 
