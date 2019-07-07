@@ -4,7 +4,11 @@
 [![codecov](https://codecov.io/gh/toureh/flutter_workshop/branch/master/graph/badge.svg)](https://codecov.io/gh/toureh/flutter_workshop)
 [![Lint](https://img.shields.io/badge/style-pedantic-blue.svg)](https://github.com/dart-lang/pedantic)
 
-This repository contains a sample app that I use to give workshops geared towards beginners to Flutter. I've made an effort to keep the git history clean by doing cohesive commits that each represent a teachable building block in the app.
+This repository contains a sample app that I use to give workshops geared towards beginners to Flutter. 
+
+The commit history contains multiple ways of doing the same thing. For example, in one commit we manually spawn an isolate to do work in the background and in a later commit we use use Flutter's handy `compute` function to do the job. In one commit we manually parse and serialize json and in a later commit we do it with code generation.
+
+I've made an effort to squash changes into cohesive commits that each represent a teachable building block in the app.
 
 
 ## Contains examples of:
@@ -14,6 +18,7 @@ This repository contains a sample app that I use to give workshops geared toward
 * Navigation & routing
 * Networking
 * JSON parsing and serialization
+* Moving work to a background isolate
 * BLoC pattern
 * Storing key-value data on disk
 * Dependency injection with InheritedWidget
