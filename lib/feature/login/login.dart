@@ -141,9 +141,9 @@ class _LoginState extends State<Login> {
 
   void _listenForLoginResponse() {
     _bloc.stream.listen((HttpEvent<LoginResponse> event) {
-      if (event.isLoading)
+      if (event.isLoading) {
         return;
-      else if (event.statusCode == HttpStatus.ok) {
+      } else if (event.statusCode == HttpStatus.ok) {
         _onLoginSuccess();
       } else {
         _onLoginFailure(event.statusCode);

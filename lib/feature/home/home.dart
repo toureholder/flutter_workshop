@@ -48,9 +48,9 @@ class _HomeState extends State<Home> {
               (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
             Widget widget = Center(child: const CircularProgressIndicator());
 
-            if (snapshot.hasData)
+            if (snapshot.hasData) {
               widget = _listView(snapshot.data);
-            else if (snapshot.hasError) {
+            } else if (snapshot.hasError) {
               widget = Center(child: Text(snapshot.error.toString()));
             }
             return widget;
