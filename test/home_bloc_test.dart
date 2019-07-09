@@ -38,8 +38,7 @@ void main() {
         diskStorageProvider: _mockDiskStorageProvider);
 
     when(_mockController.sink).thenReturn(_mockSink);
-    final stream =
-        StreamController<List<Donation>>.broadcast().stream;
+    final stream = StreamController<List<Donation>>.broadcast().stream;
     when(_mockController.stream).thenAnswer((_) => stream);
   });
 
