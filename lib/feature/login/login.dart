@@ -6,6 +6,7 @@ import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
+import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/custom_form_field_validator.dart';
@@ -20,6 +21,10 @@ class Login extends StatefulWidget {
   static const Key passwordVisibilityToggledKey =
       Key(loginPasswordVisibilityToggleValueKey);
 
+  final LoginBloc bloc;
+
+  const Login({Key key, this.bloc}) : super(key: key);
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -29,12 +34,10 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  LoginBloc _bloc;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _bloc = Provider.of<LoginBloc>(context);
+  void initState() {
+    super.initState();
     _listenForLoginResponse();
   }
 
@@ -60,7 +63,7 @@ class _LoginState extends State<Login> {
             _passwordField(),
             const SizedBox(height: 60),
             StreamBuilder<HttpEvent<LoginResponse>>(
-                stream: _bloc.stream,
+                stream: widget.bloc.stream,
                 builder: (BuildContext context,
                     AsyncSnapshot<HttpEvent<LoginResponse>> snapshot) {
                   final bool isLoading =
@@ -136,11 +139,11 @@ class _LoginState extends State<Login> {
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
       );
 
-  Future<void> _sendLoginRequest() => _bloc.login(
-      email: _emailController.text, password: _passwordController.text);
+  Future<void> _sendLoginRequest() => widget.bloc
+      .login(email: _emailController.text, password: _passwordController.text);
 
   void _listenForLoginResponse() {
-    _bloc.stream.listen((HttpEvent<LoginResponse> event) {
+    widget.bloc.stream.listen((HttpEvent<LoginResponse> event) {
       if (event.isLoading) {
         return;
       } else if (event.statusCode == HttpStatus.ok) {
@@ -151,8 +154,11 @@ class _LoginState extends State<Login> {
     });
   }
 
-  Future<void> _onLoginSuccess() =>
-      Navigation(context).push(Home(), clearStack: true);
+  Future<void> _onLoginSuccess() => Navigation(context).push(
+      Consumer<HomeBloc>(
+        builder: (context, bloc, child) => Home(bloc: bloc),
+      ),
+      clearStack: true);
 
   Future<void> _onLoginFailure(int statusCode) {
     final Map<int, String> map = <int, String>{
