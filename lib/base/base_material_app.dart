@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
+import 'package:flutter_workshop/feature/home/home_bloc.dart';
+import 'package:provider/provider.dart';
 
 class BaseMaterialApp extends StatelessWidget {
   @override
@@ -14,7 +16,9 @@ class BaseMaterialApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: supportedLocales,
-      home: Home(),
+      home: Consumer<HomeBloc>(
+        builder: (context, bloc, child) => Home(bloc: bloc),
+      ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
+import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/navigation.dart';
@@ -14,20 +15,22 @@ import 'package:provider/provider.dart';
 class Home extends StatefulWidget {
   static const Key loginButtonKey = Key(homeLoginButtonValueKey);
 
+  final HomeBloc bloc;
+
+  const Home({Key key, this.bloc}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  HomeBloc _bloc;
   Navigation _navigation;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     _navigation = Navigation(context);
-    _bloc = Provider.of<HomeBloc>(context);
-    _bloc.loadDonations();
+    widget.bloc.loadDonations();
   }
 
   @override
@@ -43,7 +46,7 @@ class _HomeState extends State<Home> {
 
   StreamBuilder<List<Donation>> _listStreamBuilder() =>
       StreamBuilder<List<Donation>>(
-          stream: _bloc.stream,
+          stream: widget.bloc.stream,
           builder:
               (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
             Widget widget = Center(child: const CircularProgressIndicator());
@@ -111,7 +114,7 @@ class _HomeState extends State<Home> {
   List<Widget> _appBarActions() {
     return <Widget>[
       FutureBuilder<User>(
-          future: _bloc.loadCurrentUser(),
+          future: widget.bloc.loadCurrentUser(),
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             return snapshot.hasData
                 ? _userAvatar(snapshot.data)
@@ -154,7 +157,7 @@ class _HomeState extends State<Home> {
   }
 
   Future _logout() async {
-    await _bloc.logout();
+    await widget.bloc.logout();
     setState(() {});
     return Navigator.of(context).pop();
   }
@@ -162,7 +165,9 @@ class _HomeState extends State<Home> {
   Future _navigateToDetail(Donation donation) =>
       _navigation.push(Detail(donation: donation));
 
-  Future _navigateToLogin() => _navigation.push(Login());
+  Future _navigateToLogin() => _navigation.push(Consumer<LoginBloc>(
+        builder: (context, bloc, child) => Login(bloc: bloc),
+      ));
 
   Future _showLogoutConfirmationDialog() => showDialog(
       context: context,
