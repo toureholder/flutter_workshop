@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
-import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
@@ -219,7 +218,6 @@ void main() {
           data: LoginResponse('token', User.fake())));
       await tester.pump(Duration.zero);
       verify(_mockNavigationObserver.didPush(any, any));
-      expect(find.byType(Home), findsOneWidget);
     });
 
     testWidgets('shows alert dialog when login fails',

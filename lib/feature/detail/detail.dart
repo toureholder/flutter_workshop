@@ -4,9 +4,10 @@ import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 
 class Detail extends StatelessWidget {
-  const Detail({Key key, this.donation}) : super(key: key);
-
+  static const routeName = '/detail';
   final Donation donation;
+
+  const Detail({Key key, this.donation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,4 +86,10 @@ class Detail extends StatelessWidget {
       ),
     );
   }
+}
+
+class DetailArguments {
+  final Donation donation;
+
+  DetailArguments({this.donation});
 }

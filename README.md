@@ -6,7 +6,11 @@
 
 This repository contains a sample app that I use to give workshops geared towards beginners to Flutter.
 
-The commit history contains multiple ways of doing the same thing. For example, in one commit we manually spawn an isolate to do work in the background and in a later commit we use use Flutter's handy `compute` function to do the job. In one commit we manually parse and serialize json and in a later commit we do it with code generation.
+The commit history contains multiple ways of doing the same thing. Some examples are:
+- In one commit we manually spawn an isolate to do work in the background and in a later commit we use use Flutter's handy `compute` function to do the job.
+- In one commit we manually parse and serialize json and in a later commit we do it with code generation.
+- Dependency injection is done with with InheritedWidget and then with [provider](https://github.com/rrousselGit/provider).
+- Navigation is done by creating a new route and pushing it to the Navigator then we used named routes.
 
 I've made an effort to squash changes into cohesive commits that each represent a teachable building block in the app.
 
@@ -17,11 +21,11 @@ I've made an effort to squash changes into cohesive commits that each represent 
 * Internationalization
 * Navigation & routing
 * Networking
-* JSON parsing and serialization
+* JSON parsing and serialization manually
 * Moving work to a background isolate
 * BLoC pattern
 * Storing key-value data on disk
-* Dependency injection with InheritedWidget
+* Dependency injection
 * Unit, widget and integration tests
 * Configuring linting rules to implement the Effective Dart guidelines
 * Continuous integration pipelines with Travis CI

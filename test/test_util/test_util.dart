@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/config/l10n.dart';
+import 'package:flutter_workshop/config/routes.dart';
 import 'package:flutter_workshop/values/strings.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ class TestUtil {
           GlobalWidgetsLocalizations.delegate,
         ],
         supportedLocales: supportedLocales,
+        onGenerateRoute: getRouteFactory,
         home: subject,
         navigatorObservers: navigatorObservers ?? const <NavigatorObserver>[],
       ),
