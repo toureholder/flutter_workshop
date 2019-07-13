@@ -19,6 +19,7 @@ I've made an effort to squash changes into cohesive commits that each represent 
 
 * Basic widgets and building layouts
 * Internationalization
+* Improving accessibility with [Semantics](https://api.flutter.dev/flutter/widgets/Semantics-class.html)
 * Navigation & routing
 * Networking
 * JSON parsing and serialization manually

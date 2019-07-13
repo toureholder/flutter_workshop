@@ -23,6 +23,18 @@ class Strings {
       "en": "Wrong email or password.",
       "pt": "E-mail ou senha incorreta."
     },
+    "login_semantics_password_visibility_toggle": {
+      "en": "Password visibility toggle",
+      "pt": "Toggle de visibilidade da senha"
+    },
+    "login_semantics_password_hide": {
+      "en": "Hide password",
+      "pt": "Ocultar senha"
+    },
+    "login_semantics_password_reveal": {
+      "en": "Make password visible",
+      "pt": "Tornar senha visível"
+    },
     "logout_confirmation_title": {
       "en": "Logout?",
       "pt": "Sair?"
