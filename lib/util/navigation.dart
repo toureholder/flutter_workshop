@@ -5,14 +5,17 @@ class Navigation {
 
   final BuildContext context;
 
-  Future<T> push<T extends Object>(Widget page, {bool clearStack = false}) {
-    final MaterialPageRoute<T> route = _makeRoute(page);
+  Future<T> pushNamed<T extends Object>(
+    String routeName, {
+    Object arguments,
+    bool clearStack = false,
+  }) {
     return clearStack
-        ? Navigator.pushAndRemoveUntil(
-            context, route, (Route<dynamic> route) => false)
-        : Navigator.push(context, route);
+        ? Navigator.pushNamedAndRemoveUntil(
+            context, routeName, (route) => false)
+        : Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
-  Route<dynamic> _makeRoute(Widget page) =>
+  static Route<dynamic> makeRoute(Widget page) =>
       MaterialPageRoute<dynamic>(builder: (BuildContext context) => page);
 }

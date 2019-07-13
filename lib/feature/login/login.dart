@@ -6,15 +6,14 @@ import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
-import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/custom_form_field_validator.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:flutter_workshop/util/navigation.dart';
-import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
+  static const routeName = '/login';
   static const Key submitButtonKey = Key(loginSubmitButtonValueKey);
   static const Key emailFieldKey = Key(loginEmailFieldValueKey);
   static const Key passwordFieldKey = Key(loginPasswordFieldValueKey);
@@ -154,11 +153,10 @@ class _LoginState extends State<Login> {
     });
   }
 
-  Future<void> _onLoginSuccess() => Navigation(context).push(
-      Consumer<HomeBloc>(
-        builder: (context, bloc, child) => Home(bloc: bloc),
-      ),
-      clearStack: true);
+  Future<void> _onLoginSuccess() => Navigation(context).pushNamed(
+        Home.routeName,
+        clearStack: true,
+      );
 
   Future<void> _onLoginFailure(int statusCode) {
     final Map<int, String> map = <int, String>{

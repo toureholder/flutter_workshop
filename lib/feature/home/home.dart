@@ -6,14 +6,13 @@ import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
-import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/navigation.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   static const Key loginButtonKey = Key(homeLoginButtonValueKey);
+  static const routeName = '/';
 
   final HomeBloc bloc;
 
@@ -162,12 +161,14 @@ class _HomeState extends State<Home> {
     return Navigator.of(context).pop();
   }
 
-  Future _navigateToDetail(Donation donation) =>
-      _navigation.push(Detail(donation: donation));
+  Future _navigateToDetail(Donation donation) => _navigation.pushNamed(
+        Detail.routeName,
+        arguments: DetailArguments(donation: donation),
+      );
 
-  Future _navigateToLogin() => _navigation.push(Consumer<LoginBloc>(
-        builder: (context, bloc, child) => Login(bloc: bloc),
-      ));
+  Future _navigateToLogin() => _navigation.pushNamed(
+        Login.routeName,
+      );
 
   Future _showLogoutConfirmationDialog() => showDialog(
       context: context,
