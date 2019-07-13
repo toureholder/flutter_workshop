@@ -87,19 +87,27 @@ class _LoginState extends State<Login> {
   Widget _visibilityToggle() {
     IconData iconData = Icons.visibility_off;
     String iconValueKey = loginPasswordVisibilityToggleObscureValueKey;
+    String semanticsLabel = 'login_semantics_password_reveal';
 
     if (_isPasswordVisible) {
       iconData = Icons.visibility;
       iconValueKey = loginPasswordVisibilityToggleVisibleValueKey;
+      semanticsLabel = 'login_semantics_password_hide';
     }
 
-    return IconButton(
-      key: const Key(loginPasswordVisibilityToggleValueKey),
-      icon: Icon(
-        iconData,
-        key: Key(iconValueKey),
+    return Semantics(
+      label: L10n.getString(context, semanticsLabel),
+      value:
+          L10n.getString(context, 'login_semantics_password_visibility_toggle'),
+      child: IconButton(
+        key: const Key(loginPasswordVisibilityToggleValueKey),
+        icon: Icon(
+          iconData,
+          key: Key(iconValueKey),
+        ),
+        onPressed: () =>
+            setState(() => _isPasswordVisible = !_isPasswordVisible),
       ),
-      onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
     );
   }
 
