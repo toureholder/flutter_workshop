@@ -44,6 +44,20 @@ For help getting started with Flutter, view the
 [online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
 
+## Installing
+
+```sh
+flutter doctor # Verify that your dev environment is set up correctly
+flutter packages get # Install project dependencies
+flutter pub run build_runner build # Generate serialization boilerplate code
+flutter run # Run the app on an attached device
+```
+Contact me if you want valid login credentials.
+
+## Running the tests
+```sh
+flutter test
+```
 
 ## Gitmojis
 :bulb: `:bulb:` when adding a new functionality
