@@ -16,6 +16,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final http.Client _httpClient = http.Client();
   final SharedPreferences _sharedPreferences =
       await SharedPreferences.getInstance();
