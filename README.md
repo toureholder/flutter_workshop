@@ -56,6 +56,15 @@ Contact me if you want valid login credentials.
 
 ## Running the tests
 ```sh
+flutter analyze --no-pub --no-current-package lib/ test/ # Static analysis
+flutter test # tests
+```
+
+## Test the CI pipeline on your machine
+```sh
+flutter packages get &&
+flutter pub run build_runner build --delete-conflicting-outputs &&
+flutter analyze --no-pub --no-current-package lib/ test/ &&
 flutter test
 ```
 

@@ -44,5 +44,5 @@ class CustomAlertDialog extends StatelessWidget {
         onPressed: () => _closeDialog(context),
       );
 
-  bool _closeDialog(BuildContext context) => Navigator.of(context).pop();
+  void _closeDialog(BuildContext context) => Navigator.of(context).pop();
 }

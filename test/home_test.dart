@@ -28,7 +28,7 @@ void main() {
         bloc: _mockHomeBloc,
       ),
       dependencies: [
-        Provider<LoginBloc>(builder: (_) => _mockLoginBloc),
+        Provider<LoginBloc>(create: (_) => _mockLoginBloc),
       ],
       navigatorObservers: <NavigatorObserver>[
         _mockNavigationObserver

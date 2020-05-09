@@ -30,12 +30,12 @@ Future<void> main() async {
 
   List<SingleChildCloneableWidget> providers = [
     Provider<LoginBloc>(
-        builder: (_) => LoginBloc(
+        create: (_) => LoginBloc(
             controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
             loginApi: LoginApi(client: _httpClient),
             sessionProvider: _session)),
     Provider<HomeBloc>(
-        builder: (_) => HomeBloc(
+        create: (_) => HomeBloc(
             controller: StreamController<List<Donation>>.broadcast(),
             donationApi: DonationApi(client: _httpClient),
             diskStorageProvider: _sharedPreferencesStorage,

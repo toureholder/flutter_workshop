@@ -7,9 +7,9 @@ import 'package:flutter_workshop/feature/home/home.dart';
 class BaseMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+      localizationsDelegates: <LocalizationsDelegate<dynamic>>[
         StringLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
