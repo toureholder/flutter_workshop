@@ -38,7 +38,7 @@ void main() {
           bloc: _mockLoginBloc,
         ),
         dependencies: [
-          Provider<HomeBloc>(builder: (_) => _mockHomeBloc),
+          Provider<HomeBloc>(create: (_) => _mockHomeBloc),
         ],
         navigatorObservers: <NavigatorObserver>[
           _mockNavigationObserver

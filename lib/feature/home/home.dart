@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
           stream: widget.bloc.stream,
           builder:
               (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
-            Widget widget = Center(child: const CircularProgressIndicator());
+            Widget widget = const Center(child: CircularProgressIndicator());
 
             if (snapshot.hasData) {
               widget = _listView(snapshot.data);
