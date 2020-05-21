@@ -12,7 +12,7 @@ class LoginApi extends BaseApi {
   LoginApi({@required http.Client client}) : super(client: client);
 
   Future<HttpEvent<LoginResponse>> login(LoginRequest request) async {
-    final String url = '${baseUrl}auth/login';
+    const String url = 'https://reqres.in/api/login';
     final http.Response response = await post(url, request.toJson());
 
     LoginResponse data;

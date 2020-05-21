@@ -32,6 +32,7 @@ I've made an effort to squash changes into cohesive commits that each represent 
 * Continuous integration pipelines with Travis CI
 * Uploading code coverage to Codecov
 
+> The app uses https://reqres.in/ as a backend for login, so the email "eve.holt@reqres.in" and password "cityslicka" should be valid login credentials.
 
 ## Getting Started
 
@@ -44,15 +45,14 @@ For help getting started with Flutter, view the
 [online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
 
-## Installing
+## Running the app
 
 ```sh
 flutter doctor # Verify that your dev environment is set up correctly
-flutter packages get # Install project dependencies
 flutter pub run build_runner build # Generate serialization boilerplate code
 flutter run # Run the app on an attached device
 ```
-Contact me if you want valid login credentials.
+
 
 ## Running the tests
 ```sh

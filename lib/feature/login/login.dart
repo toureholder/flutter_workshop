@@ -168,7 +168,7 @@ class _LoginState extends State<Login> {
 
   Future<void> _onLoginFailure(int statusCode) {
     final Map<int, String> map = <int, String>{
-      HttpStatus.unprocessableEntity: 'login_error_bad_credentials'
+      HttpStatus.badRequest: 'login_error_bad_credentials'
     };
 
     final String messageKey = map[statusCode] ?? 'common_error_server_generic';
