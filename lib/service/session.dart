@@ -12,7 +12,6 @@ class Session implements SessionProvider {
   @override
   Future<List<bool>> logUserIn(LoginResponse loginResponse) =>
       Future.wait(<Future<bool>>[
-        diskStorageProvider.setUser(loginResponse.user),
         diskStorageProvider.setAccessToken(loginResponse.token)
       ]);
 

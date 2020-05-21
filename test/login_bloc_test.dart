@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_api.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
-import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -50,7 +49,7 @@ Future<void> main() async {
       'adds loading and success events to stream sink if api returns a LoginReponse',
       () async {
     when(_mockLoginApi.login(any)).thenAnswer((_) async =>
-        HttpEvent<LoginResponse>(data: LoginResponse('token', User.fake())));
+        HttpEvent<LoginResponse>(data: LoginResponse('token')));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSink.add(any)).called(2);
@@ -65,7 +64,7 @@ Future<void> main() async {
 
   test('creates session if api returns a LoginReponse', () async {
     when(_mockLoginApi.login(any)).thenAnswer((_) async =>
-        HttpEvent<LoginResponse>(data: LoginResponse('token', User.fake())));
+        HttpEvent<LoginResponse>(data: LoginResponse('token')));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSessionProvider.logUserIn(any));

@@ -8,7 +8,6 @@ import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
-import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -215,7 +214,7 @@ void main() {
       await tester.pumpWidget(_testableWidget);
       _streamController.sink.add(HttpEvent<LoginResponse>(
           statusCode: HttpStatus.ok,
-          data: LoginResponse('token', User.fake())));
+          data: LoginResponse('token')));
       await tester.pump(Duration.zero);
       verify(_mockNavigationObserver.didPush(any, any));
     });
@@ -224,7 +223,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
       _streamController.sink.add(
-          HttpEvent<LoginResponse>(statusCode: HttpStatus.unprocessableEntity));
+          HttpEvent<LoginResponse>(statusCode: HttpStatus.badRequest));
       await tester.pump(Duration.zero);
       final Finder dialog = find.byType(CustomAlertDialog);
       final Finder content =
