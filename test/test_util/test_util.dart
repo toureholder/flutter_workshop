@@ -5,11 +5,12 @@ import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/routes.dart';
 import 'package:flutter_workshop/values/strings.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 class TestUtil {
   static Widget makeTestableWidget(
       {Widget subject,
-      List<SingleChildCloneableWidget> dependencies,
+      List<SingleChildWidget> dependencies,
       List<NavigatorObserver> navigatorObservers}) {
     return MultiProvider(
       providers: dependencies,

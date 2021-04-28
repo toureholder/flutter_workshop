@@ -12,10 +12,14 @@ class BaseApi {
   final String baseUrl = 'https://giv-api.herokuapp.com/';
 
   Future<http.Response> get(String url) =>
-      client.get(url, headers: _getDefaultHeaders());
+      client.get(Uri.parse(url), headers: _getDefaultHeaders());
 
   Future<http.Response> post(String url, Map<String, dynamic> body) =>
-      client.post(url, body: jsonEncode(body), headers: _getDefaultHeaders());
+      client.post(
+        Uri.parse(url),
+        body: jsonEncode(body),
+        headers: _getDefaultHeaders(),
+      );
 
   Map<String, String> _getDefaultHeaders() =>
       {HttpHeaders.contentTypeHeader: 'application/json'};

@@ -13,6 +13,7 @@ import 'package:flutter_workshop/service/shared_preferences_storage.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -28,7 +29,7 @@ Future<void> main() async {
   final Session _session =
       Session(diskStorageProvider: _sharedPreferencesStorage);
 
-  List<SingleChildCloneableWidget> providers = [
+  List<SingleChildWidget> providers = [
     Provider<LoginBloc>(
         create: (_) => LoginBloc(
             controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
