@@ -12,21 +12,22 @@ import 'test_util/mocks.dart';
 void main() {
   MockClient _mockClient;
   LoginApi _loginApi;
-  dynamic _body = anyNamed('body');
-  Map<String, String> _headers = anyNamed('headers');
   final LoginRequest _loginRequest =
       LoginRequest(email: 'ab@cd.com', password: '123456');
 
   setUp(() {
     _mockClient = MockClient();
     _loginApi = LoginApi(client: _mockClient);
-    _body = anyNamed('body');
-    _headers = anyNamed('headers');
   });
 
   test('returns LoginResponse data if the http call succeeds', () async {
-    when(_mockClient.post(any, body: _body, headers: _headers))
-        .thenAnswer((_) async => http.Response(fakeLoginResponseBody, 200));
+    when(
+      _mockClient.post(
+        any,
+        body: anyNamed('body'),
+        headers: anyNamed('headers'),
+      ),
+    ).thenAnswer((_) async => http.Response(fakeLoginResponseBody, 200));
 
     final HttpEvent<LoginResponse> event = await _loginApi.login(_loginRequest);
 
@@ -35,8 +36,13 @@ void main() {
   });
 
   test('returns null data if the http call fails', () async {
-    when(_mockClient.post(any, body: _body, headers: _headers))
-        .thenAnswer((_) async => http.Response(fakeLogin422ResponseBody, 422));
+    when(
+      _mockClient.post(
+        any,
+        body: anyNamed('body'),
+        headers: anyNamed('headers'),
+      ),
+    ).thenAnswer((_) async => http.Response(fakeLogin422ResponseBody, 422));
 
     final HttpEvent<LoginResponse> event = await _loginApi.login(_loginRequest);
 

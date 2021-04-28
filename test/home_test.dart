@@ -11,8 +11,8 @@ import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/user/user.dart';
-import 'package:image_test_utils/image_test_utils.dart';
 import 'package:mockito/mockito.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
 
 import 'test_util/mocks.dart';
@@ -51,7 +51,7 @@ void main() {
 
   testWidgets('shows list when donations are added to stream',
       (WidgetTester tester) async {
-    await provideMockedNetworkImages(() async {
+    await mockNetworkImagesFor(() async {
       final StreamController<List<Donation>> controller =
           StreamController<List<Donation>>.broadcast();
 
@@ -83,7 +83,7 @@ void main() {
   });
 
   testWidgets('navigates to detail screen', (WidgetTester tester) async {
-    await provideMockedNetworkImages(() async {
+    await mockNetworkImagesFor(() async {
       final StreamController<List<Donation>> controller =
           StreamController<List<Donation>>.broadcast();
 
@@ -113,7 +113,7 @@ void main() {
 
   testWidgets('displays user avatar in app bar if user is logged in',
       (WidgetTester tester) async {
-    await provideMockedNetworkImages(() async {
+    await mockNetworkImagesFor(() async {
       when(_mockHomeBloc.loadCurrentUser())
           .thenAnswer((_) async => User.fake());
 
@@ -127,7 +127,7 @@ void main() {
 
   testWidgets('displays login button in app bar if user is not logged in',
       (WidgetTester tester) async {
-    await provideMockedNetworkImages(() async {
+    await mockNetworkImagesFor(() async {
       when(_mockHomeBloc.loadCurrentUser()).thenAnswer((_) async => null);
 
       await tester.pumpWidget(_testableWidget);
@@ -144,7 +144,7 @@ void main() {
 
   testWidgets('shows logout confirmation dialog when user taps avatar',
       (WidgetTester tester) async {
-    await provideMockedNetworkImages(() async {
+    await mockNetworkImagesFor(() async {
       when(_mockHomeBloc.loadCurrentUser())
           .thenAnswer((_) async => User.fake());
 
@@ -167,7 +167,7 @@ void main() {
 
   testWidgets('calls bloc logout with button is tapped',
       (WidgetTester tester) async {
-    await provideMockedNetworkImages(() async {
+    await mockNetworkImagesFor(() async {
       when(_mockHomeBloc.loadCurrentUser())
           .thenAnswer((_) async => User.fake());
 
@@ -193,7 +193,7 @@ void main() {
 
   testWidgets('shows error message when an error is added to stream',
       (WidgetTester tester) async {
-    await provideMockedNetworkImages(() async {
+    await mockNetworkImagesFor(() async {
       final StreamController<List<Donation>> controller =
           StreamController<List<Donation>>.broadcast();
 
