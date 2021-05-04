@@ -1,5 +1,9 @@
 class HttpEvent<T> {
-  HttpEvent({this.state = EventState.done, this.data, this.statusCode});
+  HttpEvent({
+    this.state = EventState.done,
+    this.data,
+    this.statusCode,
+  });
 
   final EventState state;
   final T data;
@@ -8,4 +12,7 @@ class HttpEvent<T> {
   bool get isLoading => state == EventState.loading;
 }
 
-enum EventState { loading, done }
+enum EventState {
+  loading,
+  done,
+}

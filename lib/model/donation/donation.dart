@@ -13,7 +13,13 @@ class Donation {
   @JsonKey(name: 'listing_images')
   final List<DonationImage> images;
 
-  Donation(this.id, this.title, this.description, this.user, this.images);
+  Donation(
+    this.id,
+    this.title,
+    this.description,
+    this.user,
+    this.images,
+  );
 
   factory Donation.fromJson(Map<String, dynamic> json) =>
       _$DonationFromJson(json);

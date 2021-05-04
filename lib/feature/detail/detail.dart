@@ -60,7 +60,7 @@ class Detail extends StatelessWidget {
 
   Text _title() => Text(
         donation.title,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
       );
 
   Widget _carousel() {

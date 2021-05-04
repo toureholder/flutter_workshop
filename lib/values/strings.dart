@@ -35,6 +35,10 @@ class Strings {
       "en": "Make password visible",
       "pt": "Tornar senha visível"
     },
+    "login_try_these_creds": {
+      "en": "Try email \"eve.holt@reqres.in\" and any password",
+      "pt": "Tente o email \"eve.holt@reqres.in\" e qualquer senha"
+    },
     "logout_confirmation_title": {
       "en": "Logout?",
       "pt": "Sair?"

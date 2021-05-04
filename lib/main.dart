@@ -20,6 +20,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final http.Client _httpClient = http.Client();
+
   final SharedPreferences _sharedPreferences =
       await SharedPreferences.getInstance();
 
@@ -31,16 +32,18 @@ Future<void> main() async {
 
   List<SingleChildWidget> providers = [
     Provider<LoginBloc>(
-        create: (_) => LoginBloc(
-            controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
-            loginApi: LoginApi(client: _httpClient),
-            sessionProvider: _session)),
+      create: (_) => LoginBloc(
+          controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
+          loginApi: LoginApi(client: _httpClient),
+          sessionProvider: _session),
+    ),
     Provider<HomeBloc>(
-        create: (_) => HomeBloc(
-            controller: StreamController<List<Donation>>.broadcast(),
-            donationApi: DonationApi(client: _httpClient),
-            diskStorageProvider: _sharedPreferencesStorage,
-            sessionProvider: _session))
+      create: (_) => HomeBloc(
+          controller: StreamController<List<Donation>>.broadcast(),
+          donationApi: DonationApi(client: _httpClient),
+          diskStorageProvider: _sharedPreferencesStorage,
+          sessionProvider: _session),
+    ),
   ];
 
   runApp(MyApp(dependencies: providers));

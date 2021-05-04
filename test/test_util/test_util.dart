@@ -8,10 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 class TestUtil {
-  static Widget makeTestableWidget(
-      {Widget subject,
-      List<SingleChildWidget> dependencies,
-      List<NavigatorObserver> navigatorObservers}) {
+  static Widget makeTestableWidget({
+    Widget subject,
+    List<SingleChildWidget> dependencies,
+    List<NavigatorObserver> navigatorObservers,
+  }) {
     return MultiProvider(
       providers: dependencies,
       child: MaterialApp(
@@ -37,10 +38,13 @@ class TestUtil {
         return (textWidget.data != null)
             ? localizationMap.containsValue(textWidget.data)
             : localizationMap.containsValue(textWidget.textSpan.toPlainText());
-      } else if (candidate.widget is EditableText) {
+      }
+
+      if (candidate.widget is EditableText) {
         final EditableText editable = candidate.widget;
         return localizationMap.containsValue(editable.controller.text);
       }
+
       return false;
     });
   }

@@ -30,9 +30,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _isPasswordVisible = false;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -62,14 +62,46 @@ class _LoginState extends State<Login> {
             _passwordField(),
             const SizedBox(height: 60),
             StreamBuilder<HttpEvent<LoginResponse>>(
-                stream: widget.bloc.stream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<HttpEvent<LoginResponse>> snapshot) {
-                  final bool isLoading =
-                      snapshot.hasData && snapshot.data.isLoading;
-                  return _button(context, isLoading);
-                })
+              stream: widget.bloc.stream,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<HttpEvent<LoginResponse>> snapshot,
+              ) {
+                final bool isLoading =
+                    snapshot.hasData && snapshot.data.isLoading;
+                return _button(context, isLoading);
+              },
+            ),
+            const SizedBox(height: 60),
+            Container(
+              child: Center(
+                child: Text(
+                  L10n.getString(
+                    context,
+                    'login_try_these_creds',
+                  ),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            )
           ],
+        ),
+      );
+
+  TextFormField _emailField() => TextFormField(
+        key: Login.emailFieldKey,
+        controller: _emailController,
+        decoration: InputDecoration(
+          labelText: L10n.getString(
+            context,
+            'login_email',
+          ),
+        ),
+        validator: (String input) => L10n.getString(
+          context,
+          CustomFormFieldValidator.validateEmail(input),
         ),
       );
 
@@ -77,11 +109,17 @@ class _LoginState extends State<Login> {
         key: Login.passwordFieldKey,
         controller: _passwordController,
         decoration: InputDecoration(
-            labelText: L10n.getString(context, 'login_password'),
-            suffixIcon: _visibilityToggle()),
+          labelText: L10n.getString(
+            context,
+            'login_password',
+          ),
+          suffixIcon: _visibilityToggle(),
+        ),
         obscureText: !_isPasswordVisible,
         validator: (String input) => L10n.getString(
-            context, CustomFormFieldValidator.validatePassword(input)),
+          context,
+          CustomFormFieldValidator.validatePassword(input),
+        ),
       );
 
   Widget _visibilityToggle() {
@@ -96,9 +134,14 @@ class _LoginState extends State<Login> {
     }
 
     return Semantics(
-      label: L10n.getString(context, semanticsLabel),
-      value:
-          L10n.getString(context, 'login_semantics_password_visibility_toggle'),
+      label: L10n.getString(
+        context,
+        semanticsLabel,
+      ),
+      value: L10n.getString(
+        context,
+        'login_semantics_password_visibility_toggle',
+      ),
       child: IconButton(
         key: const Key(loginPasswordVisibilityToggleValueKey),
         icon: Icon(
@@ -110,14 +153,6 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
-  TextFormField _emailField() => TextFormField(
-      key: Login.emailFieldKey,
-      controller: _emailController,
-      decoration:
-          InputDecoration(labelText: L10n.getString(context, 'login_email')),
-      validator: (String input) => L10n.getString(
-          context, CustomFormFieldValidator.validateEmail(input)));
 
   Widget _button(BuildContext context, bool isLoading) {
     final Widget child = isLoading
@@ -133,7 +168,9 @@ class _LoginState extends State<Login> {
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
           onPressed: () {
-            if (_formKey.currentState.validate()) _sendLoginRequest();
+            if (_formKey.currentState.validate()) {
+              _sendLoginRequest();
+            }
           }),
     );
   }
@@ -142,29 +179,37 @@ class _LoginState extends State<Login> {
         height: 26.0,
         width: 26.0,
         child: CircularProgressIndicator(
-            strokeWidth: 3.0,
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+          strokeWidth: 3.0,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        ),
       );
 
-  Future<void> _sendLoginRequest() => widget.bloc
-      .login(email: _emailController.text, password: _passwordController.text);
+  Future<void> _sendLoginRequest() => widget.bloc.login(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
   void _listenForLoginResponse() {
     widget.bloc.stream.listen((HttpEvent<LoginResponse> event) {
       if (event.isLoading) {
         return;
-      } else if (event.statusCode == HttpStatus.ok) {
-        _onLoginSuccess();
-      } else {
-        _onLoginFailure(event.statusCode);
       }
+
+      if (event.statusCode == HttpStatus.ok) {
+        _onLoginSuccess();
+        return;
+      }
+
+      _onLoginFailure(event.statusCode);
     });
   }
 
-  Future<void> _onLoginSuccess() => Navigation(context).pushNamed(
-        Home.routeName,
-        clearStack: true,
-      );
+  Future<void> _onLoginSuccess() {
+    return Navigation(context).pushNamed(
+      Home.routeName,
+      clearStack: true,
+    );
+  }
 
   Future<void> _onLoginFailure(int statusCode) {
     final Map<int, String> map = <int, String>{
@@ -174,9 +219,10 @@ class _LoginState extends State<Login> {
     final String messageKey = map[statusCode] ?? 'common_error_server_generic';
 
     return showDialog(
-        context: context,
-        builder: (BuildContext context) => CustomAlertDialog(
-              contentText: L10n.getString(context, messageKey),
-            ));
+      context: context,
+      builder: (BuildContext context) => CustomAlertDialog(
+        contentText: L10n.getString(context, messageKey),
+      ),
+    );
   }
 }

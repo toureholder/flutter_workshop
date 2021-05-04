@@ -12,8 +12,10 @@ import 'test_util/mocks.dart';
 void main() {
   MockClient _mockClient;
   LoginApi _loginApi;
-  final LoginRequest _loginRequest =
-      LoginRequest(email: 'ab@cd.com', password: '123456');
+  final LoginRequest _loginRequest = LoginRequest(
+    email: 'ab@cd.com',
+    password: '123456',
+  );
 
   setUp(() {
     _mockClient = MockClient();

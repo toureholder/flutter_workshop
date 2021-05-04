@@ -4,7 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key key, this.dependencies}) : super(key: key);
+  const MyApp({
+    Key key,
+    this.dependencies,
+  }) : super(key: key);
 
   final List<SingleChildWidget> dependencies;
 
