@@ -12,10 +12,18 @@ class Navigation {
   }) {
     return clearStack
         ? Navigator.pushNamedAndRemoveUntil(
-            context, routeName, (route) => false)
-        : Navigator.pushNamed(context, routeName, arguments: arguments);
+            context,
+            routeName,
+            (route) => false,
+          )
+        : Navigator.pushNamed(
+            context,
+            routeName,
+            arguments: arguments,
+          );
   }
 
-  static Route<dynamic> makeRoute(Widget page) =>
-      MaterialPageRoute<dynamic>(builder: (BuildContext context) => page);
+  static Route<dynamic> makeRoute(Widget page) => MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => page,
+      );
 }

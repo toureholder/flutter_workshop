@@ -14,10 +14,11 @@ class DonationApi extends BaseApi {
   DonationApi({@required http.Client client}) : super(client: client);
 
   Future<List<Donation>> getDonations() async {
-    final String url = '${baseUrl}listings/categories/33';
+    final String url =
+        '${baseUrl}listings/categories/33?state_id=3463504&country_id=3469034&is_hard_filter=true&page=1&per_page=15';
     final http.Response response = await get(url);
     final Map<String, dynamic> json = jsonDecode(response.body);
-    final DonationApiResponse dto = await compute(parseDonations, json);
+    final DonationApiResponse dto = parseDonations(json);
     return dto.donations;
   }
 }

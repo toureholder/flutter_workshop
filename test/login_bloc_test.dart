@@ -48,8 +48,8 @@ Future<void> main() async {
   test(
       'adds loading and success events to stream sink if api returns a LoginReponse',
       () async {
-    when(_mockLoginApi.login(any)).thenAnswer((_) async =>
-        HttpEvent<LoginResponse>(data: LoginResponse('token')));
+    when(_mockLoginApi.login(any)).thenAnswer(
+        (_) async => HttpEvent<LoginResponse>(data: LoginResponse('token')));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSink.add(any)).called(2);
@@ -63,8 +63,8 @@ Future<void> main() async {
   });
 
   test('creates session if api returns a LoginReponse', () async {
-    when(_mockLoginApi.login(any)).thenAnswer((_) async =>
-        HttpEvent<LoginResponse>(data: LoginResponse('token')));
+    when(_mockLoginApi.login(any)).thenAnswer(
+        (_) async => HttpEvent<LoginResponse>(data: LoginResponse('token')));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
     verify(_mockSessionProvider.logUserIn(any));

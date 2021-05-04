@@ -13,26 +13,40 @@ class SharedPreferencesStorage implements DiskStorageProvider {
   @override
   User getUser() {
     try {
-      return User.fromEncodedJson(sharedPreferences.getString(_userKey));
+      return User.fromEncodedJson(
+        sharedPreferences.getString(
+          _userKey,
+        ),
+      );
     } catch (e) {
       return null;
     }
   }
 
   @override
-  Future<bool> setUser(User user) =>
-      sharedPreferences.setString(_userKey, user.toEncodedJson());
+  Future<bool> setUser(User user) => sharedPreferences.setString(
+        _userKey,
+        user.toEncodedJson(),
+      );
 
   @override
-  String getAccessToken() => sharedPreferences.getString(_accessTokenKey);
+  String getAccessToken() => sharedPreferences.getString(
+        _accessTokenKey,
+      );
 
   @override
-  Future<bool> setAccessToken(String token) =>
-      sharedPreferences.setString(_accessTokenKey, token);
+  Future<bool> setAccessToken(String token) => sharedPreferences.setString(
+        _accessTokenKey,
+        token,
+      );
 
   @override
-  Future<bool> clearToken() => sharedPreferences.remove(_accessTokenKey);
+  Future<bool> clearToken() => sharedPreferences.remove(
+        _accessTokenKey,
+      );
 
   @override
-  Future<bool> clearUser() => sharedPreferences.remove(_userKey);
+  Future<bool> clearUser() => sharedPreferences.remove(
+        _userKey,
+      );
 }

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 
 class CustomAlertDialog extends StatelessWidget {
-  const CustomAlertDialog(
-      {Key key,
-      this.onConfirmed,
-      this.confirmationText,
-      this.cancellationText,
-      this.titleText,
-      this.contentText,
-      this.hasCancelButton = false})
-      : super(key: key);
+  const CustomAlertDialog({
+    Key key,
+    this.onConfirmed,
+    this.confirmationText,
+    this.cancellationText,
+    this.titleText,
+    this.contentText,
+    this.hasCancelButton = false,
+  }) : super(key: key);
 
   final VoidCallback onConfirmed;
   final String confirmationText;
@@ -29,15 +29,19 @@ class CustomAlertDialog extends StatelessWidget {
       content: content,
       actions: <Widget>[
         if (hasCancelButton || cancellationText != null) _cancelButton(context),
-        FlatButton(
-          child: Text(confirmationText ?? L10n.getString(context, 'common_ok')),
-          onPressed: onConfirmed ?? () => _closeDialog(context),
-        )
+        _confirmButton(context)
       ],
     );
   }
 
-  Widget _cancelButton(BuildContext context) => FlatButton(
+  FlatButton _confirmButton(BuildContext context) => FlatButton(
+        child: Text(
+          confirmationText ?? L10n.getString(context, 'common_ok'),
+        ),
+        onPressed: onConfirmed ?? () => _closeDialog(context),
+      );
+
+  FlatButton _cancelButton(BuildContext context) => FlatButton(
         child: Text(
           cancellationText ?? L10n.getString(context, 'common_cancel'),
         ),

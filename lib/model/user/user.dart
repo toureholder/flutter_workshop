@@ -11,7 +11,11 @@ class User {
   @JsonKey(name: 'image_url')
   String avatarUrl;
 
-  User(this.id, this.name, this.avatarUrl);
+  User(
+    this.id,
+    this.name,
+    this.avatarUrl,
+  );
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

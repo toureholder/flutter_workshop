@@ -203,8 +203,10 @@ void main() {
       await tester.pumpWidget(_testableWidget);
       expect(find.byType(CircularProgressIndicator), findsNothing);
 
-      _streamController.sink
-          .add(HttpEvent<LoginResponse>(state: EventState.loading));
+      _streamController.sink.add(
+        HttpEvent<LoginResponse>(state: EventState.loading),
+      );
+
       await tester.pump(Duration.zero);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -212,23 +214,43 @@ void main() {
     testWidgets('navigates to home screen when login succeeds',
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
-      _streamController.sink.add(HttpEvent<LoginResponse>(
+
+      _streamController.sink.add(
+        HttpEvent<LoginResponse>(
           statusCode: HttpStatus.ok,
-          data: LoginResponse('token')));
-      await tester.pump(Duration.zero);
+          data: LoginResponse('token'),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
       verify(_mockNavigationObserver.didPush(any, any));
+
+      // TODO: expect(find.byType(Home), findsOneWidget); fails :(
     });
 
     testWidgets('shows alert dialog when login fails',
         (WidgetTester tester) async {
       await tester.pumpWidget(_testableWidget);
+
       _streamController.sink.add(
-          HttpEvent<LoginResponse>(statusCode: HttpStatus.badRequest));
+        HttpEvent<LoginResponse>(statusCode: HttpStatus.badRequest),
+      );
+
       await tester.pump(Duration.zero);
+
       final Finder dialog = find.byType(CustomAlertDialog);
-      final Finder content =
-          TestUtil.findInternationalizedText('login_error_bad_credentials');
-      expect(find.descendant(of: dialog, matching: content), findsOneWidget);
+      final Finder content = TestUtil.findInternationalizedText(
+        'login_error_bad_credentials',
+      );
+
+      expect(
+        find.descendant(
+          of: dialog,
+          matching: content,
+        ),
+        findsOneWidget,
+      );
     });
   });
 

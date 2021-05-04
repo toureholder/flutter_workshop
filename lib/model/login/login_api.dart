@@ -22,6 +22,8 @@ class LoginApi extends BaseApi {
     }
 
     return HttpEvent<LoginResponse>(
-        statusCode: response.statusCode, data: data);
+      statusCode: response.statusCode,
+      data: data,
+    );
   }
 }

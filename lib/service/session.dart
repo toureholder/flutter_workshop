@@ -10,10 +10,8 @@ class Session implements SessionProvider {
   final DiskStorageProvider diskStorageProvider;
 
   @override
-  Future<List<bool>> logUserIn(LoginResponse loginResponse) =>
-      Future.wait(<Future<bool>>[
-        diskStorageProvider.setAccessToken(loginResponse.token)
-      ]);
+  Future<List<bool>> logUserIn(LoginResponse loginResponse) => Future.wait(
+      <Future<bool>>[diskStorageProvider.setAccessToken(loginResponse.token)]);
 
   @override
   Future<List<bool>> logUserOut() => Future.wait(<Future<bool>>[

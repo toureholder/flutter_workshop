@@ -46,32 +46,36 @@ class _HomeState extends State<Home> {
   StreamBuilder<List<Donation>> _listStreamBuilder() =>
       StreamBuilder<List<Donation>>(
           stream: widget.bloc.stream,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Donation>> snapshot) {
-            Widget widget = const Center(child: CircularProgressIndicator());
-
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<List<Donation>> snapshot,
+          ) {
             if (snapshot.hasData) {
-              widget = _listView(snapshot.data);
-            } else if (snapshot.hasError) {
-              widget = Center(child: Text(snapshot.error.toString()));
+              return _listView(snapshot.data);
             }
-            return widget;
+
+            if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            }
+
+            return const Center(child: CircularProgressIndicator());
           });
 
   ListView _listView(List<Donation> list) {
     return ListView.builder(
-        padding: const EdgeInsets.only(top: 8),
-        itemCount: list.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Donation listItem = list[index];
-          return _listItem(listItem, index);
-        });
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Donation listItem = list[index];
+        return _listItem(listItem, index);
+      },
+    );
   }
 
   Widget _listItem(Donation listItem, int index) {
     return ListTile(
       key: Key('$homeListItemValueKey$index'),
-      contentPadding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      contentPadding: const EdgeInsets.all(16),
       leading: _image(listItem),
       title: _title(listItem),
       subtitle: _subtitle(listItem),
@@ -171,11 +175,12 @@ class _HomeState extends State<Home> {
       );
 
   Future _showLogoutConfirmationDialog() => showDialog(
-      context: context,
-      builder: (BuildContext context) => CustomAlertDialog(
-            titleText: L10n.getString(context, 'logout_confirmation_title'),
-            hasCancelButton: true,
-            confirmationText: L10n.getString(context, 'logout_confirmation'),
-            onConfirmed: () => _logout(),
-          ));
+        context: context,
+        builder: (BuildContext context) => CustomAlertDialog(
+          titleText: L10n.getString(context, 'logout_confirmation_title'),
+          hasCancelButton: true,
+          confirmationText: L10n.getString(context, 'logout_confirmation'),
+          onConfirmed: () => _logout(),
+        ),
+      );
 }
