@@ -24,15 +24,15 @@ void main() {
   final MockNavigatorObserver _mockNavigationObserver = MockNavigatorObserver();
 
   final Widget _testableWidget = TestUtil.makeTestableWidget(
-      subject: Home(
-        bloc: _mockHomeBloc,
-      ),
-      dependencies: [
-        Provider<LoginBloc>(create: (_) => _mockLoginBloc),
-      ],
-      navigatorObservers: <NavigatorObserver>[
-        _mockNavigationObserver
-      ]);
+    subject: Home(
+      bloc: _mockHomeBloc,
+    ),
+    dependencies: [
+      Provider<LoginBloc>(create: (_) => _mockLoginBloc),
+    ],
+    navigatorObservers: <NavigatorObserver>[_mockNavigationObserver],
+    testingLocale: const Locale('not_supported'),
+  );
 
   final Finder _appBar = find.byType(CustomAppBar);
 
