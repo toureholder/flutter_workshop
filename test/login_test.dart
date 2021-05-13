@@ -12,6 +12,7 @@ import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter_workshop/config/l10n.dart';
 import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
 
@@ -33,15 +34,15 @@ void main() {
     _streamController = StreamController<HttpEvent<LoginResponse>>.broadcast();
 
     _testableWidget = TestUtil.makeTestableWidget(
-        subject: Login(
-          bloc: _mockLoginBloc,
-        ),
-        dependencies: [
-          Provider<HomeBloc>(create: (_) => _mockHomeBloc),
-        ],
-        navigatorObservers: <NavigatorObserver>[
-          _mockNavigationObserver
-        ]);
+      subject: Login(
+        bloc: _mockLoginBloc,
+      ),
+      dependencies: [
+        Provider<HomeBloc>(create: (_) => _mockHomeBloc),
+      ],
+      navigatorObservers: <NavigatorObserver>[_mockNavigationObserver],
+      testingLocale: supportedLocales.first,
+    );
 
     _emailField = find.byKey(Login.emailFieldKey);
     _passwordField = find.byKey(Login.passwordFieldKey);

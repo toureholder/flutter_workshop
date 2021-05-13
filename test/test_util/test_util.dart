@@ -12,12 +12,13 @@ class TestUtil {
     Widget subject,
     List<SingleChildWidget> dependencies,
     List<NavigatorObserver> navigatorObservers,
+    Locale testingLocale,
   }) {
     return MultiProvider(
       providers: dependencies,
       child: MaterialApp(
-        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          StringLocalizationsDelegate(),
+        localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+          StringLocalizationsDelegate(testingLocale: testingLocale),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
