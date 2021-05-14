@@ -121,8 +121,10 @@ void main() {
       await tester.pumpWidget(_testableWidget);
       await tester.pump(Duration.zero);
 
-      expect(find.descendant(of: _appBar, matching: find.byType(CircleAvatar)),
-          findsOneWidget);
+      expect(
+        find.descendant(of: _appBar, matching: find.byType(CircleAvatar)),
+        findsOneWidget,
+      );
     });
   });
 
@@ -160,8 +162,10 @@ void main() {
       await tester.pumpWidget(_testableWidget);
       await tester.pump(Duration.zero);
 
-      final Finder avatar =
-          find.descendant(of: _appBar, matching: find.byType(CircleAvatar));
+      final Finder avatar = find.descendant(
+        of: _appBar,
+        matching: find.byType(CircleAvatar),
+      );
 
       await tester.tap(avatar);
       await tester.pump(Duration.zero);
@@ -170,7 +174,43 @@ void main() {
       final Finder title =
           TestUtil.findInternationalizedText('logout_confirmation_title');
 
-      expect(find.descendant(of: dialog, matching: title), findsOneWidget);
+      expect(
+        find.descendant(of: dialog, matching: title),
+        findsOneWidget,
+      );
+    });
+  });
+
+  testWidgets('closes logout confirmation dialog when user taps cancel',
+      (WidgetTester tester) async {
+    await mockNetworkImagesFor(() async {
+      when(_mockHomeBloc.loadCurrentUser())
+          .thenAnswer((_) async => User.fake());
+
+      await tester.pumpWidget(_testableWidget);
+      await tester.pump(Duration.zero);
+
+      final Finder avatar = find.descendant(
+        of: _appBar,
+        matching: find.byType(CircleAvatar),
+      );
+
+      await tester.tap(avatar);
+      await tester.pump(Duration.zero);
+
+      final Finder dialog = find.byType(CustomAlertDialog);
+      final Finder cancelButton =
+          find.byKey(const Key(logoutDialogCancelButton));
+
+      expect(
+        find.descendant(of: dialog, matching: cancelButton),
+        findsOneWidget,
+      );
+
+      await tester.tap(cancelButton);
+      await tester.pump(Duration.zero);
+
+      expect(dialog, findsNothing);
     });
   });
 

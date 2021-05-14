@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/custom/custom_button.dart';
 
+import 'package:flutter_workshop/config/platform_independent_constants.dart';
+
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
     Key key,
@@ -41,6 +43,7 @@ class CustomAlertDialog extends StatelessWidget {
       );
 
   Widget _cancelButton(BuildContext context) => PrimaryTextButton(
+        key: const Key(logoutDialogCancelButton),
         text: cancellationText ?? L10n.getString(context, 'common_cancel'),
         onPressed: () => _closeDialog(context),
       );
