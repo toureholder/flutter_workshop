@@ -4,6 +4,7 @@
 
 const homeLoginButtonValueKey = 'home_login_button';
 const homeListItemValueKey = 'home_list_item';
+const logoutDialogCancelButton = 'logout_dialog_cancel_button';
 const loginSubmitButtonValueKey = 'login_submit_button';
 const loginEmailFieldValueKey = 'login_email_field_button';
 const loginPasswordFieldValueKey = 'login_password_field';
