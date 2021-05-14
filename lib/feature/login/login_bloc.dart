@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_workshop/model/login/login_api.dart';
 import 'package:flutter_workshop/model/login/login_request.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
+import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/service/session_provider.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:meta/meta.dart';
@@ -41,6 +42,13 @@ class LoginBloc {
     }
   }
 
-  Future<List<bool>> _saveToPreferences(LoginResponse loginResponse) =>
-      sessionProvider.logUserIn(loginResponse);
+  Future<List<bool>> _saveToPreferences(LoginResponse loginResponse) {
+    // Provide a fake user for demo
+    final user = User.fake();
+
+    return sessionProvider.logUserIn(
+      loginResponse.token,
+      user,
+    );
+  }
 }

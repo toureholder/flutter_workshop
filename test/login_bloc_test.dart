@@ -63,11 +63,13 @@ Future<void> main() async {
   });
 
   test('creates session if api returns a LoginReponse', () async {
+    const token = 'i am a token';
+
     when(_mockLoginApi.login(any)).thenAnswer(
-        (_) async => HttpEvent<LoginResponse>(data: LoginResponse('token')));
+        (_) async => HttpEvent<LoginResponse>(data: LoginResponse(token)));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockSessionProvider.logUserIn(any));
+    verify(_mockSessionProvider.logUserIn(token, any));
   });
 
   test('gets contoller stream', () async {
