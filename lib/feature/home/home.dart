@@ -3,6 +3,7 @@ import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/custom/custom_button.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
@@ -147,16 +148,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  FlatButton _loginButton() {
-    return FlatButton(
-        key: Home.loginButtonKey,
-        onPressed: _navigateToLogin,
-        child: Text(
-          L10n.getString(context, 'login_title'),
-          style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontWeight: FontWeight.bold),
-        ));
+  Widget _loginButton() {
+    return PrimaryTextButton(
+      key: Home.loginButtonKey,
+      onPressed: _navigateToLogin,
+      text: L10n.getString(context, 'login_title'),
+    );
   }
 
   Future _logout() async {

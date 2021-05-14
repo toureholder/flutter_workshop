@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
+import 'package:flutter_workshop/custom/custom_button.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
@@ -34,17 +35,13 @@ class CustomAlertDialog extends StatelessWidget {
     );
   }
 
-  FlatButton _confirmButton(BuildContext context) => FlatButton(
-        child: Text(
-          confirmationText ?? L10n.getString(context, 'common_ok'),
-        ),
+  Widget _confirmButton(BuildContext context) => PrimaryTextButton(
+        text: confirmationText ?? L10n.getString(context, 'common_ok'),
         onPressed: onConfirmed ?? () => _closeDialog(context),
       );
 
-  FlatButton _cancelButton(BuildContext context) => FlatButton(
-        child: Text(
-          cancellationText ?? L10n.getString(context, 'common_cancel'),
-        ),
+  Widget _cancelButton(BuildContext context) => PrimaryTextButton(
+        text: cancellationText ?? L10n.getString(context, 'common_cancel'),
         onPressed: () => _closeDialog(context),
       );
 

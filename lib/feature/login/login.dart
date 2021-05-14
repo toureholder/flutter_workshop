@@ -5,6 +5,7 @@ import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/custom/custom_button.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
@@ -159,19 +160,14 @@ class _LoginState extends State<Login> {
         ? _circularProgressIndicator()
         : Text(L10n.getString(context, 'login_title'));
 
-    return ButtonTheme(
-      height: 48.0,
-      minWidth: double.maxFinite,
-      child: FlatButton(
-          key: Login.submitButtonKey,
-          child: child,
-          color: Theme.of(context).primaryColor,
-          textColor: Colors.white,
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              _sendLoginRequest();
-            }
-          }),
+    return PrimaryContainedButton(
+      key: Login.submitButtonKey,
+      child: child,
+      onPressed: () {
+        if (_formKey.currentState.validate()) {
+          _sendLoginRequest();
+        }
+      },
     );
   }
 
