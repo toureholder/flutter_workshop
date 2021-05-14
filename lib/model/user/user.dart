@@ -24,8 +24,8 @@ class User {
 
   User.fake()
       : id = 1,
-        name = 'Test user',
-        avatarUrl = 'https://randomuser.me/api/portraits/women/2.jpg';
+        name = 'Eve Holt',
+        avatarUrl = 'https://randomuser.me/api/portraits/women/30.jpg';
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
 

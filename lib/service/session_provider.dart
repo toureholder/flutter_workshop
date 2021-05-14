@@ -1,6 +1,6 @@
-import 'package:flutter_workshop/model/login/login_response.dart';
+import 'package:flutter_workshop/model/user/user.dart';
 
 abstract class SessionProvider {
-  Future<List<bool>> logUserIn(LoginResponse loginResponse);
+  Future<List<bool>> logUserIn(String token, User user);
   Future<List<bool>> logUserOut();
 }
