@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
+import 'package:flutter_workshop/custom/custom_button.dart';
 import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
@@ -133,12 +134,20 @@ void main() {
       await tester.pumpWidget(_testableWidget);
       await tester.pump(Duration.zero);
 
-      final Finder flatButton = find.byType(FlatButton);
+      final Finder textButton = find.byType(PrimaryTextButton);
       final Finder text = TestUtil.findInternationalizedText('login_title');
-      final Finder textButton = find.descendant(of: flatButton, matching: text);
+      final Finder loginButton = find.descendant(
+        of: textButton,
+        matching: text,
+      );
 
       expect(
-          find.descendant(of: _appBar, matching: textButton), findsOneWidget);
+        find.descendant(
+          of: _appBar,
+          matching: loginButton,
+        ),
+        findsOneWidget,
+      );
     });
   });
 
@@ -180,10 +189,14 @@ void main() {
       await tester.tap(avatar);
       await tester.pump(Duration.zero);
 
-      final Finder buttonText =
-          TestUtil.findInternationalizedText('logout_confirmation');
-      final Finder button =
-          find.descendant(of: find.byType(FlatButton), matching: buttonText);
+      final Finder buttonText = TestUtil.findInternationalizedText(
+        'logout_confirmation',
+      );
+
+      final Finder button = find.descendant(
+        of: find.byType(PrimaryTextButton),
+        matching: buttonText,
+      );
 
       await tester.tap(button);
 
