@@ -13,7 +13,7 @@ import 'package:flutter_workshop/util/navigation.dart';
 
 class Home extends StatefulWidget {
   static const Key loginButtonKey = Key(homeLoginButtonValueKey);
-  static const routeName = '/';
+  static const routeName = '/home';
 
   final HomeBloc bloc;
 
@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
         actions: _appBarActions(),
         title: L10n.getString(context, 'home_title'),
       ),
-      body: _listStreamBuilder(),
+      body: widget.bloc.stream == null ? null : _listStreamBuilder(),
     );
   }
 

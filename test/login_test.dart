@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
+import 'package:flutter_workshop/feature/home/home.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
@@ -12,7 +14,6 @@ import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_workshop/config/l10n.dart';
 import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
 
@@ -226,8 +227,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(_mockNavigationObserver.didPush(any, any));
-
-      // TODO: expect(find.byType(Home), findsOneWidget); fails :(
+      expect(find.byType(Home), findsOneWidget);
     });
 
     testWidgets('shows alert dialog when login fails',

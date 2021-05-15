@@ -39,6 +39,8 @@ void main() {
 
   testWidgets('shows circular progress inidicator while loading',
       (WidgetTester tester) async {
+    when(_mockHomeBloc.stream).thenAnswer((_) => MockDonationListStream());
+
     await tester.pumpWidget(_testableWidget);
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
