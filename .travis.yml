@@ -7,6 +7,9 @@ addons:
 env:
   global:
     - FLUTTER_CHANNEL=stable
+
+if: branch = master
+
 install:
   - git clone https://github.com/flutter/flutter.git -b $FLUTTER_CHANNEL
   - export PATH="$PATH:`pwd`/flutter/bin/cache/dart-sdk/bin"
