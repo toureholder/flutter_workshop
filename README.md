@@ -1,7 +1,7 @@
 # Flutter beginner's workshop
 
-[![Build Status](https://travis-ci.com/toureh/flutter_workshop.svg?branch=master)](https://travis-ci.com/toureh/flutter_workshop)
-[![codecov](https://codecov.io/gh/toureh/flutter_workshop/branch/master/graph/badge.svg)](https://codecov.io/gh/toureh/flutter_workshop)
+[![Build Status](https://travis-ci.com/toureholder/flutter_workshop.svg?branch=master)](https://travis-ci.com/toureholder/flutter_workshop)
+[![codecov](https://codecov.io/gh/toureholder/flutter_workshop/branch/master/graph/badge.svg)](https://codecov.io/gh/toureholder/flutter_workshop)
 [![Lint](https://img.shields.io/badge/style-pedantic-blue.svg)](https://github.com/dart-lang/pedantic)
 
 This repository contains a sample app that I use to give workshops geared towards beginners to Flutter.
@@ -31,8 +31,6 @@ I've made an effort to squash changes into cohesive commits that each represent 
 * Configuring linting rules to implement the Effective Dart guidelines
 * Continuous integration pipelines with Travis CI
 * Uploading code coverage to Codecov
-
-> The app uses https://reqres.in/ as a backend for login, so the email "eve.holt@reqres.in" and password "cityslicka" should be valid login credentials.
 
 ## Getting Started
 
