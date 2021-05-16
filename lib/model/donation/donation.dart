@@ -24,13 +24,16 @@ class Donation {
   factory Donation.fromJson(Map<String, dynamic> json) =>
       _$DonationFromJson(json);
 
-  Donation.fake()
-      : id = 1,
-        title = 'Donation',
-        description =
-            'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-        images = DonationImage.fakeList(),
-        user = User.fake();
+  factory Donation.fake({User user}) {
+    const id = 1;
+    const title = 'Donation';
+    const description =
+        'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua';
+    final images = DonationImage.fakeList();
+    final finalUser = user ?? User.fake();
+
+    return Donation(id, title, description, finalUser, images);
+  }
 
   static List<Donation> fakeList() {
     final List<Donation> list = <Donation>[];
