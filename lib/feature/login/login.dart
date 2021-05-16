@@ -49,136 +49,45 @@ class _LoginState extends State<Login> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-        child: _form(context),
-      ),
-    );
-  }
-
-  Form _form(BuildContext context) => Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            _emailField(),
-            const SizedBox(height: 40),
-            _passwordField(),
-            const SizedBox(height: 60),
-            StreamBuilder<HttpEvent<LoginResponse>>(
-              stream: widget.bloc.stream,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<HttpEvent<LoginResponse>> snapshot,
-              ) {
-                final bool isLoading =
-                    snapshot.hasData && snapshot.data.isLoading;
-                return _button(context, isLoading);
-              },
-            ),
-            const SizedBox(height: 60),
-            Container(
-              child: Center(
-                child: Text(
-                  L10n.getString(
-                    context,
-                    'login_try_these_creds',
-                  ),
-                  style: const TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              _EmailField(
+                controller: _emailController,
               ),
-            )
-          ],
-        ),
-      );
-
-  TextFormField _emailField() => TextFormField(
-        key: Login.emailFieldKey,
-        controller: _emailController,
-        decoration: InputDecoration(
-          labelText: L10n.getString(
-            context,
-            'login_email',
+              _VerticalSpacer(),
+              _PasswordField(
+                controller: _passwordController,
+                isPasswordVisible: _isPasswordVisible,
+                onVisibilityTogglePressed: () {
+                  setState(() => _isPasswordVisible = !_isPasswordVisible);
+                },
+              ),
+              _VerticalSpacer(),
+              StreamBuilder<HttpEvent<LoginResponse>>(
+                stream: widget.bloc.stream,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<HttpEvent<LoginResponse>> snapshot,
+                ) {
+                  final bool isLoading =
+                      snapshot.hasData && snapshot.data.isLoading;
+                  return _SubmitButton(
+                    formState: _formKey.currentState,
+                    isLoading: isLoading,
+                    onPressed: _sendLoginRequest,
+                  );
+                },
+              ),
+              _VerticalSpacer(),
+              _CredentialsHint(),
+            ],
           ),
         ),
-        validator: (String input) => L10n.getString(
-          context,
-          CustomFormFieldValidator.validateEmail(input),
-        ),
-      );
-
-  TextFormField _passwordField() => TextFormField(
-        key: Login.passwordFieldKey,
-        controller: _passwordController,
-        decoration: InputDecoration(
-          labelText: L10n.getString(
-            context,
-            'login_password',
-          ),
-          suffixIcon: _visibilityToggle(),
-        ),
-        obscureText: !_isPasswordVisible,
-        validator: (String input) => L10n.getString(
-          context,
-          CustomFormFieldValidator.validatePassword(input),
-        ),
-      );
-
-  Widget _visibilityToggle() {
-    IconData iconData = Icons.visibility_off;
-    String iconValueKey = loginPasswordVisibilityToggleObscureValueKey;
-    String semanticsLabel = 'login_semantics_password_reveal';
-
-    if (_isPasswordVisible) {
-      iconData = Icons.visibility;
-      iconValueKey = loginPasswordVisibilityToggleVisibleValueKey;
-      semanticsLabel = 'login_semantics_password_hide';
-    }
-
-    return Semantics(
-      label: L10n.getString(
-        context,
-        semanticsLabel,
-      ),
-      value: L10n.getString(
-        context,
-        'login_semantics_password_visibility_toggle',
-      ),
-      child: IconButton(
-        key: const Key(loginPasswordVisibilityToggleValueKey),
-        icon: Icon(
-          iconData,
-          key: Key(iconValueKey),
-        ),
-        onPressed: () =>
-            setState(() => _isPasswordVisible = !_isPasswordVisible),
       ),
     );
   }
-
-  Widget _button(BuildContext context, bool isLoading) {
-    final Widget child = isLoading
-        ? _circularProgressIndicator()
-        : Text(L10n.getString(context, 'login_title'));
-
-    return PrimaryContainedButton(
-      key: Login.submitButtonKey,
-      child: child,
-      onPressed: () {
-        if (_formKey.currentState.validate()) {
-          _sendLoginRequest();
-        }
-      },
-    );
-  }
-
-  Widget _circularProgressIndicator() => const SizedBox(
-        height: 26.0,
-        width: 26.0,
-        child: CircularProgressIndicator(
-          strokeWidth: 3.0,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        ),
-      );
 
   Future<void> _sendLoginRequest() => widget.bloc.login(
         email: _emailController.text,
@@ -220,5 +129,178 @@ class _LoginState extends State<Login> {
         contentText: L10n.getString(context, messageKey),
       ),
     );
+  }
+}
+
+class _EmailField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const _EmailField({Key key, @required this.controller}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      key: Login.emailFieldKey,
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: L10n.getString(
+          context,
+          'login_email',
+        ),
+      ),
+      validator: (String input) => L10n.getString(
+        context,
+        validateEmail(input),
+      ),
+    );
+  }
+}
+
+class _PasswordField extends StatelessWidget {
+  final TextEditingController controller;
+  final bool isPasswordVisible;
+  final VoidCallback onVisibilityTogglePressed;
+
+  const _PasswordField({
+    Key key,
+    @required this.controller,
+    @required this.isPasswordVisible,
+    @required this.onVisibilityTogglePressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      key: Login.passwordFieldKey,
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: L10n.getString(
+          context,
+          'login_password',
+        ),
+        suffixIcon: _PasswordVisibilityToggle(
+          isPasswordVisible: isPasswordVisible,
+          onPressed: onVisibilityTogglePressed,
+        ),
+      ),
+      obscureText: !isPasswordVisible,
+      validator: (String input) => L10n.getString(
+        context,
+        validatePassword(input),
+      ),
+    );
+  }
+}
+
+class _PasswordVisibilityToggle extends StatelessWidget {
+  final bool isPasswordVisible;
+  final VoidCallback onPressed;
+
+  const _PasswordVisibilityToggle({
+    Key key,
+    @required this.isPasswordVisible,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    IconData iconData = Icons.visibility_off;
+    String iconValueKey = loginPasswordVisibilityToggleObscureValueKey;
+    String semanticsLabel = 'login_semantics_password_reveal';
+
+    if (isPasswordVisible) {
+      iconData = Icons.visibility;
+      iconValueKey = loginPasswordVisibilityToggleVisibleValueKey;
+      semanticsLabel = 'login_semantics_password_hide';
+    }
+
+    return Semantics(
+      label: L10n.getString(
+        context,
+        semanticsLabel,
+      ),
+      value: L10n.getString(
+        context,
+        'login_semantics_password_visibility_toggle',
+      ),
+      child: IconButton(
+        key: const Key(loginPasswordVisibilityToggleValueKey),
+        icon: Icon(
+          iconData,
+          key: Key(iconValueKey),
+        ),
+        onPressed: onPressed,
+      ),
+    );
+  }
+}
+
+class _SubmitButton extends StatelessWidget {
+  final bool isLoading;
+  final FormState formState;
+  final VoidCallback onPressed;
+
+  const _SubmitButton({
+    Key key,
+    @required this.isLoading,
+    @required this.formState,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget child = isLoading
+        ? _ButtonProgressIndicator()
+        : Text(L10n.getString(context, 'login_title'));
+
+    return PrimaryContainedButton(
+      key: Login.submitButtonKey,
+      child: child,
+      onPressed: () {
+        if (formState.validate()) {
+          onPressed.call();
+        }
+      },
+    );
+  }
+}
+
+class _ButtonProgressIndicator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      height: 26.0,
+      width: 26.0,
+      child: CircularProgressIndicator(
+        strokeWidth: 3.0,
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      ),
+    );
+  }
+}
+
+class _CredentialsHint extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Text(
+          L10n.getString(
+            context,
+            'login_try_these_creds',
+          ),
+          style: const TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _VerticalSpacer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(height: 40);
   }
 }

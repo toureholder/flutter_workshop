@@ -8,6 +8,7 @@ import 'package:flutter_workshop/feature/detail/detail.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
+import 'package:flutter_workshop/model/donation/donation_image.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/navigation.dart';
 
@@ -35,125 +36,38 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final donationListStream = widget.bloc.stream;
+
     return Scaffold(
       appBar: CustomAppBar(
-        actions: _appBarActions(),
+        actions: _buildAppBarActions(),
         title: L10n.getString(context, 'home_title'),
       ),
-      body: widget.bloc.stream == null ? null : _listStreamBuilder(),
+      body: donationListStream == null
+          ? null
+          : _DonationListStreamBuilder(
+              onTapListItem: _navigateToDetail,
+              stream: donationListStream,
+            ),
     );
   }
 
-  StreamBuilder<List<Donation>> _listStreamBuilder() =>
-      StreamBuilder<List<Donation>>(
-          stream: widget.bloc.stream,
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<List<Donation>> snapshot,
-          ) {
-            if (snapshot.hasData) {
-              return _listView(snapshot.data);
-            }
-
-            if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            }
-
-            return const Center(child: CircularProgressIndicator());
-          });
-
-  ListView _listView(List<Donation> list) {
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 8),
-      itemCount: list.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Donation listItem = list[index];
-        return _listItem(listItem, index);
-      },
-    );
-  }
-
-  Widget _listItem(Donation listItem, int index) {
-    return ListTile(
-      key: Key('$homeListItemValueKey$index'),
-      contentPadding: const EdgeInsets.all(16),
-      leading: _image(listItem),
-      title: _title(listItem),
-      subtitle: _subtitle(listItem),
-      onTap: () => _navigateToDetail(listItem),
-    );
-  }
-
-  Text _title(Donation listItem) {
-    return Text(
-      listItem.title,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  Widget _subtitle(Donation listItem) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Text(
-        listItem.description,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-
-  Widget _image(Donation listItem) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(5.0),
-      child: Image.network(
-        listItem.images.last.url,
-        height: 75,
-        width: 75,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-  List<Widget> _appBarActions() {
+  List<Widget> _buildAppBarActions() {
     return <Widget>[
       FutureBuilder<User>(
-          future: widget.bloc.loadCurrentUser(),
-          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-            return snapshot.hasData
-                ? _userAvatar(snapshot.data)
-                : _loginButton();
-          })
+        future: widget.bloc.loadCurrentUser(),
+        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+          return snapshot.hasData
+              ? _UserAvatar(
+                  user: snapshot.data,
+                  onTap: _showLogoutConfirmationDialog,
+                )
+              : _LoginButton(
+                  onPressed: _navigateToLogin,
+                );
+        },
+      )
     ];
-  }
-
-  Widget _userAvatar(User user) {
-    Widget child = Text(user.name.substring(0, 1).toUpperCase());
-    ImageProvider backgroundImage;
-
-    if (user.avatarUrl != null && user.name.isNotEmpty) {
-      child = null;
-      backgroundImage = NetworkImage(user.avatarUrl);
-    }
-
-    return GestureDetector(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: CircleAvatar(
-          child: child,
-          backgroundImage: backgroundImage,
-        ),
-      ),
-      onTap: _showLogoutConfirmationDialog,
-    );
-  }
-
-  Widget _loginButton() {
-    return PrimaryTextButton(
-      key: Home.loginButtonKey,
-      onPressed: _navigateToLogin,
-      text: L10n.getString(context, 'login_title'),
-    );
   }
 
   Future _logout() async {
@@ -180,4 +94,199 @@ class _HomeState extends State<Home> {
           onConfirmed: () => _logout(),
         ),
       );
+}
+
+class _DonationListStreamBuilder extends StatelessWidget {
+  final Stream<List<Donation>> stream;
+  final Function(Donation) onTapListItem;
+
+  const _DonationListStreamBuilder({
+    Key key,
+    @required this.stream,
+    @required this.onTapListItem,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Donation>>(
+      stream: stream,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<Donation>> snapshot,
+      ) {
+        if (snapshot.hasData) {
+          return _ListView(
+            list: snapshot.data,
+            onTapItem: onTapListItem,
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              snapshot.error.toString(),
+            ),
+          );
+        }
+
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+}
+
+class _ListView extends StatelessWidget {
+  final List<Donation> list;
+  final Function(Donation) onTapItem;
+
+  const _ListView({
+    Key key,
+    @required this.list,
+    @required this.onTapItem,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Donation listItem = list[index];
+        return _ListItemTile(
+          index: index,
+          donation: listItem,
+          onTap: () {
+            onTapItem.call(listItem);
+          },
+        );
+      },
+    );
+  }
+}
+
+class _UserAvatar extends StatelessWidget {
+  final User user;
+  final GestureTapCallback onTap;
+
+  const _UserAvatar({
+    Key key,
+    @required this.user,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget child = Text(user.name.substring(0, 1).toUpperCase());
+    ImageProvider backgroundImage;
+
+    if (user.avatarUrl != null && user.name.isNotEmpty) {
+      child = null;
+      backgroundImage = NetworkImage(user.avatarUrl);
+    }
+
+    return GestureDetector(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: CircleAvatar(
+          child: child,
+          backgroundImage: backgroundImage,
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+}
+
+class _ListItemTile extends StatelessWidget {
+  final int index;
+  final Donation donation;
+  final GestureTapCallback onTap;
+
+  const _ListItemTile({
+    Key key,
+    this.index,
+    @required this.donation,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      key: Key('$homeListItemValueKey$index'),
+      contentPadding: const EdgeInsets.all(16),
+      leading: _DonationImage(images: donation.images),
+      title: _DonationTitle(text: donation.title),
+      subtitle: _DonationSubtitle(text: donation.description),
+      onTap: onTap,
+    );
+  }
+}
+
+class _DonationImage extends StatelessWidget {
+  final List<DonationImage> images;
+
+  const _DonationImage({Key key, @required this.images}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5.0),
+      child: Image.network(
+        images.last.url,
+        height: 75,
+        width: 75,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+}
+
+class _DonationTitle extends StatelessWidget {
+  final String text;
+
+  const _DonationTitle({Key key, @required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+}
+
+class _DonationSubtitle extends StatelessWidget {
+  final String text;
+
+  const _DonationSubtitle({Key key, @required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: Text(
+        text,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+}
+
+class _LoginButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const _LoginButton({Key key, this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryTextButton(
+      key: Home.loginButtonKey,
+      onPressed: onPressed,
+      text: L10n.getString(context, 'login_title'),
+    );
+  }
 }

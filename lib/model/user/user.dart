@@ -22,10 +22,11 @@ class User {
   factory User.fromEncodedJson(String encoded) =>
       encoded == null ? null : User.fromJson(jsonDecode(encoded));
 
-  User.fake()
-      : id = 1,
+  User.fake({
+    String avatarUrl = 'https://randomuser.me/api/portraits/women/30.jpg',
+  })  : id = 1,
         name = 'Eve Holt',
-        avatarUrl = 'https://randomuser.me/api/portraits/women/30.jpg';
+        avatarUrl = avatarUrl;
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
 

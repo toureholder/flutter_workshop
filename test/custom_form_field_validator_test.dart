@@ -3,23 +3,22 @@ import 'package:test/test.dart';
 
 void main() {
   test('empty email returns error string', () {
-    final String result = CustomFormFieldValidator.validateEmail('');
+    final String result = validateEmail('');
     expect(result, 'validation_message_email_required');
   });
 
   test('invalid email returns error string', () {
-    final String result =
-        CustomFormFieldValidator.validateEmail('invalid email');
+    final String result = validateEmail('invalid email');
     expect(result, 'validation_message_email_invalid');
   });
 
   test('empty password returns error string', () {
-    final String result = CustomFormFieldValidator.validatePassword('');
+    final String result = validatePassword('');
     expect(result, 'validation_message_password_required');
   });
 
   test('short password returns error string', () {
-    final String result = CustomFormFieldValidator.validatePassword('12345');
+    final String result = validatePassword('12345');
     expect(result, 'validation_message_password_too_short');
   });
 }
