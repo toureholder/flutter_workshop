@@ -39,6 +39,10 @@ class Strings {
       "en": "Try email \"eve.holt@reqres.in\" and any password",
       "pt": "Tente o email \"eve.holt@reqres.in\" e qualquer senha"
     },
+    "login_welcome": {
+      "en": "Welcome 👋",
+      "pt": "Seja bem-vindo 👋"
+    },
     "logout_confirmation_title": {
       "en": "Logout?",
       "pt": "Sair?"

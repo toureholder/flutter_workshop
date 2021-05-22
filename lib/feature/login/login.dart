@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
+import 'package:flutter_workshop/custom/adaptive_view.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/custom/custom_button.dart';
@@ -30,11 +31,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool _isPasswordVisible = false;
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -47,52 +43,18 @@ class _LoginState extends State<Login> {
       appBar: CustomAppBar(
         title: L10n.getString(context, 'login_title'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              _EmailField(
-                controller: _emailController,
-              ),
-              const _VerticalSpacer(),
-              _PasswordField(
-                controller: _passwordController,
-                isPasswordVisible: _isPasswordVisible,
-                onVisibilityTogglePressed: () {
-                  setState(() => _isPasswordVisible = !_isPasswordVisible);
-                },
-              ),
-              const _VerticalSpacer(),
-              StreamBuilder<HttpEvent<LoginResponse>>(
-                stream: widget.bloc.stream,
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<HttpEvent<LoginResponse>> snapshot,
-                ) {
-                  final bool isLoading =
-                      snapshot.hasData && snapshot.data.isLoading;
-                  return _SubmitButton(
-                    formState: _formKey.currentState,
-                    isLoading: isLoading,
-                    onPressed: _sendLoginRequest,
-                  );
-                },
-              ),
-              const _VerticalSpacer(),
-              const _CredentialsHint(),
-            ],
-          ),
+      body: AdaptiveView(
+        smallView: SmallScreenView(bloc: widget.bloc),
+        mediumView: LargeScreenView(
+          bloc: widget.bloc,
+          horizontalPadding: 100,
+          formFlexFactor: 2,
+          headlineStyle: Theme.of(context).textTheme.headline5,
         ),
+        largeView: LargeScreenView(bloc: widget.bloc),
       ),
     );
   }
-
-  Future<void> _sendLoginRequest() => widget.bloc.login(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
 
   void _listenForLoginResponse() {
     widget.bloc.stream.listen((HttpEvent<LoginResponse> event) {
@@ -130,6 +92,151 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+}
+
+class SmallScreenView extends StatelessWidget {
+  const SmallScreenView({
+    Key key,
+    @required this.bloc,
+    this.horizontalPadding,
+  }) : super(key: key);
+
+  final LoginBloc bloc;
+  final double horizontalPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding ?? 20.0,
+        vertical: 40.0,
+      ),
+      child: LoginForm(
+        bloc: bloc,
+      ),
+    );
+  }
+}
+
+class LargeScreenView extends StatelessWidget {
+  const LargeScreenView({
+    Key key,
+    @required this.bloc,
+    this.horizontalPadding,
+    this.formFlexFactor,
+    this.headlineStyle,
+  }) : super(key: key);
+
+  final LoginBloc bloc;
+  final double horizontalPadding;
+  final int formFlexFactor;
+  final TextStyle headlineStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final texStyle = headlineStyle ?? theme.textTheme.headline4;
+
+    return Row(
+      children: [
+        Expanded(
+          flex: formFlexFactor ?? 1,
+          child: SmallScreenView(
+            bloc: bloc,
+            horizontalPadding: horizontalPadding ?? 120.0,
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                theme.accentColor,
+                theme.primaryColor,
+              ],
+            )),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    L10n.getString(context, 'login_welcome'),
+                    style: texStyle.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  final LoginBloc bloc;
+
+  const LoginForm({Key key, @required this.bloc}) : super(key: key);
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  bool _isPasswordVisible = false;
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          _EmailField(
+            controller: _emailController,
+          ),
+          const _VerticalSpacer(),
+          _PasswordField(
+            controller: _passwordController,
+            isPasswordVisible: _isPasswordVisible,
+            onVisibilityTogglePressed: () {
+              setState(() => _isPasswordVisible = !_isPasswordVisible);
+            },
+          ),
+          const _VerticalSpacer(),
+          StreamBuilder<HttpEvent<LoginResponse>>(
+            stream: widget.bloc.stream,
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<HttpEvent<LoginResponse>> snapshot,
+            ) {
+              final bool isLoading =
+                  snapshot.hasData && snapshot.data.isLoading;
+              return _SubmitButton(
+                formState: _formKey.currentState,
+                isLoading: isLoading,
+                onPressed: _sendLoginRequest,
+              );
+            },
+          ),
+          const _VerticalSpacer(),
+          const _CredentialsHint(),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _sendLoginRequest() => widget.bloc.login(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 }
 
 class _EmailField extends StatelessWidget {
