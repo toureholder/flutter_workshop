@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_workshop/base/my_app.dart';
 import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
@@ -30,19 +31,30 @@ Future<void> main() async {
   final Session _session =
       Session(diskStorageProvider: _sharedPreferencesStorage);
 
+  await SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ],
+  );
+
   List<SingleChildWidget> providers = [
     Provider<LoginBloc>(
       create: (_) => LoginBloc(
-          controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
-          loginApi: LoginApi(client: _httpClient),
-          sessionProvider: _session),
+        controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
+        loginApi: LoginApi(client: _httpClient),
+        sessionProvider: _session,
+      ),
     ),
     Provider<HomeBloc>(
       create: (_) => HomeBloc(
-          controller: StreamController<List<Donation>>.broadcast(),
-          donationApi: DonationApi(client: _httpClient),
-          diskStorageProvider: _sharedPreferencesStorage,
-          sessionProvider: _session),
+        controller: StreamController<List<Donation>>.broadcast(),
+        donationApi: DonationApi(client: _httpClient),
+        diskStorageProvider: _sharedPreferencesStorage,
+        sessionProvider: _session,
+      ),
     ),
   ];
 
