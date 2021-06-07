@@ -3,6 +3,7 @@
 // Flutter specific, such as the Flutter driver run-time.
 
 const homeLoginButtonValueKey = 'home_login_button';
+const homeLargeScreenCTAKey = 'home_large_screen_call_to_action';
 const homeListItemValueKey = 'home_list_item';
 const logoutDialogCancelButton = 'logout_dialog_cancel_button';
 const loginSubmitButtonValueKey = 'login_submit_button';

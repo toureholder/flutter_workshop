@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+const double MEDUIM_SCREEN_MIN_WIDTH = 720;
+const double LARGE_SCREEN_MIN_WIDTH = 1200;
+
 class AdaptiveView extends StatelessWidget {
   final Widget smallView;
   final Widget mediumView;
@@ -24,11 +27,11 @@ class AdaptiveView extends StatelessWidget {
   }
 
   FormFactor _getFormFactor(double width) {
-    if (width > 1200) {
+    if (width > LARGE_SCREEN_MIN_WIDTH) {
       return FormFactor.large;
     }
 
-    if (width > 720) {
+    if (width > MEDUIM_SCREEN_MIN_WIDTH) {
       return FormFactor.medium;
     }
 

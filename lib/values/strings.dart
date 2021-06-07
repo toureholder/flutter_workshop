@@ -7,6 +7,10 @@ class Strings {
       "en": "Home",
       "pt": "Início"
     },
+    "home_large_screen_call_to_action": {
+      "en": "Select an item on the left to see the details.",
+      "pt": "Selecione um item à esquerda para ver os detalhes."
+    },
     "login_title": {
       "en": "Login",
       "pt": "Entrar"

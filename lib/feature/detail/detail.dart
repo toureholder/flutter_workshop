@@ -6,13 +6,18 @@ import 'package:flutter_workshop/model/user/user.dart';
 class Detail extends StatelessWidget {
   static const routeName = '/detail';
   final Donation donation;
+  final bool showAppBar;
 
-  const Detail({Key key, this.donation}) : super(key: key);
+  const Detail({
+    Key key,
+    @required this.donation,
+    this.showAppBar = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: showAppBar ? const CustomAppBar() : null,
       body: _Body(donation: donation),
     );
   }
