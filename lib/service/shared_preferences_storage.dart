@@ -11,13 +11,13 @@ class SharedPreferencesStorage implements DiskStorageProvider {
   final SharedPreferences sharedPreferences;
 
   @override
-  User getUser() {
+  User? getUser() {
     try {
-      return User.fromEncodedJson(
-        sharedPreferences.getString(
-          _userKey,
-        ),
+      final encodedJson = sharedPreferences.getString(
+        _userKey,
       );
+
+      return encodedJson == null ? null : User.fromEncodedJson(encodedJson);
     } catch (e) {
       return null;
     }
@@ -30,14 +30,14 @@ class SharedPreferencesStorage implements DiskStorageProvider {
       );
 
   @override
-  String getAccessToken() => sharedPreferences.getString(
+  String? getAccessToken() => sharedPreferences.getString(
         _accessTokenKey,
       );
 
   @override
-  Future<bool> setAccessToken(String token) => sharedPreferences.setString(
+  Future<bool> setAccessToken(String? token) => sharedPreferences.setString(
         _accessTokenKey,
-        token,
+        token!,
       );
 
   @override

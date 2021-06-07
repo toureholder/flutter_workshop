@@ -66,8 +66,8 @@ void main() {
         ),
       );
 
-      expect(find.text(fakeDonation.title), findsOneWidget);
-      expect(find.text(fakeDonation.description), findsOneWidget);
+      expect(find.text(fakeDonation.title!), findsOneWidget);
+      expect(find.text(fakeDonation.description!), findsOneWidget);
     });
   });
 
@@ -82,7 +82,7 @@ void main() {
         ),
       );
 
-      expect(find.text(fakeDonation.user.name), findsOneWidget);
+      expect(find.text(fakeDonation.user.name!), findsOneWidget);
     });
   });
 
@@ -99,7 +99,7 @@ void main() {
       );
 
       expect(
-        find.text(Donation.fake().user.name[0]),
+        find.text(Donation.fake().user.name![0]),
         findsOneWidget,
       );
     });

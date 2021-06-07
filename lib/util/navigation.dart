@@ -5,9 +5,9 @@ class Navigation {
 
   final BuildContext context;
 
-  Future<T> pushNamed<T extends Object>(
+  Future pushNamed(
     String routeName, {
-    Object arguments,
+    Object? arguments,
     bool clearStack = false,
   }) {
     return clearStack

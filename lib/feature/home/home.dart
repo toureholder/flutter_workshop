@@ -18,27 +18,27 @@ class Home extends StatefulWidget {
   static const Key largeScreenCTAKey = Key(homeLargeScreenCTAKey);
   static const routeName = '/home';
 
-  final HomeBloc bloc;
+  final HomeBloc? bloc;
 
-  const Home({Key key, this.bloc}) : super(key: key);
+  const Home({Key? key, this.bloc}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  Navigation _navigation;
+  late Navigation _navigation;
 
   @override
   void initState() {
     super.initState();
     _navigation = Navigation(context);
-    widget.bloc.loadDonations();
+    widget.bloc!.loadDonations();
   }
 
   @override
   Widget build(BuildContext context) {
-    final donationListStream = widget.bloc.stream;
+    final donationListStream = widget.bloc!.stream;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -56,9 +56,9 @@ class _HomeState extends State<Home> {
 
   List<Widget> _buildAppBarActions() {
     return <Widget>[
-      FutureBuilder<User>(
-        future: widget.bloc.loadCurrentUser(),
-        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+      FutureBuilder<User?>(
+        future: widget.bloc!.loadCurrentUser(),
+        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           return snapshot.hasData
               ? _UserAvatar(
                   user: snapshot.data,
@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
   }
 
   Future _logout() async {
-    await widget.bloc.logout();
+    await widget.bloc!.logout();
     setState(() {});
     return Navigator.of(context).pop();
   }
@@ -103,9 +103,9 @@ class _DonationListStreamBuilder extends StatelessWidget {
   final Function(Donation) onTapListItem;
 
   const _DonationListStreamBuilder({
-    Key key,
-    @required this.stream,
-    @required this.onTapListItem,
+    Key? key,
+    required this.stream,
+    required this.onTapListItem,
   }) : super(key: key);
 
   @override
@@ -145,11 +145,11 @@ class _DonationListStreamBuilder extends StatelessWidget {
 }
 
 class _LargeScreenView extends StatefulWidget {
-  final List<Donation> list;
+  final List<Donation>? list;
 
   const _LargeScreenView({
-    Key key,
-    @required this.list,
+    Key? key,
+    required this.list,
   }) : super(key: key);
 
   @override
@@ -157,7 +157,7 @@ class _LargeScreenView extends StatefulWidget {
 }
 
 class __LargeScreenViewState extends State<_LargeScreenView> {
-  Donation _selectedDonation;
+  Donation? _selectedDonation;
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +182,7 @@ class __LargeScreenViewState extends State<_LargeScreenView> {
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
-                  color: Colors.grey[300],
+                  color: Colors.grey[300]!,
                   width: 1.0,
                 ),
               ),
@@ -202,7 +202,7 @@ class __LargeScreenViewState extends State<_LargeScreenView> {
 }
 
 class _LargeScreenCTA extends StatelessWidget {
-  const _LargeScreenCTA({Key key}) : super(key: key);
+  const _LargeScreenCTA({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -212,21 +212,21 @@ class _LargeScreenCTA extends StatelessWidget {
         L10n.getString(
           context,
           'home_large_screen_call_to_action',
-        ),
+        )!,
       ),
     );
   }
 }
 
 class _ListView extends StatelessWidget {
-  final List<Donation> list;
+  final List<Donation>? list;
   final Function(Donation) onTapItem;
-  final int selectedDonationId;
+  final int? selectedDonationId;
 
   const _ListView({
-    Key key,
-    @required this.list,
-    @required this.onTapItem,
+    Key? key,
+    required this.list,
+    required this.onTapItem,
     this.selectedDonationId,
   }) : super(key: key);
 
@@ -236,9 +236,9 @@ class _ListView extends StatelessWidget {
       isAlwaysShown: true,
       child: ListView.builder(
         padding: const EdgeInsets.only(top: 8),
-        itemCount: list.length,
+        itemCount: list!.length,
         itemBuilder: (BuildContext context, int index) {
-          final Donation listItem = list[index];
+          final Donation listItem = list![index];
 
           final color = listItem.id == selectedDonationId
               ? Theme.of(context).primaryColor.withOpacity(0.25)
@@ -261,23 +261,23 @@ class _ListView extends StatelessWidget {
 }
 
 class _UserAvatar extends StatelessWidget {
-  final User user;
+  final User? user;
   final GestureTapCallback onTap;
 
   const _UserAvatar({
-    Key key,
-    @required this.user,
-    @required this.onTap,
+    Key? key,
+    required this.user,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget child = Text(user.name.substring(0, 1).toUpperCase());
-    ImageProvider backgroundImage;
+    Widget? child = Text(user!.name!.substring(0, 1).toUpperCase());
+    ImageProvider? backgroundImage;
 
-    if (user.avatarUrl != null && user.name.isNotEmpty) {
+    if (user!.avatarUrl != null && user!.name!.isNotEmpty) {
       child = null;
-      backgroundImage = NetworkImage(user.avatarUrl);
+      backgroundImage = NetworkImage(user!.avatarUrl!);
     }
 
     return GestureDetector(
@@ -294,15 +294,15 @@ class _UserAvatar extends StatelessWidget {
 }
 
 class _ListItemTile extends StatelessWidget {
-  final int index;
+  final int? index;
   final Donation donation;
   final GestureTapCallback onTap;
 
   const _ListItemTile({
-    Key key,
+    Key? key,
     this.index,
-    @required this.donation,
-    @required this.onTap,
+    required this.donation,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -321,14 +321,14 @@ class _ListItemTile extends StatelessWidget {
 class _DonationImage extends StatelessWidget {
   final List<DonationImage> images;
 
-  const _DonationImage({Key key, @required this.images}) : super(key: key);
+  const _DonationImage({Key? key, required this.images}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5.0),
       child: Image.network(
-        images.first.url,
+        images.first.url!,
         height: 75,
         width: 75,
         fit: BoxFit.cover,
@@ -338,14 +338,14 @@ class _DonationImage extends StatelessWidget {
 }
 
 class _DonationTitle extends StatelessWidget {
-  final String text;
+  final String? text;
 
-  const _DonationTitle({Key key, @required this.text}) : super(key: key);
+  const _DonationTitle({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text!,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -353,16 +353,16 @@ class _DonationTitle extends StatelessWidget {
 }
 
 class _DonationSubtitle extends StatelessWidget {
-  final String text;
+  final String? text;
 
-  const _DonationSubtitle({Key key, @required this.text}) : super(key: key);
+  const _DonationSubtitle({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 4.0),
       child: Text(
-        text,
+        text!,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
@@ -371,9 +371,9 @@ class _DonationSubtitle extends StatelessWidget {
 }
 
 class _LoginButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
-  const _LoginButton({Key key, this.onPressed}) : super(key: key);
+  const _LoginButton({Key? key, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

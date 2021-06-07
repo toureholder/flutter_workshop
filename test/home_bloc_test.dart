@@ -18,12 +18,12 @@ class MockHomeResponseStreamSink extends Mock
     implements StreamSink<List<Donation>> {}
 
 void main() {
-  MockHomeResponseStreamController _mockController;
-  MockHomeResponseStreamSink _mockSink;
-  MockDonationApi _mockDonationApi;
-  MockSessionProvider _mockSessionProvider;
-  MockDiskStorageProvider _mockDiskStorageProvider;
-  HomeBloc _bloc;
+  late MockHomeResponseStreamController _mockController;
+  late MockHomeResponseStreamSink _mockSink;
+  late MockDonationApi _mockDonationApi;
+  late MockSessionProvider _mockSessionProvider;
+  late MockDiskStorageProvider _mockDiskStorageProvider;
+  late HomeBloc _bloc;
 
   setUp(() {
     _mockController = MockHomeResponseStreamController();
@@ -52,14 +52,14 @@ void main() {
         .thenAnswer((_) async => Donation.fakeList());
 
     await _bloc.loadDonations();
-    verify(_mockSink.add(any));
+    verify(_mockSink.add(any!));
   });
 
   test('adds error to stream sink if api throws an exception', () async {
     when(_mockDonationApi.getDonations()).thenThrow(Error());
 
     await _bloc.loadDonations();
-    verify(_mockSink.addError(any)).called(1);
+    verify(_mockSink.addError(any!)).called(1);
   });
 
   test('recovers user from disk storage', () async {

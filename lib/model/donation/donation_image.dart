@@ -4,7 +4,7 @@ part 'donation_image.g.dart';
 
 @JsonSerializable()
 class DonationImage {
-  final String url;
+  final String? url;
 
   DonationImage(this.url);
 

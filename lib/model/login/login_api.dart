@@ -9,13 +9,13 @@ import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:meta/meta.dart';
 
 class LoginApi extends BaseApi {
-  LoginApi({@required http.Client client}) : super(client: client);
+  LoginApi({required http.Client client}) : super(client: client);
 
   Future<HttpEvent<LoginResponse>> login(LoginRequest request) async {
     const String url = 'https://reqres.in/api/login';
     final http.Response response = await post(url, request.toJson());
 
-    LoginResponse data;
+    LoginResponse? data;
 
     if (response.statusCode == HttpStatus.ok) {
       data = LoginResponse.fromJson(jsonDecode(response.body));

@@ -14,7 +14,7 @@ description: A sample Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -22,13 +22,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  http: ^0.13.1
+  http: ^0.13.3
   provider: ^5.0.0
-  shared_preferences: ^2.0.5
+  shared_preferences: ^2.0.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.3
 
 dev_dependencies:
   flutter_driver:
@@ -36,12 +36,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^1.8.1
-  json_annotation: ^3.1.1
-  json_serializable: ^3.5.1
-  mockito: ^4.1.3
-  network_image_mock: 1.1.0
-  test: ^1.14.3
+  build_runner: ^2.0.4
+  json_annotation: ^4.0.1
+  json_serializable: ^4.1.3
+  mockito: ^5.0.9
+  network_image_mock: ^2.0.1
+  test: ^1.16.8
 
 
 # For information on the generic Dart part of this file, see the

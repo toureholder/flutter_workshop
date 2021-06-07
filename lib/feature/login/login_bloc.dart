@@ -6,13 +6,12 @@ import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/service/session_provider.dart';
 import 'package:flutter_workshop/util/http_event.dart';
-import 'package:meta/meta.dart';
 
 class LoginBloc {
   LoginBloc({
-    @required this.loginApi,
-    @required this.controller,
-    @required this.sessionProvider,
+    required this.loginApi,
+    required this.controller,
+    required this.sessionProvider,
   });
 
   final LoginApi loginApi;
@@ -23,7 +22,7 @@ class LoginBloc {
 
   Future<void> dispose() => controller.close();
 
-  Future<void> login({String email, String password}) async {
+  Future<void> login({String? email, String? password}) async {
     try {
       final LoginRequest request = LoginRequest(
         email: email,
@@ -34,7 +33,7 @@ class LoginBloc {
 
       final HttpEvent<LoginResponse> event = await loginApi.login(request);
 
-      if (event.data != null) await _saveToPreferences(event.data);
+      if (event.data != null) await _saveToPreferences(event.data!);
 
       controller.sink.add(event);
     } catch (error) {

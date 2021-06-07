@@ -9,10 +9,10 @@ import 'test_util/test_util.dart';
 
 void main() {
   Widget makeTestableWidget({
-    Widget smallView,
-    Widget mediumView,
-    Widget largeView,
-    FormFactor formFactor,
+    Widget? smallView,
+    Widget? mediumView,
+    Widget? largeView,
+    FormFactor? formFactor,
   }) {
     return TestUtil.makeTestableWidget(
       dependencies: [

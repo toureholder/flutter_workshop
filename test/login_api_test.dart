@@ -10,8 +10,8 @@ import 'test_util/fakes.dart';
 import 'test_util/mocks.dart';
 
 void main() {
-  MockClient _mockClient;
-  LoginApi _loginApi;
+  late MockClient _mockClient;
+  late LoginApi _loginApi;
   final LoginRequest _loginRequest = LoginRequest(
     email: 'ab@cd.com',
     password: '123456',
@@ -25,7 +25,7 @@ void main() {
   test('returns LoginResponse data if the http call succeeds', () async {
     when(
       _mockClient.post(
-        any,
+        any!,
         body: anyNamed('body'),
         headers: anyNamed('headers'),
       ),
@@ -40,7 +40,7 @@ void main() {
   test('returns null data if the http call fails', () async {
     when(
       _mockClient.post(
-        any,
+        any!,
         body: anyNamed('body'),
         headers: anyNamed('headers'),
       ),

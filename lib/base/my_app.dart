@@ -5,18 +5,18 @@ import 'package:provider/single_child_widget.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({
-    Key key,
+    Key? key,
     this.dependencies,
   }) : super(key: key);
 
-  final List<SingleChildWidget> dependencies;
+  final List<SingleChildWidget>? dependencies;
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  List<SingleChildWidget> _appDependencies;
+  List<SingleChildWidget>? _appDependencies;
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: _appDependencies,
+      providers: _appDependencies!,
       child: BaseMaterialApp(),
     );
   }

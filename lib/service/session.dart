@@ -1,17 +1,16 @@
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/service/disk_storage_provider.dart';
-import 'package:meta/meta.dart';
 
 import 'session_provider.dart';
 
 class Session implements SessionProvider {
-  Session({@required this.diskStorageProvider});
+  Session({required this.diskStorageProvider});
 
   final DiskStorageProvider diskStorageProvider;
 
   @override
   Future<List<bool>> logUserIn(
-    String token,
+    String? token,
     User user,
   ) =>
       Future.wait(

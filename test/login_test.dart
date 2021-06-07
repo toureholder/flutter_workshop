@@ -18,15 +18,15 @@ import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
 
 void main() {
-  MockLoginBloc _mockLoginBloc;
+  MockLoginBloc? _mockLoginBloc;
   MockHomeBloc _mockHomeBloc;
-  MockNavigatorObserver _mockNavigationObserver;
-  Widget _testableWidget;
-  Finder _emailField;
-  Finder _passwordField;
-  Finder _submitButton;
-  Finder _passwordVisibilityToggle;
-  StreamController<HttpEvent<LoginResponse>> _streamController;
+  MockNavigatorObserver? _mockNavigationObserver;
+  late Widget _testableWidget;
+  late Finder _emailField;
+  late Finder _passwordField;
+  late Finder _submitButton;
+  late Finder _passwordVisibilityToggle;
+  late StreamController<HttpEvent<LoginResponse>> _streamController;
 
   setUp(() {
     _mockLoginBloc = MockLoginBloc();
@@ -41,7 +41,7 @@ void main() {
       dependencies: [
         Provider<HomeBloc>(create: (_) => _mockHomeBloc),
       ],
-      navigatorObservers: <NavigatorObserver>[_mockNavigationObserver],
+      navigatorObservers: <NavigatorObserver?>[_mockNavigationObserver],
       testingLocale: supportedLocales.first,
     );
 
@@ -50,7 +50,7 @@ void main() {
     _submitButton = find.byKey(Login.submitButtonKey);
     _passwordVisibilityToggle = find.byKey(Login.passwordVisibilityToggledKey);
 
-    when(_mockLoginBloc.stream).thenAnswer((_) => _streamController.stream);
+    when(_mockLoginBloc!.stream).thenAnswer((_) => _streamController.stream);
   });
 
   group('attempts login', () {
@@ -65,7 +65,7 @@ void main() {
       await tester.enterText(_passwordField, password);
       await tester.tap(_submitButton);
 
-      verify(_mockLoginBloc.login(email: email, password: password));
+      verify(_mockLoginBloc!.login(email: email, password: password));
     });
 
     testWidgets('does not attempt login if email and password are empty',
@@ -74,7 +74,7 @@ void main() {
 
       await tester.tap(_submitButton);
 
-      verifyNever(_mockLoginBloc.login(email: '', password: ''));
+      verifyNever(_mockLoginBloc!.login(email: '', password: ''));
     });
 
     testWidgets('does not attempt login if email is not a valid email',
@@ -88,7 +88,7 @@ void main() {
       await tester.enterText(_passwordField, password);
       await tester.tap(_submitButton);
 
-      verifyNever(_mockLoginBloc.login(email: email, password: password));
+      verifyNever(_mockLoginBloc!.login(email: email, password: password));
     });
 
     testWidgets('does not attempt login if password is too short',
@@ -102,7 +102,7 @@ void main() {
       await tester.enterText(_passwordField, password);
       await tester.tap(_submitButton);
 
-      verifyNever(_mockLoginBloc.login(email: email, password: password));
+      verifyNever(_mockLoginBloc!.login(email: email, password: password));
     });
   });
 
@@ -226,7 +226,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      verify(_mockNavigationObserver.didPush(any, any));
+      verify(_mockNavigationObserver!.didPush(any!, any));
       expect(find.byType(Home), findsOneWidget);
     });
 

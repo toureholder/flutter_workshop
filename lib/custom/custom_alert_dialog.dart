@@ -6,7 +6,7 @@ import 'package:flutter_workshop/config/platform_independent_constants.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
-    Key key,
+    Key? key,
     this.onConfirmed,
     this.confirmationText,
     this.cancellationText,
@@ -15,17 +15,17 @@ class CustomAlertDialog extends StatelessWidget {
     this.hasCancelButton = false,
   }) : super(key: key);
 
-  final VoidCallback onConfirmed;
-  final String confirmationText;
-  final String cancellationText;
-  final String titleText;
-  final String contentText;
+  final VoidCallback? onConfirmed;
+  final String? confirmationText;
+  final String? cancellationText;
+  final String? titleText;
+  final String? contentText;
   final bool hasCancelButton;
 
   @override
   Widget build(BuildContext context) {
-    final Text title = titleText == null ? null : Text(titleText);
-    final Text content = contentText == null ? null : Text(contentText);
+    final Text? title = titleText == null ? null : Text(titleText!);
+    final Text? content = contentText == null ? null : Text(contentText!);
 
     return AlertDialog(
       title: title,

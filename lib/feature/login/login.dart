@@ -22,9 +22,9 @@ class Login extends StatefulWidget {
   static const Key passwordVisibilityToggledKey =
       Key(loginPasswordVisibilityToggleValueKey);
 
-  final LoginBloc bloc;
+  final LoginBloc? bloc;
 
-  const Login({Key key, this.bloc}) : super(key: key);
+  const Login({Key? key, this.bloc}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
   }
 
   void _listenForLoginResponse() {
-    widget.bloc.stream.listen((HttpEvent<LoginResponse> event) {
+    widget.bloc!.stream.listen((HttpEvent<LoginResponse> event) {
       if (event.isLoading) {
         return;
       }
@@ -78,12 +78,12 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> _onLoginFailure(int statusCode) {
+  Future<void> _onLoginFailure(int? statusCode) {
     final Map<int, String> map = <int, String>{
       HttpStatus.badRequest: 'login_error_bad_credentials'
     };
 
-    final String messageKey = map[statusCode] ?? 'common_error_server_generic';
+    final String messageKey = map[statusCode!] ?? 'common_error_server_generic';
 
     return showDialog(
       context: context,
@@ -96,13 +96,13 @@ class _LoginState extends State<Login> {
 
 class SmallScreenView extends StatelessWidget {
   const SmallScreenView({
-    Key key,
-    @required this.bloc,
+    Key? key,
+    required this.bloc,
     this.horizontalPadding,
   }) : super(key: key);
 
-  final LoginBloc bloc;
-  final double horizontalPadding;
+  final LoginBloc? bloc;
+  final double? horizontalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -120,22 +120,22 @@ class SmallScreenView extends StatelessWidget {
 
 class LargeScreenView extends StatelessWidget {
   const LargeScreenView({
-    Key key,
-    @required this.bloc,
+    Key? key,
+    required this.bloc,
     this.horizontalPadding,
     this.formFlexFactor,
     this.headlineStyle,
   }) : super(key: key);
 
-  final LoginBloc bloc;
-  final double horizontalPadding;
-  final int formFlexFactor;
-  final TextStyle headlineStyle;
+  final LoginBloc? bloc;
+  final double? horizontalPadding;
+  final int? formFlexFactor;
+  final TextStyle? headlineStyle;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final texStyle = headlineStyle ?? theme.textTheme.headline4;
+    final texStyle = headlineStyle ?? theme.textTheme.headline4!;
 
     return Row(
       children: [
@@ -163,7 +163,7 @@ class LargeScreenView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    L10n.getString(context, 'login_welcome'),
+                    L10n.getString(context, 'login_welcome')!,
                     style: texStyle.copyWith(
                       color: Colors.white,
                     ),
@@ -179,9 +179,9 @@ class LargeScreenView extends StatelessWidget {
 }
 
 class LoginForm extends StatefulWidget {
-  final LoginBloc bloc;
+  final LoginBloc? bloc;
 
-  const LoginForm({Key key, @required this.bloc}) : super(key: key);
+  const LoginForm({Key? key, required this.bloc}) : super(key: key);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -212,13 +212,13 @@ class _LoginFormState extends State<LoginForm> {
           ),
           const _VerticalSpacer(),
           StreamBuilder<HttpEvent<LoginResponse>>(
-            stream: widget.bloc.stream,
+            stream: widget.bloc!.stream,
             builder: (
               BuildContext context,
               AsyncSnapshot<HttpEvent<LoginResponse>> snapshot,
             ) {
               final bool isLoading =
-                  snapshot.hasData && snapshot.data.isLoading;
+                  snapshot.hasData && snapshot.data!.isLoading;
               return _SubmitButton(
                 formState: _formKey.currentState,
                 isLoading: isLoading,
@@ -233,7 +233,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Future<void> _sendLoginRequest() => widget.bloc.login(
+  Future<void> _sendLoginRequest() => widget.bloc!.login(
         email: _emailController.text,
         password: _passwordController.text,
       );
@@ -243,8 +243,8 @@ class _EmailField extends StatelessWidget {
   final TextEditingController controller;
 
   const _EmailField({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -258,9 +258,9 @@ class _EmailField extends StatelessWidget {
           'login_email',
         ),
       ),
-      validator: (String input) => L10n.getString(
+      validator: (String? input) => L10n.getString(
         context,
-        validateEmail(input),
+        validateEmail(input!),
       ),
     );
   }
@@ -272,10 +272,10 @@ class _PasswordField extends StatelessWidget {
   final VoidCallback onVisibilityTogglePressed;
 
   const _PasswordField({
-    Key key,
-    @required this.controller,
-    @required this.isPasswordVisible,
-    @required this.onVisibilityTogglePressed,
+    Key? key,
+    required this.controller,
+    required this.isPasswordVisible,
+    required this.onVisibilityTogglePressed,
   }) : super(key: key);
 
   @override
@@ -294,9 +294,9 @@ class _PasswordField extends StatelessWidget {
         ),
       ),
       obscureText: !isPasswordVisible,
-      validator: (String input) => L10n.getString(
+      validator: (String? input) => L10n.getString(
         context,
-        validatePassword(input),
+        validatePassword(input!),
       ),
     );
   }
@@ -307,9 +307,9 @@ class _PasswordVisibilityToggle extends StatelessWidget {
   final VoidCallback onPressed;
 
   const _PasswordVisibilityToggle({
-    Key key,
-    @required this.isPasswordVisible,
-    @required this.onPressed,
+    Key? key,
+    required this.isPasswordVisible,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -347,27 +347,27 @@ class _PasswordVisibilityToggle extends StatelessWidget {
 
 class _SubmitButton extends StatelessWidget {
   final bool isLoading;
-  final FormState formState;
+  final FormState? formState;
   final VoidCallback onPressed;
 
   const _SubmitButton({
-    Key key,
-    @required this.isLoading,
-    @required this.formState,
-    @required this.onPressed,
+    Key? key,
+    required this.isLoading,
+    required this.formState,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Widget child = isLoading
         ? const _ButtonProgressIndicator()
-        : Text(L10n.getString(context, 'login_title'));
+        : Text(L10n.getString(context, 'login_title')!);
 
     return PrimaryContainedButton(
       key: Login.submitButtonKey,
       child: child,
       onPressed: () {
-        if (formState.validate()) {
+        if (formState!.validate()) {
           onPressed.call();
         }
       },
@@ -402,7 +402,7 @@ class _CredentialsHint extends StatelessWidget {
           L10n.getString(
             context,
             'login_try_these_creds',
-          ),
+          )!,
           style: const TextStyle(
             color: Colors.grey,
           ),
