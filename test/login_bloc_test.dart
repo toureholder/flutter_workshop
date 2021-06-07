@@ -18,11 +18,11 @@ class MockLoginResponseStreamSink extends Mock
     implements StreamSink<HttpEvent<LoginResponse>> {}
 
 Future<void> main() async {
-  MockLoginResponseStreamController _mockController;
-  MockLoginResponseStreamSink _mockSink;
-  MockLoginApi _mockLoginApi;
-  MockSessionProvider _mockSessionProvider;
-  LoginBloc _bloc;
+  late MockLoginResponseStreamController _mockController;
+  late MockLoginResponseStreamSink _mockSink;
+  late MockLoginApi _mockLoginApi;
+  late MockSessionProvider _mockSessionProvider;
+  late LoginBloc _bloc;
 
   setUp(() async {
     _mockController = MockLoginResponseStreamController();
@@ -42,34 +42,34 @@ Future<void> main() async {
 
   test('calls login api', () async {
     await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockLoginApi.login(any));
+    verify(_mockLoginApi.login(any!));
   });
 
   test(
       'adds loading and success events to stream sink if api returns a LoginReponse',
       () async {
-    when(_mockLoginApi.login(any)).thenAnswer(
+    when(_mockLoginApi.login(any!)).thenAnswer(
         (_) async => HttpEvent<LoginResponse>(data: LoginResponse('token')));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockSink.add(any)).called(2);
+    verify(_mockSink.add(any!)).called(2);
   });
 
   test('adds error to stream sink if api throws an exception', () async {
-    when(_mockLoginApi.login(any)).thenThrow(Error());
+    when(_mockLoginApi.login(any!)).thenThrow(Error());
 
     await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockSink.addError(any)).called(1);
+    verify(_mockSink.addError(any!)).called(1);
   });
 
   test('creates session if api returns a LoginReponse', () async {
     const token = 'i am a token';
 
-    when(_mockLoginApi.login(any)).thenAnswer(
+    when(_mockLoginApi.login(any!)).thenAnswer(
         (_) async => HttpEvent<LoginResponse>(data: LoginResponse(token)));
 
     await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockSessionProvider.logUserIn(token, any));
+    verify(_mockSessionProvider.logUserIn(token, any!));
   });
 
   test('gets contoller stream', () async {

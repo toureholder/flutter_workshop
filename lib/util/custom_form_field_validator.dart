@@ -1,7 +1,7 @@
-String validateEmail(String input) {
+String? validateEmail(String input) {
   const Pattern pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  final RegExp regex = RegExp(pattern);
+  final RegExp regex = RegExp(pattern as String);
 
   if (input.trim().isEmpty) {
     return 'validation_message_email_required';
@@ -14,7 +14,7 @@ String validateEmail(String input) {
   return null;
 }
 
-String validatePassword(String input) {
+String? validatePassword(String input) {
   if (input.trim().isEmpty) {
     return 'validation_message_password_required';
   }

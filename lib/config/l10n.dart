@@ -15,7 +15,7 @@ class StringLocalizationsDelegate extends LocalizationsDelegate<L10n> {
     this.testingLocale,
   });
 
-  final Locale testingLocale;
+  final Locale? testingLocale;
 
   @override
   bool isSupported(Locale locale) =>
@@ -38,28 +38,29 @@ class L10n {
   });
 
   final Locale _locale;
-  final Locale testingLocale;
+  final Locale? testingLocale;
   final String defaultLanguageCode = supportedLanguageCodes.first;
   final Map<String, Map<String, String>> _localizedValues = Strings().map;
 
   String _get(String key) {
     if (_localizedValues[key] == null) return key;
 
-    final languageCode = testingLocale ?? _locale;
+    final languageCode = testingLocale?.languageCode ?? _locale.languageCode;
 
-    return _localizedValues[key][languageCode] ??
-        _localizedValues[key][defaultLanguageCode] ??
+    return _localizedValues[key]![languageCode] ??
+        _localizedValues[key]![defaultLanguageCode] ??
         key;
   }
 
-  static String getString(
+  static String? getString(
     BuildContext context,
-    String key,
+    String? key,
   ) =>
       key == null
           ? null
           : Localizations.of<L10n>(
               context,
               L10n,
-            )._get(key);
+            )!
+              ._get(key);
 }

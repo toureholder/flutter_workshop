@@ -4,13 +4,13 @@ const double MEDUIM_SCREEN_MIN_WIDTH = 720;
 const double LARGE_SCREEN_MIN_WIDTH = 1200;
 
 class AdaptiveView extends StatelessWidget {
-  final Widget smallView;
-  final Widget mediumView;
-  final Widget largeView;
-  final FormFactor forcedFormFactor;
+  final Widget? smallView;
+  final Widget? mediumView;
+  final Widget? largeView;
+  final FormFactor? forcedFormFactor;
 
   const AdaptiveView({
-    Key key,
+    Key? key,
     this.smallView,
     this.mediumView,
     this.largeView,
@@ -23,7 +23,7 @@ class AdaptiveView extends StatelessWidget {
     final formFactor =
         forcedFormFactor ?? _getFormFactor(MediaQuery.of(context).size.width);
 
-    return _getView(formFactor);
+    return _getView(formFactor)!;
   }
 
   FormFactor _getFormFactor(double width) {
@@ -38,14 +38,12 @@ class AdaptiveView extends StatelessWidget {
     return FormFactor.small;
   }
 
-  Widget _getView(FormFactor formFactor) {
+  Widget? _getView(FormFactor formFactor) {
     switch (formFactor) {
       case FormFactor.large:
         return largeView ?? mediumView ?? smallView;
-        break;
       case FormFactor.medium:
         return mediumView ?? largeView ?? smallView;
-        break;
       default:
         return smallView ?? mediumView ?? largeView;
     }

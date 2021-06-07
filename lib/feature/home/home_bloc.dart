@@ -9,10 +9,10 @@ import 'package:meta/meta.dart';
 
 class HomeBloc {
   HomeBloc({
-    @required this.donationApi,
-    @required this.controller,
-    @required this.diskStorageProvider,
-    @required this.sessionProvider,
+    required this.donationApi,
+    required this.controller,
+    required this.diskStorageProvider,
+    required this.sessionProvider,
   });
 
   final DonationApi donationApi;
@@ -33,7 +33,7 @@ class HomeBloc {
     }
   }
 
-  Future<User> loadCurrentUser() async => diskStorageProvider.getUser();
+  Future<User?> loadCurrentUser() async => diskStorageProvider.getUser();
 
   Future<List<bool>> logout() async => sessionProvider.logUserOut();
 }

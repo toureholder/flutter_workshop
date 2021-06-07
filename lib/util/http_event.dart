@@ -6,8 +6,8 @@ class HttpEvent<T> {
   });
 
   final EventState state;
-  final T data;
-  final int statusCode;
+  final T? data;
+  final int? statusCode;
 
   bool get isLoading => state == EventState.loading;
 }

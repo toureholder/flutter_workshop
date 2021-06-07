@@ -6,8 +6,8 @@ import 'package:flutter_workshop/model/user/user.dart';
 import 'test_util/mocks.dart';
 
 void main() {
-  MockDiskStorageProvider _mockStorage;
-  Session _session;
+  late MockDiskStorageProvider _mockStorage;
+  late Session _session;
 
   setUp(() {
     _mockStorage = MockDiskStorageProvider();
@@ -24,7 +24,7 @@ void main() {
         // Given
         const token = 'i am a token';
         when(_mockStorage.setAccessToken(any)).thenAnswer((_) async => true);
-        when(_mockStorage.setUser(any)).thenAnswer((_) async => true);
+        when(_mockStorage.setUser(any!)).thenAnswer((_) async => true);
 
         // When
         await _session.logUserIn(token, User.fake());
@@ -37,7 +37,7 @@ void main() {
         // Given
         final user = User.fake();
         when(_mockStorage.setAccessToken(any)).thenAnswer((_) async => true);
-        when(_mockStorage.setUser(any)).thenAnswer((_) async => true);
+        when(_mockStorage.setUser(any!)).thenAnswer((_) async => true);
 
         // When
         await _session.logUserIn('any token', user);

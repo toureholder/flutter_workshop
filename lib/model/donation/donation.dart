@@ -6,9 +6,9 @@ part 'donation.g.dart';
 
 @JsonSerializable()
 class Donation {
-  final int id;
-  final String title;
-  final String description;
+  final int? id;
+  final String? title;
+  final String? description;
   final User user;
   @JsonKey(name: 'listing_images')
   final List<DonationImage> images;
@@ -24,7 +24,7 @@ class Donation {
   factory Donation.fromJson(Map<String, dynamic> json) =>
       _$DonationFromJson(json);
 
-  factory Donation.fake({User user}) {
+  factory Donation.fake({User? user}) {
     const id = 1;
     const title = 'Donation';
     const description =

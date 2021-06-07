@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 class DonationApi extends BaseApi {
-  DonationApi({@required http.Client client}) : super(client: client);
+  DonationApi({required http.Client client}) : super(client: client);
 
   Future<List<Donation>> getDonations() async {
     final String url = '${baseUrl}users/4/listings';

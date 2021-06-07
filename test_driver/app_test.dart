@@ -13,7 +13,7 @@ void main() {
     final passwordVisibilityToggleVisibleFinder =
         find.byValueKey(loginPasswordVisibilityToggleVisibleValueKey);
 
-    FlutterDriver driver;
+    FlutterDriver? driver;
 
     // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
@@ -23,26 +23,26 @@ void main() {
     // Close the connection to the driver after the tests have completed.
     tearDownAll(() async {
       if (driver != null) {
-        await driver.close();
+        await driver!.close();
       }
     });
 
     test('password visibility toggle shows correct icon', () async {
       final homeLoginButtonFinder = find.byValueKey(homeLoginButtonValueKey);
 
-      await driver.tap(homeLoginButtonFinder);
+      await driver!.tap(homeLoginButtonFinder);
 
-      await driver.waitFor(passwordVisibilityToggleObscureFinder,
+      await driver!.waitFor(passwordVisibilityToggleObscureFinder,
           timeout: defaultWaitForTimeout);
 
-      await driver.tap(passwordVisibilityToggleFinder);
+      await driver!.tap(passwordVisibilityToggleFinder);
 
-      await driver.waitFor(passwordVisibilityToggleVisibleFinder,
+      await driver!.waitFor(passwordVisibilityToggleVisibleFinder,
           timeout: defaultWaitForTimeout);
 
-      await driver.tap(passwordVisibilityToggleFinder);
+      await driver!.tap(passwordVisibilityToggleFinder);
 
-      await driver.waitFor(passwordVisibilityToggleObscureFinder,
+      await driver!.waitFor(passwordVisibilityToggleObscureFinder,
           timeout: defaultWaitForTimeout);
     });
   });

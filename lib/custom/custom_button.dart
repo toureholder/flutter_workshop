@@ -5,9 +5,9 @@ class PrimaryContainedButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const PrimaryContainedButton({
-    Key key,
-    @required this.child,
-    @required this.onPressed,
+    Key? key,
+    required this.child,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -31,13 +31,13 @@ class PrimaryContainedButton extends StatelessWidget {
 }
 
 class PrimaryTextButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
+  final String? text;
+  final VoidCallback? onPressed;
 
   const PrimaryTextButton({
-    Key key,
-    @required this.text,
-    @required this.onPressed,
+    Key? key,
+    required this.text,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -55,7 +55,7 @@ class PrimaryTextButton extends StatelessWidget {
       style: flatButtonStyle,
       onPressed: onPressed,
       child: Text(
-        text,
+        text!,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),

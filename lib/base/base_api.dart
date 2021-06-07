@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 
 class BaseApi {
-  BaseApi({@required this.client});
+  BaseApi({required this.client});
 
   final http.Client client;
 

@@ -22,7 +22,7 @@ import 'test_util/test_util.dart';
 
 void main() {
   final TestWidgetsFlutterBinding binding =
-      TestWidgetsFlutterBinding.ensureInitialized();
+      TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
 
   final MockHomeBloc _mockHomeBloc = MockHomeBloc();
   final MockLoginBloc _mockLoginBloc = MockLoginBloc();
@@ -95,7 +95,7 @@ void main() {
       await tester.tap(loginButton);
       await tester.pumpAndSettle();
 
-      verify(_mockNavigationObserver.didPush(any, any));
+      verify(_mockNavigationObserver.didPush(any!, any));
       expect(find.byType(Login), findsOneWidget);
     });
 
@@ -121,7 +121,7 @@ void main() {
         await tester.tap(firstItem);
         await tester.pumpAndSettle();
 
-        verify(_mockNavigationObserver.didPush(any, any));
+        verify(_mockNavigationObserver.didPush(any!, any));
         expect(find.byType(Detail), findsOneWidget);
 
         await controller.close();
