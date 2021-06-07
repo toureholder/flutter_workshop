@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
+import 'package:flutter_workshop/custom/adaptive_view.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/custom/custom_button.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_workshop/util/navigation.dart';
 
 class Home extends StatefulWidget {
   static const Key loginButtonKey = Key(homeLoginButtonValueKey);
+  static const Key largeScreenCTAKey = Key(homeLargeScreenCTAKey);
   static const routeName = '/home';
 
   final HomeBloc bloc;
@@ -115,9 +117,14 @@ class _DonationListStreamBuilder extends StatelessWidget {
         AsyncSnapshot<List<Donation>> snapshot,
       ) {
         if (snapshot.hasData) {
-          return _ListView(
-            list: snapshot.data,
-            onTapItem: onTapListItem,
+          return AdaptiveView(
+            smallView: _ListView(
+              list: snapshot.data,
+              onTapItem: onTapListItem,
+            ),
+            largeView: _LargeScreenView(
+              list: snapshot.data,
+            ),
           );
         }
 
@@ -137,31 +144,118 @@ class _DonationListStreamBuilder extends StatelessWidget {
   }
 }
 
+class _LargeScreenView extends StatefulWidget {
+  final List<Donation> list;
+
+  const _LargeScreenView({
+    Key key,
+    @required this.list,
+  }) : super(key: key);
+
+  @override
+  __LargeScreenViewState createState() => __LargeScreenViewState();
+}
+
+class __LargeScreenViewState extends State<_LargeScreenView> {
+  Donation _selectedDonation;
+
+  @override
+  Widget build(BuildContext context) {
+    final detailFragment = _selectedDonation == null
+        ? const _LargeScreenCTA()
+        : Detail(
+            donation: _selectedDonation,
+            showAppBar: false,
+          );
+
+    return Row(
+      children: [
+        Expanded(
+          child: _ListView(
+            list: widget.list,
+            onTapItem: _selectDonation,
+            selectedDonationId: _selectedDonation?.id,
+          ),
+        ),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.grey[300],
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: detailFragment,
+          ),
+        )
+      ],
+    );
+  }
+
+  void _selectDonation(Donation donation) {
+    setState(() {
+      _selectedDonation = donation;
+    });
+  }
+}
+
+class _LargeScreenCTA extends StatelessWidget {
+  const _LargeScreenCTA({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      key: Home.largeScreenCTAKey,
+      child: Text(
+        L10n.getString(
+          context,
+          'home_large_screen_call_to_action',
+        ),
+      ),
+    );
+  }
+}
+
 class _ListView extends StatelessWidget {
   final List<Donation> list;
   final Function(Donation) onTapItem;
+  final int selectedDonationId;
 
   const _ListView({
     Key key,
     @required this.list,
     @required this.onTapItem,
+    this.selectedDonationId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 8),
-      itemCount: list.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Donation listItem = list[index];
-        return _ListItemTile(
-          index: index,
-          donation: listItem,
-          onTap: () {
-            onTapItem.call(listItem);
-          },
-        );
-      },
+    return Scrollbar(
+      isAlwaysShown: true,
+      child: ListView.builder(
+        padding: const EdgeInsets.only(top: 8),
+        itemCount: list.length,
+        itemBuilder: (BuildContext context, int index) {
+          final Donation listItem = list[index];
+
+          final color = listItem.id == selectedDonationId
+              ? Theme.of(context).primaryColor.withOpacity(0.25)
+              : Colors.transparent;
+
+          return Container(
+            color: color,
+            child: _ListItemTile(
+              index: index,
+              donation: listItem,
+              onTap: () {
+                onTapItem.call(listItem);
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -234,7 +328,7 @@ class _DonationImage extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5.0),
       child: Image.network(
-        images.last.url,
+        images.first.url,
         height: 75,
         width: 75,
         fit: BoxFit.cover,
