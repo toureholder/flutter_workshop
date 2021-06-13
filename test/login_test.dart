@@ -11,112 +11,111 @@ import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/feature/login/login.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/http_event.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
 
 void main() {
-  MockLoginBloc? _mockLoginBloc;
-  MockHomeBloc _mockHomeBloc;
-  MockNavigatorObserver? _mockNavigationObserver;
-  late Widget _testableWidget;
-  late Finder _emailField;
-  late Finder _passwordField;
-  late Finder _submitButton;
-  late Finder _passwordVisibilityToggle;
-  late StreamController<HttpEvent<LoginResponse>> _streamController;
+  late MockLoginBloc mockLoginBloc;
+  late Widget testableWidget;
+  late Finder emailField;
+  late Finder passwordField;
+  late Finder submitButton;
+  late Finder passwordVisibilityToggle;
+  late StreamController<HttpEvent<LoginResponse>> streamController;
 
   setUp(() {
-    _mockLoginBloc = MockLoginBloc();
-    _mockHomeBloc = MockHomeBloc();
-    _mockNavigationObserver = MockNavigatorObserver();
-    _streamController = StreamController<HttpEvent<LoginResponse>>.broadcast();
+    mockLoginBloc = MockLoginBloc();
+    streamController = StreamController<HttpEvent<LoginResponse>>.broadcast();
 
-    _testableWidget = TestUtil.makeTestableWidget(
+    testableWidget = TestUtil.makeTestableWidget(
       subject: Login(
-        bloc: _mockLoginBloc,
+        bloc: mockLoginBloc,
       ),
       dependencies: [
-        Provider<HomeBloc>(create: (_) => _mockHomeBloc),
+        Provider<HomeBloc?>(create: (_) => null),
       ],
-      navigatorObservers: <NavigatorObserver?>[_mockNavigationObserver],
       testingLocale: supportedLocales.first,
     );
 
-    _emailField = find.byKey(Login.emailFieldKey);
-    _passwordField = find.byKey(Login.passwordFieldKey);
-    _submitButton = find.byKey(Login.submitButtonKey);
-    _passwordVisibilityToggle = find.byKey(Login.passwordVisibilityToggledKey);
+    emailField = find.byKey(Login.emailFieldKey);
+    passwordField = find.byKey(Login.passwordFieldKey);
+    submitButton = find.byKey(Login.submitButtonKey);
+    passwordVisibilityToggle = find.byKey(Login.passwordVisibilityToggledKey);
 
-    when(_mockLoginBloc!.stream).thenAnswer((_) => _streamController.stream);
+    when(() => mockLoginBloc.stream).thenAnswer((_) => streamController.stream);
+
+    when(() => mockLoginBloc.login(
+        email: any(named: 'email'),
+        password: any(named: 'password'))).thenAnswer((_) async => null);
   });
 
   group('attempts login', () {
     testWidgets('attempts login if email and password are valid',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
       const String email = 'test@test.com';
       const String password = 'qwertyuiop';
 
-      await tester.enterText(_emailField, email);
-      await tester.enterText(_passwordField, password);
-      await tester.tap(_submitButton);
+      await tester.enterText(emailField, email);
+      await tester.enterText(passwordField, password);
+      await tester.tap(submitButton);
 
-      verify(_mockLoginBloc!.login(email: email, password: password));
+      verify(() => mockLoginBloc.login(email: email, password: password));
     });
 
     testWidgets('does not attempt login if email and password are empty',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
-      await tester.tap(_submitButton);
+      await tester.tap(submitButton);
 
-      verifyNever(_mockLoginBloc!.login(email: '', password: ''));
+      verifyNever(() => mockLoginBloc.login(email: '', password: ''));
     });
 
     testWidgets('does not attempt login if email is not a valid email',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
       const String email = 'invalid email';
       const String password = 'qwertyuiop';
 
-      await tester.enterText(_emailField, email);
-      await tester.enterText(_passwordField, password);
-      await tester.tap(_submitButton);
+      await tester.enterText(emailField, email);
+      await tester.enterText(passwordField, password);
+      await tester.tap(submitButton);
 
-      verifyNever(_mockLoginBloc!.login(email: email, password: password));
+      verifyNever(() => mockLoginBloc.login(email: email, password: password));
     });
 
     testWidgets('does not attempt login if password is too short',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
       const String email = 'test@test.com';
       const String password = '123';
 
-      await tester.enterText(_emailField, email);
-      await tester.enterText(_passwordField, password);
-      await tester.tap(_submitButton);
+      await tester.enterText(emailField, email);
+      await tester.enterText(passwordField, password);
+      await tester.tap(submitButton);
 
-      verifyNever(_mockLoginBloc!.login(email: email, password: password));
+      verifyNever(() => mockLoginBloc.login(email: email, password: password));
     });
   });
 
   group('shows validation messages', () {
     testWidgets('shows invalid email error message',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
       const String email = 'invalid email';
       const String password = 'qwertyuiop';
 
-      await tester.enterText(_emailField, email);
-      await tester.enterText(_passwordField, password);
-      await tester.tap(_submitButton);
+      await tester.enterText(emailField, email);
+      await tester.enterText(passwordField, password);
+      await tester.tap(submitButton);
 
       await tester.pumpAndSettle();
 
@@ -128,12 +127,12 @@ void main() {
 
     testWidgets('shows required email error message',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
       const String password = 'qwertyuiop';
 
-      await tester.enterText(_passwordField, password);
-      await tester.tap(_submitButton);
+      await tester.enterText(passwordField, password);
+      await tester.tap(submitButton);
 
       await tester.pumpAndSettle();
 
@@ -145,14 +144,14 @@ void main() {
 
     testWidgets('shows password too short error message',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
       const String email = 'test@test.com';
       const String password = '123';
 
-      await tester.enterText(_emailField, email);
-      await tester.enterText(_passwordField, password);
-      await tester.tap(_submitButton);
+      await tester.enterText(emailField, email);
+      await tester.enterText(passwordField, password);
+      await tester.tap(submitButton);
 
       await tester.pumpAndSettle();
 
@@ -164,12 +163,12 @@ void main() {
 
     testWidgets('shows password required error message',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
       const String email = 'test@test.com';
 
-      await tester.enterText(_emailField, email);
-      await tester.tap(_submitButton);
+      await tester.enterText(emailField, email);
+      await tester.tap(submitButton);
 
       await tester.pumpAndSettle();
 
@@ -181,7 +180,7 @@ void main() {
   });
 
   testWidgets('toggles password visibility', (WidgetTester tester) async {
-    await tester.pumpWidget(_testableWidget);
+    await tester.pumpWidget(testableWidget);
 
     final Finder passwordIsVisibleIcon =
         find.byKey(const Key(loginPasswordVisibilityToggleObscureValueKey));
@@ -191,7 +190,7 @@ void main() {
     expect(passwordIsObscuredIcon, findsNothing);
     expect(passwordIsVisibleIcon, findsOneWidget);
 
-    await tester.tap(_passwordVisibilityToggle);
+    await tester.tap(passwordVisibilityToggle);
 
     await tester.pumpAndSettle();
 
@@ -202,10 +201,10 @@ void main() {
   group('handles login stream events', () {
     testWidgets('shows circular progress inidicator when loading',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
       expect(find.byType(CircularProgressIndicator), findsNothing);
 
-      _streamController.sink.add(
+      streamController.sink.add(
         HttpEvent<LoginResponse>(state: EventState.loading),
       );
 
@@ -215,9 +214,9 @@ void main() {
 
     testWidgets('navigates to home screen when login succeeds',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
-      _streamController.sink.add(
+      streamController.sink.add(
         HttpEvent<LoginResponse>(
           statusCode: HttpStatus.ok,
           data: LoginResponse('token'),
@@ -226,15 +225,14 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      verify(_mockNavigationObserver!.didPush(any!, any));
       expect(find.byType(Home), findsOneWidget);
     });
 
     testWidgets('shows alert dialog when login fails',
         (WidgetTester tester) async {
-      await tester.pumpWidget(_testableWidget);
+      await tester.pumpWidget(testableWidget);
 
-      _streamController.sink.add(
+      streamController.sink.add(
         HttpEvent<LoginResponse>(statusCode: HttpStatus.badRequest),
       );
 
@@ -256,6 +254,6 @@ void main() {
   });
 
   tearDown(() {
-    _streamController.close();
+    streamController.close();
   });
 }

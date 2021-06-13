@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
   }
 
   void _listenForLoginResponse() {
-    widget.bloc!.stream.listen((HttpEvent<LoginResponse> event) {
+    widget.bloc?.stream.listen((HttpEvent<LoginResponse> event) {
       if (event.isLoading) {
         return;
       }
@@ -212,7 +212,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           const _VerticalSpacer(),
           StreamBuilder<HttpEvent<LoginResponse>>(
-            stream: widget.bloc!.stream,
+            stream: widget.bloc?.stream,
             builder: (
               BuildContext context,
               AsyncSnapshot<HttpEvent<LoginResponse>> snapshot,
@@ -233,7 +233,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Future<void> _sendLoginRequest() => widget.bloc!.login(
+  Future? _sendLoginRequest() => widget.bloc?.login(
         email: _emailController.text,
         password: _passwordController.text,
       );

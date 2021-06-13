@@ -33,12 +33,12 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _navigation = Navigation(context);
-    widget.bloc!.loadDonations();
+    widget.bloc?.loadDonations();
   }
 
   @override
   Widget build(BuildContext context) {
-    final donationListStream = widget.bloc!.stream;
+    final donationListStream = widget.bloc?.stream;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
   List<Widget> _buildAppBarActions() {
     return <Widget>[
       FutureBuilder<User?>(
-        future: widget.bloc!.loadCurrentUser(),
+        future: widget.bloc?.loadCurrentUser(),
         builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           return snapshot.hasData
               ? _UserAvatar(
@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
   }
 
   Future _logout() async {
-    await widget.bloc!.logout();
+    await widget.bloc?.logout();
     setState(() {});
     return Navigator.of(context).pop();
   }

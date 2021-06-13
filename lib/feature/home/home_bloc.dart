@@ -5,7 +5,6 @@ import 'package:flutter_workshop/model/donation/donation_api.dart';
 import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/service/disk_storage_provider.dart';
 import 'package:flutter_workshop/service/session_provider.dart';
-import 'package:meta/meta.dart';
 
 class HomeBloc {
   HomeBloc({

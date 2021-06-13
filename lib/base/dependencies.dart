@@ -37,7 +37,7 @@ Future<List<SingleChildWidget>> getDependencies() async {
   );
 
   return [
-    Provider<LoginBloc>(
+    Provider<LoginBloc?>(
       create: (_) => LoginBloc(
         controller: StreamController<HttpEvent<LoginResponse>>.broadcast(),
         loginApi: LoginApi(client: _httpClient),
