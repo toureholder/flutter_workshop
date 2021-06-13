@@ -4,7 +4,7 @@ import 'package:flutter_workshop/feature/home/home_bloc.dart';
 import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/donation/donation_api.dart';
 import 'package:flutter_workshop/model/user/user.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'test_util/mocks.dart';
@@ -18,71 +18,79 @@ class MockHomeResponseStreamSink extends Mock
     implements StreamSink<List<Donation>> {}
 
 void main() {
-  late MockHomeResponseStreamController _mockController;
-  late MockHomeResponseStreamSink _mockSink;
-  late MockDonationApi _mockDonationApi;
-  late MockSessionProvider _mockSessionProvider;
-  late MockDiskStorageProvider _mockDiskStorageProvider;
-  late HomeBloc _bloc;
+  late MockHomeResponseStreamController mockController;
+  late MockHomeResponseStreamSink mockSink;
+  late MockDonationApi mockDonationApi;
+  late MockSessionProvider mockSessionProvider;
+  late MockDiskStorageProvider mockDiskStorageProvider;
+  late HomeBloc bloc;
 
   setUp(() {
-    _mockController = MockHomeResponseStreamController();
-    _mockSink = MockHomeResponseStreamSink();
-    _mockDonationApi = MockDonationApi();
-    _mockSessionProvider = MockSessionProvider();
-    _mockDiskStorageProvider = MockDiskStorageProvider();
-    _bloc = HomeBloc(
-        controller: _mockController,
-        donationApi: _mockDonationApi,
-        sessionProvider: _mockSessionProvider,
-        diskStorageProvider: _mockDiskStorageProvider);
+    mockController = MockHomeResponseStreamController();
+    mockSink = MockHomeResponseStreamSink();
+    mockDonationApi = MockDonationApi();
+    mockSessionProvider = MockSessionProvider();
+    mockDiskStorageProvider = MockDiskStorageProvider();
+    bloc = HomeBloc(
+      controller: mockController,
+      donationApi: mockDonationApi,
+      sessionProvider: mockSessionProvider,
+      diskStorageProvider: mockDiskStorageProvider,
+    );
 
-    when(_mockController.sink).thenReturn(_mockSink);
+    when(() => mockController.sink).thenReturn(mockSink);
     final stream = StreamController<List<Donation>>.broadcast().stream;
-    when(_mockController.stream).thenAnswer((_) => stream);
+    when(() => mockController.stream).thenAnswer((_) => stream);
+
+    when(() => mockController.close()).thenAnswer((_) async => null);
   });
 
   test('calls donation api', () async {
-    await _bloc.loadDonations();
-    verify(_mockDonationApi.getDonations());
+    await bloc.loadDonations();
+
+    verify(() => mockDonationApi.getDonations());
   });
 
   test('adds the donations the api returns to stream sink', () async {
-    when(_mockDonationApi.getDonations())
+    when(() => mockDonationApi.getDonations())
         .thenAnswer((_) async => Donation.fakeList());
 
-    await _bloc.loadDonations();
-    verify(_mockSink.add(any!));
+    await bloc.loadDonations();
+    verify(() => mockSink.add(any()));
   });
 
   test('adds error to stream sink if api throws an exception', () async {
-    when(_mockDonationApi.getDonations()).thenThrow(Error());
+    when(() => mockDonationApi.getDonations()).thenThrow(Error());
 
-    await _bloc.loadDonations();
-    verify(_mockSink.addError(any!)).called(1);
+    await bloc.loadDonations();
+    verify(() => mockSink.addError(any())).called(1);
   });
 
   test('recovers user from disk storage', () async {
-    when(_mockDiskStorageProvider.getUser()).thenReturn(User.fake());
-    expect(await _bloc.loadCurrentUser(), isA<User>());
+    when(() => mockDiskStorageProvider.getUser()).thenReturn(User.fake());
+    expect(await bloc.loadCurrentUser(), isA<User>());
   });
 
   test('logs user out from session', () async {
-    await _bloc.logout();
-    verify(_mockSessionProvider.logUserOut()).called(1);
+    when(() => mockSessionProvider.logUserOut())
+        .thenAnswer((_) async => [true]);
+
+    await bloc.logout();
+
+    verify(() => mockSessionProvider.logUserOut()).called(1);
   });
 
   test('gets contoller stream', () async {
-    await _bloc.dispose();
-    expect(_bloc.stream, isA<Stream<List<Donation>>>());
+    await bloc.dispose();
+    expect(bloc.stream, isA<Stream<List<Donation>>>());
   });
 
   test('closes stream', () async {
-    await _bloc.dispose();
-    verify(_mockController.close()).called(1);
+    await bloc.dispose();
+    verify(() => mockController.close()).called(1);
   });
 
   tearDown(() {
-    _mockController.close();
+    mockController.close();
   });
 }

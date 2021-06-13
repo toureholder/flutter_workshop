@@ -12,7 +12,7 @@ MaterialPageRoute? getRouteFactory(settings) {
   switch (settings.name) {
     case Home.routeName:
       {
-        route = Navigation.makeRoute(Consumer<HomeBloc>(
+        route = Navigation.makeRoute(Consumer<HomeBloc?>(
           builder: (context, bloc, child) => Home(bloc: bloc),
         )) as MaterialPageRoute<dynamic>?;
       }
@@ -20,7 +20,7 @@ MaterialPageRoute? getRouteFactory(settings) {
 
     case Login.routeName:
       {
-        route = Navigation.makeRoute(Consumer<LoginBloc>(
+        route = Navigation.makeRoute(Consumer<LoginBloc?>(
           builder: (context, bloc, child) => Login(bloc: bloc),
         )) as MaterialPageRoute<dynamic>?;
       }

@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_api.dart';
+import 'package:flutter_workshop/model/login/login_request.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
 import 'package:flutter_workshop/util/http_event.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'test_util/fakes.dart';
 import 'test_util/mocks.dart';
 
 class MockLoginApi extends Mock implements LoginApi {}
@@ -17,72 +19,97 @@ class MockLoginResponseStreamController extends Mock
 class MockLoginResponseStreamSink extends Mock
     implements StreamSink<HttpEvent<LoginResponse>> {}
 
+class FakeLoginRequest extends Fake implements LoginRequest {}
+
+class FakeLoginResponseHttpEvent extends Fake
+    implements HttpEvent<LoginResponse> {}
+
 Future<void> main() async {
-  late MockLoginResponseStreamController _mockController;
-  late MockLoginResponseStreamSink _mockSink;
-  late MockLoginApi _mockLoginApi;
-  late MockSessionProvider _mockSessionProvider;
-  late LoginBloc _bloc;
+  late MockLoginResponseStreamController mockController;
+  late MockLoginResponseStreamSink mockSink;
+  late MockLoginApi mockLoginApi;
+  late MockSessionProvider mockSessionProvider;
+  late LoginBloc bloc;
 
   setUp(() async {
-    _mockController = MockLoginResponseStreamController();
-    _mockSink = MockLoginResponseStreamSink();
-    _mockLoginApi = MockLoginApi();
-    _mockSessionProvider = MockSessionProvider();
-    _bloc = LoginBloc(
-        controller: _mockController,
-        loginApi: _mockLoginApi,
-        sessionProvider: _mockSessionProvider);
+    registerFallbackValue(FakeLoginRequest());
+    registerFallbackValue(FakeLoginResponseHttpEvent());
+    registerFallbackValue(FakeUser());
+    mockController = MockLoginResponseStreamController();
+    mockSink = MockLoginResponseStreamSink();
+    mockLoginApi = MockLoginApi();
+    mockSessionProvider = MockSessionProvider();
+    bloc = LoginBloc(
+        controller: mockController,
+        loginApi: mockLoginApi,
+        sessionProvider: mockSessionProvider);
 
-    when(_mockController.sink).thenReturn(_mockSink);
+    when(() => mockController.sink).thenReturn(mockSink);
     final stream =
         StreamController<HttpEvent<LoginResponse>>.broadcast().stream;
-    when(_mockController.stream).thenAnswer((_) => stream);
+    when(() => mockController.stream).thenAnswer((_) => stream);
+
+    when(() => mockController.close()).thenAnswer((_) async => null);
+
+    when(() => mockSessionProvider.logUserIn(any(), any()))
+        .thenAnswer((_) async => []);
   });
 
   test('calls login api', () async {
-    await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockLoginApi.login(any!));
+    when(() => mockLoginApi.login(any())).thenAnswer(
+        (_) async => HttpEvent<LoginResponse>(data: LoginResponse('token')));
+
+    await bloc.login(email: 'test@test.com', password: '123456');
+    verify(() => mockLoginApi.login(any()));
   });
 
   test(
       'adds loading and success events to stream sink if api returns a LoginReponse',
       () async {
-    when(_mockLoginApi.login(any!)).thenAnswer(
+    when(() => mockLoginApi.login(any())).thenAnswer(
         (_) async => HttpEvent<LoginResponse>(data: LoginResponse('token')));
 
-    await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockSink.add(any!)).called(2);
+    await bloc.login(email: 'test@test.com', password: '123456');
+    final captured = verify(() => mockSink.add(captureAny())).captured;
+
+    expect(captured.length, 2);
+
+    final first = captured.first as HttpEvent<LoginResponse>;
+    expect(first.state, EventState.loading);
+
+    final last = captured.last as HttpEvent<LoginResponse>;
+    expect(last.state, EventState.done);
+    expect(last.data, isA<LoginResponse>());
   });
 
   test('adds error to stream sink if api throws an exception', () async {
-    when(_mockLoginApi.login(any!)).thenThrow(Error());
+    when(() => mockLoginApi.login(any())).thenThrow(Error());
 
-    await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockSink.addError(any!)).called(1);
+    await bloc.login(email: 'test@test.com', password: '123456');
+    verify(() => mockSink.addError(any())).called(1);
   });
 
   test('creates session if api returns a LoginReponse', () async {
     const token = 'i am a token';
 
-    when(_mockLoginApi.login(any!)).thenAnswer(
+    when(() => mockLoginApi.login(any())).thenAnswer(
         (_) async => HttpEvent<LoginResponse>(data: LoginResponse(token)));
 
-    await _bloc.login(email: 'test@test.com', password: '123456');
-    verify(_mockSessionProvider.logUserIn(token, any!));
+    await bloc.login(email: 'test@test.com', password: '123456');
+    verify(() => mockSessionProvider.logUserIn(token, any()));
   });
 
   test('gets contoller stream', () async {
-    await _bloc.dispose();
-    expect(_bloc.stream, isA<Stream<HttpEvent<LoginResponse>>>());
+    await bloc.dispose();
+    expect(bloc.stream, isA<Stream<HttpEvent<LoginResponse>>>());
   });
 
   test('closes stream', () async {
-    await _bloc.dispose();
-    verify(_mockController.close()).called(1);
+    await bloc.dispose();
+    verify(() => mockController.close()).called(1);
   });
 
   tearDown(() {
-    _mockController.close();
+    mockController.close();
   });
 }
