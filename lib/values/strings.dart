@@ -2,27 +2,17 @@
 // Ignoring some lint rules because I want the map to also be valid json.
 
 class Strings {
-  Map<String, Map<String, String>> map = <String, Map<String, String>> {
-    "home_title": {
-      "en": "Home",
-      "pt": "Início"
-    },
+  Map<String, Map<String, String>> map = <String, Map<String, String>>{
+    "home_title": {"en": "Home", "pt": "Início"},
     "home_large_screen_call_to_action": {
-      "en": "Select an item on the left to see the details.",
-      "pt": "Selecione um item à esquerda para ver os detalhes."
+      "en":
+          "Select an item on the left to see the details here.\n\nReduce the browser window size to see how adaptive I am.",
+      "pt":
+          "Selecione um item à esquerda para ver os detalhes.\n\nDiminua o tamanho da janela do browser para ver como me adapto."
     },
-    "login_title": {
-      "en": "Login",
-      "pt": "Entrar"
-    },
-    "login_email": {
-      "en": "Email",
-      "pt": "E-mail"
-    },
-    "login_password": {
-      "en": "Password",
-      "pt": "Senha"
-    },
+    "login_title": {"en": "Login", "pt": "Entrar"},
+    "login_email": {"en": "Email", "pt": "E-mail"},
+    "login_password": {"en": "Password", "pt": "Senha"},
     "login_error_bad_credentials": {
       "en": "Wrong email or password.",
       "pt": "E-mail ou senha incorreta."
@@ -43,30 +33,15 @@ class Strings {
       "en": "Try email \"eve.holt@reqres.in\" and any password",
       "pt": "Tente o email \"eve.holt@reqres.in\" e qualquer senha"
     },
-    "login_welcome": {
-      "en": "Welcome 👋",
-      "pt": "Seja bem-vindo 👋"
-    },
-    "logout_confirmation_title": {
-      "en": "Logout?",
-      "pt": "Sair?"
-    },
-    "logout_confirmation": {
-      "en": "Logout",
-      "pt": "Sair"
-    },
-    "common_cancel": {
-      "en": "Cancel",
-      "pt": "Cancelar"
-    },
+    "login_welcome": {"en": "Welcome 👋", "pt": "Seja bem-vindo 👋"},
+    "logout_confirmation_title": {"en": "Logout?", "pt": "Sair?"},
+    "logout_confirmation": {"en": "Logout", "pt": "Sair"},
+    "common_cancel": {"en": "Cancel", "pt": "Cancelar"},
     "common_error_server_generic": {
       "en": "Something went wrong. Please try again.",
       "pt": "Algo deu errado. Por favor, tente novamente."
     },
-    "common_ok": {
-      "en": "Ok",
-      "pt": "Ok"
-    },
+    "common_ok": {"en": "Ok", "pt": "Ok"},
     "validation_message_email_required": {
       "en": "Email required",
       "pt": "E seu e-mail?"
