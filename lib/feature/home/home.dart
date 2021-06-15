@@ -213,6 +213,7 @@ class _LargeScreenCTA extends StatelessWidget {
           context,
           'home_large_screen_call_to_action',
         )!,
+        textAlign: TextAlign.center,
       ),
     );
   }
