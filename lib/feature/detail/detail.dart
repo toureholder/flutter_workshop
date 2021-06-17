@@ -143,7 +143,7 @@ class _Donator extends StatelessWidget {
         CircleAvatar(
           backgroundImage: backgroundImage,
           child: child,
-          backgroundColor: Colors.blue,
+          backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: Colors.white,
         ),
         const SizedBox(width: 16),

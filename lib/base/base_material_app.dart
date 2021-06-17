@@ -16,9 +16,9 @@ class BaseMaterialApp extends StatelessWidget {
       ],
       supportedLocales: supportedLocales,
       theme: ThemeData(
-        primaryColor: Colors.blue,
-        backgroundColor: Colors.blue,
-        accentColor: Colors.purple,
+        primaryColor: const Color(0xFF4A91E2),
+        backgroundColor: const Color(0xFF4A91E2),
+        accentColor: const Color(0xFF1D4371),
       ),
       initialRoute: Home.routeName,
       onGenerateRoute: getRouteFactory,
