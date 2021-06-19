@@ -4,6 +4,7 @@ import 'package:flutter_workshop/feature/login/login_bloc.dart';
 import 'package:flutter_workshop/model/login/login_api.dart';
 import 'package:flutter_workshop/model/login/login_request.dart';
 import 'package:flutter_workshop/model/login/login_response.dart';
+import 'package:flutter_workshop/model/user/user.dart';
 import 'package:flutter_workshop/util/http_event.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -59,8 +60,19 @@ Future<void> main() async {
     when(() => mockLoginApi.login(any())).thenAnswer(
         (_) async => HttpEvent<LoginResponse>(data: LoginResponse('token')));
 
-    await bloc.login(email: 'test@test.com', password: '123456');
-    verify(() => mockLoginApi.login(any()));
+    const email = 'test@test.com';
+    const password = '1234567';
+
+    await bloc.login(email: email, password: password);
+
+    verify(
+      () => mockLoginApi.login(
+        const LoginRequest(
+          email: email,
+          password: password,
+        ),
+      ),
+    );
   });
 
   test(
@@ -89,14 +101,15 @@ Future<void> main() async {
     verify(() => mockSink.addError(any())).called(1);
   });
 
-  test('creates session if api returns a LoginReponse', () async {
+  test('creates session with token and fake user if api returns a LoginReponse',
+      () async {
     const token = 'i am a token';
 
     when(() => mockLoginApi.login(any())).thenAnswer(
         (_) async => HttpEvent<LoginResponse>(data: LoginResponse(token)));
 
     await bloc.login(email: 'test@test.com', password: '123456');
-    verify(() => mockSessionProvider.logUserIn(token, any()));
+    verify(() => mockSessionProvider.logUserIn(token, const User.fake()));
   });
 
   test('gets contoller stream', () async {

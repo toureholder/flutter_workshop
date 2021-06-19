@@ -12,7 +12,7 @@ import 'test_util/mocks.dart';
 void main() {
   late MockClient mockClient;
   late LoginApi loginApi;
-  final LoginRequest loginRequest = LoginRequest(
+  const loginRequest = LoginRequest(
     email: 'ab@cd.com',
     password: '123456',
   );

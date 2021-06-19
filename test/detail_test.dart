@@ -89,7 +89,8 @@ void main() {
   testWidgets('displays first letter of user\'s name if user has no image',
       (WidgetTester tester) async {
     await mockNetworkImagesFor(() async {
-      final fakeDonation = Donation.fake(user: User.fake(avatarUrl: null));
+      final fakeDonation =
+          Donation.fake(user: const User.fake(avatarUrl: null));
       await tester.pumpWidget(
         makeTestableWidget(
           Detail(

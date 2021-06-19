@@ -1,5 +1,7 @@
-class LoginRequest {
-  LoginRequest({
+import 'package:equatable/equatable.dart';
+
+class LoginRequest extends Equatable {
+  const LoginRequest({
     this.email,
     this.password,
   });
@@ -11,4 +13,7 @@ class LoginRequest {
         'email': email,
         'password': password,
       };
+
+  @override
+  List<Object?> get props => [email, password];
 }

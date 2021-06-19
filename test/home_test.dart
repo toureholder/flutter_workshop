@@ -46,7 +46,7 @@ void main() {
     when(() => mockHomeBloc.loadDonations()).thenAnswer((_) async => null);
 
     when(() => mockHomeBloc.loadCurrentUser())
-        .thenAnswer((_) async => User.fake());
+        .thenAnswer((_) async => const User.fake());
 
     final StreamController<List<Donation>> controller =
         StreamController<List<Donation>>.broadcast();

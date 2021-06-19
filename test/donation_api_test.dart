@@ -1,8 +1,7 @@
-import 'package:flutter_workshop/model/donation/donation.dart';
 import 'package:flutter_workshop/model/donation/donation_api.dart';
 import 'package:http/http.dart' as http;
-import 'package:test/test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
 
 import 'test_util/mocks.dart';
 
@@ -21,6 +20,11 @@ void main() {
       ),
     ).thenAnswer((_) async => http.Response(fakeResponseBody, 200));
 
-    expect(await donationApi.getDonations(), isA<List<Donation>>());
+    final list = await donationApi.getDonations();
+    final fistItem = list.first;
+
+    expect(fistItem.id, 127);
+    expect(fistItem.title, 'Livro A vida do bebê');
+    expect(fistItem.description, 'Livro do pediatra Dr Rinaldo de Lamare');
   });
 }

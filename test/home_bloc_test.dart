@@ -67,8 +67,10 @@ void main() {
   });
 
   test('recovers user from disk storage', () async {
-    when(() => mockDiskStorageProvider.getUser()).thenReturn(User.fake());
-    expect(await bloc.loadCurrentUser(), isA<User>());
+    const user = User.fake();
+    when(() => mockDiskStorageProvider.getUser()).thenReturn(user);
+    final recoveredUser = await bloc.loadCurrentUser();
+    expect(recoveredUser, user);
   });
 
   test('logs user out from session', () async {

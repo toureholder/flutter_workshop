@@ -43,7 +43,7 @@ class LoginBloc {
 
   Future<List<bool>> _saveToPreferences(LoginResponse loginResponse) {
     // Provide a fake user for demo
-    final user = User.fake();
+    const user = User.fake();
 
     return sessionProvider.logUserIn(
       loginResponse.token,

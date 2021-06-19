@@ -32,7 +32,7 @@ void main() {
         when(() => mockStorage.setUser(any())).thenAnswer((_) async => true);
 
         // When
-        await session.logUserIn(token, User.fake());
+        await session.logUserIn(token, const User.fake());
 
         // Then
         verify(() => mockStorage.setAccessToken(token));
@@ -40,7 +40,7 @@ void main() {
 
       test('should persist user', () async {
         // Given
-        final user = User.fake();
+        const user = User.fake();
         when(() => mockStorage.setAccessToken(any()))
             .thenAnswer((_) async => true);
         when(() => mockStorage.setUser(any())).thenAnswer((_) async => true);

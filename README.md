@@ -24,6 +24,7 @@ This repository contains a sample app that I use to give workshops geared toward
 * [Continuous integration pipelines with Travis CI](https://github.com/toureholder/flutter_workshop/blob/master/.travis.yml)
 * [Uploading code coverage to Codecov](https://github.com/toureholder/flutter_workshop/commit/38f87f6ce4cdaa6f5a1efb801306ca5148d49392)
 * [Migrating to Null-safety (mostly done by the migration tool)](https://github.com/toureholder/flutter_workshop/commit/1ec21dd0109b157b5c3af81ec22de8b5c007a191)
+* [Easily overriding `==` and `hashCode` with `Equatable`](./lib/model/user/user.dart)
 
 The commit history contains multiple ways of doing the same thing. Some examples are:
 - In one commit we manually spawn an isolate to do work in the background and in a later commit we use use Flutter's `compute` function to do the job.

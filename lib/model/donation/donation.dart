@@ -30,7 +30,7 @@ class Donation {
     const description =
         'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua';
     final images = DonationImage.fakeList();
-    final finalUser = user ?? User.fake();
+    final finalUser = user ?? const User.fake();
 
     return Donation(id, title, description, finalUser, images);
   }
