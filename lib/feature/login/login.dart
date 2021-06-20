@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
-import 'package:flutter_workshop/custom/adaptive_view.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/custom/custom_button.dart';
@@ -43,15 +43,15 @@ class _LoginState extends State<Login> {
       appBar: CustomAppBar(
         title: L10n.getString(context, 'login_title'),
       ),
-      body: AdaptiveView(
-        smallView: SmallScreenView(bloc: widget.bloc),
-        mediumView: LargeScreenView(
+      body: AdaptiveLayout(
+        smallLayout: SmallScreenView(bloc: widget.bloc),
+        mediumLayout: LargeScreenView(
           bloc: widget.bloc,
           horizontalPadding: 100,
           formFlexFactor: 2,
           headlineStyle: Theme.of(context).textTheme.headline5,
         ),
-        largeView: LargeScreenView(bloc: widget.bloc),
+        largeLayout: LargeScreenView(bloc: widget.bloc),
       ),
     );
   }

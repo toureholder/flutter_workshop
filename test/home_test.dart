@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
-import 'package:flutter_workshop/custom/adaptive_view.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/custom/custom_button.dart';
@@ -56,8 +56,8 @@ void main() {
 
   group('small screen', () {
     setUp(() {
-      binding.window.physicalSizeTestValue = const Size(
-        MEDUIM_SCREEN_MIN_WIDTH - 10,
+      binding.window.physicalSizeTestValue = Size(
+        AdaptiveLayout.getBreakpoints().mediumScreenMinWidth - 10,
         500,
       );
 
@@ -284,8 +284,8 @@ void main() {
 
   group('large screen', () {
     setUp(() {
-      binding.window.physicalSizeTestValue = const Size(
-        LARGE_SCREEN_MIN_WIDTH + 10,
+      binding.window.physicalSizeTestValue = Size(
+        AdaptiveLayout.getBreakpoints().largeScreenMinWidth + 10,
         500,
       );
 
