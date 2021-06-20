@@ -1,7 +1,7 @@
+import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/l10n.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
-import 'package:flutter_workshop/custom/adaptive_view.dart';
 import 'package:flutter_workshop/custom/custom_alert_dialog.dart';
 import 'package:flutter_workshop/custom/custom_app_bar.dart';
 import 'package:flutter_workshop/custom/custom_button.dart';
@@ -117,12 +117,12 @@ class _DonationListStreamBuilder extends StatelessWidget {
         AsyncSnapshot<List<Donation>> snapshot,
       ) {
         if (snapshot.hasData) {
-          return AdaptiveView(
-            smallView: _ListView(
+          return AdaptiveLayout(
+            smallLayout: _ListView(
               list: snapshot.data,
               onTapItem: onTapListItem,
             ),
-            largeView: _LargeScreenView(
+            largeLayout: _LargeScreenView(
               list: snapshot.data,
             ),
           );
