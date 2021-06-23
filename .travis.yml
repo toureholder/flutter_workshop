@@ -12,6 +12,8 @@ cache:
   directories:
   - $HOME/.pub-cache
 
+if: branch = master 
+
 install:
   - git clone https://github.com/flutter/flutter.git -b $FLUTTER_CHANNEL
   - export PATH="$PATH:`pwd`/flutter/bin/cache/dart-sdk/bin"
@@ -29,4 +31,4 @@ deploy:
   project: ./build/web
   domain: flutter-workshop.surge.sh
   on:
-    condition: type = push
+    branch: master
