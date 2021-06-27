@@ -8,7 +8,7 @@
 This repository contains a sample app that I use to give workshops geared towards beginners to Flutter
 
 ## Contains examples of:
-* [Building adaptive/responsive layouts](https://github.com/toureholder/flutter_workshop/compare/f101b8b...f93ce68)
+* [Building adaptive/responsive layouts with `adaptive_layout`](https://github.com/toureholder/flutter_workshop/blob/master/lib/feature/login/login.dart#L46)
 * [Internationalization](https://github.com/toureholder/flutter_workshop/commit/e593145c0adb89e9756a1218207db3d2e0f8cedc)
 * [Improving accessibility with Semantics](https://github.com/toureholder/flutter_workshop/commit/0860dd7a79788f9b340361b922688a3aa74b5720)
 * [Navigation by creating a new route and pushing it to the Navigator](https://github.com/toureholder/flutter_workshop/commit/4e93b50ede90788a3a4f9ce489c29543139ecedc)
@@ -24,7 +24,8 @@ This repository contains a sample app that I use to give workshops geared toward
 * [Continuous integration pipelines with Travis CI](https://github.com/toureholder/flutter_workshop/blob/master/.travis.yml)
 * [Uploading code coverage to Codecov](https://github.com/toureholder/flutter_workshop/commit/38f87f6ce4cdaa6f5a1efb801306ca5148d49392)
 * [Migrating to Null-safety (mostly done by the migration tool)](https://github.com/toureholder/flutter_workshop/commit/1ec21dd0109b157b5c3af81ec22de8b5c007a191)
-* [Easily overriding `==` and `hashCode` with `Equatable`](./lib/model/user/user.dart)
+* [Easily overriding `==` and `hashCode` with `equatable`](./lib/model/user/user.dart)
+* [Using custom icons generated with FlutterIcon](https://github.com/toureholder/flutter_workshop/commit/e99a572326c910eef73b74d5a400164c1c28c853)
 
 The commit history contains multiple ways of doing the same thing. Some examples are:
 - In one commit we manually spawn an isolate to do work in the background and in a later commit we use use Flutter's `compute` function to do the job.
