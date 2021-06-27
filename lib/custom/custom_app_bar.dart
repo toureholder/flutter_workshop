@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_workshop/config/platform_independent_constants.dart';
+import 'package:flutter_workshop/values/custom_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -22,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       IconButton(
         key: githubButtonKey,
         onPressed: _launchURL,
-        icon: const Icon(Icons.code),
+        icon: const Icon(CustomIcons.github),
         color: Theme.of(context).primaryColor,
       )
     ];
