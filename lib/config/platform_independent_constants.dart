@@ -2,6 +2,7 @@
 // This file can be imported into environments that can not contain anything
 // Flutter specific, such as the Flutter driver run-time.
 
+const appBarGithubButtonValueKey = 'app_bar_github_button';
 const homeLoginButtonValueKey = 'home_login_button';
 const homeLargeScreenCTAKey = 'home_large_screen_call_to_action';
 const homeListItemValueKey = 'home_list_item';
