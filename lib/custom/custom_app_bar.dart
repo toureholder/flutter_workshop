@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_workshop/config/platform_independent_constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key, this.actions, this.title}) : super(key: key);
+  static const Key githubButtonKey = Key(appBarGithubButtonValueKey);
+  static const _GITHUB_URL = 'https://github.com/toureholder/flutter_workshop';
+
+  const CustomAppBar({
+    Key? key,
+    this.actions,
+    this.title,
+  }) : super(key: key);
 
   final List<Widget>? actions;
   final String? title;
@@ -9,6 +18,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final String computedTitle = title == null ? '' : title!;
+    final finalActions = <Widget>[
+      IconButton(
+        key: githubButtonKey,
+        onPressed: _launchURL,
+        icon: const Icon(Icons.code),
+        color: Theme.of(context).primaryColor,
+      )
+    ];
+
+    if (actions != null) {
+      finalActions.addAll(actions!);
+    }
 
     return AppBar(
       brightness: Brightness.light,
@@ -19,13 +40,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: TextStyle(color: Colors.grey[800]),
       ),
       elevation: 0,
-      actions: actions,
+      actions: finalActions,
       bottom: CustomAppBarBottom(),
     );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  void _launchURL() async => await launch(_GITHUB_URL);
 }
 
 class CustomAppBarBottom extends StatelessWidget

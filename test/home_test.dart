@@ -37,7 +37,7 @@ void main() {
     testingLocale: const Locale('not_supported'),
   );
 
-  final Finder _appBar = find.byType(CustomAppBar);
+  final Finder appBar = find.byType(CustomAppBar);
 
   final StreamController<List<Donation>> controller =
       StreamController<List<Donation>>.broadcast();
@@ -141,7 +141,7 @@ void main() {
         await tester.pump(Duration.zero);
 
         expect(
-          find.descendant(of: _appBar, matching: find.byType(CircleAvatar)),
+          find.descendant(of: appBar, matching: find.byType(CircleAvatar)),
           findsOneWidget,
         );
       });
@@ -165,7 +165,7 @@ void main() {
 
         expect(
           find.descendant(
-            of: _appBar,
+            of: appBar,
             matching: loginButton,
           ),
           findsOneWidget,
@@ -180,7 +180,7 @@ void main() {
         await tester.pump(Duration.zero);
 
         final Finder avatar = find.descendant(
-          of: _appBar,
+          of: appBar,
           matching: find.byType(CircleAvatar),
         );
 
@@ -205,7 +205,7 @@ void main() {
         await tester.pump(Duration.zero);
 
         final Finder avatar = find.descendant(
-          of: _appBar,
+          of: appBar,
           matching: find.byType(CircleAvatar),
         );
 
@@ -237,7 +237,7 @@ void main() {
         await tester.pump(Duration.zero);
 
         final Finder avatar =
-            find.descendant(of: _appBar, matching: find.byType(CircleAvatar));
+            find.descendant(of: appBar, matching: find.byType(CircleAvatar));
 
         await tester.tap(avatar);
         await tester.pump(Duration.zero);
