@@ -25,6 +25,8 @@ script:
   - flutter analyze --no-pub --no-current-package lib/ test/
   - flutter test --coverage --coverage-path=lcov.info
   - flutter build web --release
+  - npm i -g surge
+  - surge --project ./build/web --domain flutter-workshop-staging.surge.sh
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 deploy:
